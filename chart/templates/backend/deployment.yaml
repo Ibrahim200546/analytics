@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: exchange-rates-{{ .Values.env }}-backend-deployment
+    labels:
+        env: {{ .Values.env }}
+        type: exchange-rates-{{ .Values.env }}-backend-deployment
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            env: {{ .Values.env }}
+            type: exchange-rates-{{ .Values.env }}-backend
+    template:
+        metadata:
+            labels:
+                env: {{ .Values.env }}
+                type: exchange-rates-{{ .Values.env }}-backend
+        spec:
+            imagePullSecrets:
+                -   name: cap-regcred
+            dnsPolicy: ClusterFirstWithHostNet
+            securityContext:
+                fsGroup: 1000
+            containers:
+                -   name: php
+                    resources:
+                        limits:
+                            ephemeral-storage: 4Gi
+                    image: "registry.gitlab.com/dexodus-group/exchange-rates/backend-php-{{ .Values.env }}:{{ .Values.image.tag }}"
+                    ports:
+                        -   containerPort: 9000
+                    lifecycle:
+                        postStart:
+                            exec:
+                                command: ['phing', '-f', './build/build.deploy.xml']
+                -   name: nginx
+                    image: "registry.gitlab.com/dexodus-group/exchange-rates/backend-nginx:{{ .Values.image.tag }}"
+                    resources:
+                        limits:
+                            ephemeral-storage: 1Gi
+                    ports:
+                        -   containerPort: 80

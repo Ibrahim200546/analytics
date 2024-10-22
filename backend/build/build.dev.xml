@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<project name="EDUCATION_DEV" basedir="." default="build">
+    <target name="build" depends="vars, cache, composer, migrations" />
+
+    <target name="vars">
+        <resolvepath propertyName="target.dir" file="/srv/app" />
+        <echo msg="Target dir: ${target.dir}" />
+    </target>
+
+    <target name="cache">
+        <exec command="rm -rf var/cache" dir="${target.dir}" passthru="true" checkreturn="true" />
+    </target>
+
+    <target name="composer">
+        <exec
+            command="composer install --no-interaction"
+            dir="${target.dir}"
+            passthru="true"
+            checkreturn="true"
+        />
+    </target>
+
+    <target name="migrations">
+        <exec
+            command="php bin/console doctrine:migrations:migrate --no-interaction"
+            dir="${target.dir}"
+            passthru="true"
+            checkreturn="true"
+        />
+    </target>
+</project>

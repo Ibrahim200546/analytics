@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<project name="EDUCATION_DEPLOY" basedir="." default="build">
+
+    <target name="build" depends="install" />
+
+    <target name="install">
+        <exec
+                command="COMPOSER_ALLOW_SUPERUSER=1 composer install --optimize-autoloader --no-scripts --prefer-dist"
+                dir="/srv/app"
+                passthru="true"
+                checkreturn="true"
+        />
+<!--        <exec-->
+<!--                command="bin/console doctrine:migrations:migrate &#45;&#45;no-interaction"-->
+<!--                dir="/srv/app"-->
+<!--                passthru="true"-->
+<!--                checkreturn="true"-->
+<!--        />-->
+    </target>
+</project>

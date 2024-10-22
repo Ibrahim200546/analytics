@@ -1,0 +1,6 @@
+env: prod
+domain:
+    backend: api.exchange-rates.dexodus.ru
+    frontend: exchange-rates.dexodus.ru
+image:
+    tag: latest

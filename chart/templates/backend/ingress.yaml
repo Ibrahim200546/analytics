@@ -1,0 +1,16 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+    name: exchange-rates-{{ .Values.env }}-backend-ingress
+spec:
+    entryPoints:
+        - websecure
+    routes:
+        -   match: 'Host(`{{ .Values.domain.backend }}`)'
+            kind: Rule
+            services:
+                -   name: exchange-rates-{{ .Values.env }}-backend-service
+                    port: web
+    tls:
+        certResolver: myresolver
+

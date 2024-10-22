@@ -1,0 +1,67 @@
+image: docker:20.10.16
+
+variables:
+    IMAGE_TAG: ${CI_COMMIT_SHORT_SHA}
+
+Build Backend PHP:
+    services:
+        - docker:dind
+    cache:
+        paths:
+            - backend/vendor/
+    stage: build
+    parallel:
+        matrix:
+            - ENVIRONMENT: 'prod'
+              PROJECT_ENVIRONMENT: $PROJECT_ENVIRONMENT_PROD
+    rules:
+        -   if: $CI_COMMIT_BRANCH == "main"
+    script:
+        - echo "$PROJECT_ENVIRONMENT" > .env
+        - docker login $REGISTRY_URL -u $REGISTRY_USER -p $REGISTRY_PASSWORD
+        - docker build -f docker/php/prod.Dockerfile -t $REGISTRY_IMAGE_PREFIX/backend-php-${ENVIRONMENT}:${IMAGE_TAG} --build-arg ENVIRONMENT=${ENVIRONMENT} .
+        - docker push $REGISTRY_IMAGE_PREFIX/backend-php-${ENVIRONMENT}:${IMAGE_TAG}
+
+Build Backend Nginx:
+    services:
+        - docker:dind
+    stage: build
+    rules:
+        -   if: $CI_COMMIT_BRANCH == "main"
+    script:
+        - docker login $REGISTRY_URL -u $REGISTRY_USER -p $REGISTRY_PASSWORD
+        - docker build -f docker/nginx/prod.Dockerfile -t $REGISTRY_IMAGE_PREFIX/backend-nginx:${IMAGE_TAG} --build-arg NGINX_PORT=80 .
+        - docker push $REGISTRY_IMAGE_PREFIX/backend-nginx:${IMAGE_TAG}
+        - 'echo "Docker image: ${REGISTRY_IMAGE_PREFIX}/backend-nginx:${IMAGE_TAG}"'
+
+Build and push Frontend:
+    stage: 'build'
+    services:
+        - docker:dind
+    parallel:
+        matrix:
+            - ENVIRONMENT: 'prod'
+              PROJECT_ENVIRONMENT: $PROJECT_ENVIRONMENT_PROD
+    rules:
+        -   if: $CI_COMMIT_BRANCH == "main"
+
+    cache:
+        paths:
+            - frontend/node_modules/
+            - frontend/.next/
+    script:
+        - echo "$PROJECT_ENVIRONMENT" > frontend/.env
+        - docker login $REGISTRY_URL -u $REGISTRY_USER -p $REGISTRY_PASSWORD
+        - docker build -f docker/frontend/prod.Dockerfile -t $REGISTRY_IMAGE_PREFIX/frontend-${ENVIRONMENT}:${IMAGE_TAG} .
+        - docker push ${REGISTRY_IMAGE_PREFIX}/frontend-${ENVIRONMENT}:${IMAGE_TAG}
+        - 'echo "Docker image: $REGISTRY_IMAGE_PREFIX/frontend-${ENVIRONMENT}:${IMAGE_TAG}"'
+
+Deploy In Production Environment:
+    stage: deploy
+    rules:
+        -   if: $CI_COMMIT_BRANCH == "main"
+            when: manual
+    image: dtzar/helm-kubectl:3.9.4
+    script:
+        - kubectl config use-context dexodus-group/exchange-rates:exchange-rates
+        - helm upgrade exchange-rates -n default ./chart/ -f ./chart/prod_values.yaml --set image.tag=${IMAGE_TAG} --install

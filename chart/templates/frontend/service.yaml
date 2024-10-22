@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+    name: exchange-rates-{{ .Values.env }}-frontend-service
+    labels:
+        env: {{ .Values.env }}
+        type: exchange-rates-{{ .Values.env }}-frontend-service
+spec:
+    selector:
+        env: {{ .Values.env }}
+        type: exchange-rates-{{ .Values.env }}-frontend
+    ports:
+        -   name: web
+            protocol: TCP
+            port: 80
+            targetPort: 3000
