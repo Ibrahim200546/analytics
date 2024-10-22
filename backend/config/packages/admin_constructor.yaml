@@ -1,0 +1,2 @@
+admin_constructor:
+  navigation_class: App\Admin\Navigation

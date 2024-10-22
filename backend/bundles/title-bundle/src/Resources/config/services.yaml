@@ -1,0 +1,9 @@
+services:
+    Dexodus\TitleBundle\:
+        resource: '../..'
+        public: true
+        autowire: true
+        autoconfigure: true
+        exclude:
+            - '../../Attribute/'
+            - '../../Exception/'

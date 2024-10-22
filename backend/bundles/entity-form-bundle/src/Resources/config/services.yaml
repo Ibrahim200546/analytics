@@ -1,0 +1,18 @@
+services:
+    _instanceof:
+        Dexodus\EntityFormBundle\Validator\ValidatorInterface:
+            tags: ['entity_form.validator']
+        Dexodus\EntityFormBundle\Service\FieldGenerator\FieldGeneratorInterface:
+            tags: ['entity_form.field_generator']
+
+    Dexodus\EntityFormBundle\:
+        resource: '../..'
+        public: true
+        autowire: true
+        autoconfigure: true
+        exclude:
+            - '../../Attribute/'
+            - '../../Dto/'
+            - '../../Exception/'
+            - '../../Jsel/JselBuilder.php'
+            - '../../EntityForm.php'

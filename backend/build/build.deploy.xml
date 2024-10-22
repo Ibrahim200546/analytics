@@ -11,11 +11,17 @@
                 passthru="true"
                 checkreturn="true"
         />
-<!--        <exec-->
-<!--                command="bin/console doctrine:migrations:migrate &#45;&#45;no-interaction"-->
-<!--                dir="/srv/app"-->
-<!--                passthru="true"-->
-<!--                checkreturn="true"-->
-<!--        />-->
+        <exec
+                command="bin/console lexik:jwt:generate-keypair --overwrite -n"
+                dir="/srv/app"
+                passthru="true"
+                checkreturn="true"
+        />
+        <exec
+                command="bin/console doctrine:migrations:migrate --no-interaction"
+                dir="/srv/app"
+                passthru="true"
+                checkreturn="true"
+        />
     </target>
 </project>

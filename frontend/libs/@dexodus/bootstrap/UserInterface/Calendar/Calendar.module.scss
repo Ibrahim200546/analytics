@@ -1,0 +1,90 @@
+.calendar {
+  .loader {
+    background: rgba(0, 0, 0, 0.3);
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .rowBeforeTable {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 8px;
+
+    .monthName {
+      font-size: 18px;
+    }
+
+    &> * {
+      margin: 0 12px;
+    }
+  }
+
+  table {
+    width: 100%;
+    table-layout: fixed;
+
+    td, th {
+      width: calc(100% / 7);
+      border: 1px solid #dddddd;
+    }
+
+    th {
+      background: #f5f5f5;
+      font-size: 14px;
+      line-height: 20px;
+      padding: 10px 0;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    td {
+      .dateContainer {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding: 4px;
+
+        .date {
+          text-align: end;
+          font-size: 14px;
+        }
+
+        .events {
+          .event {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            padding-left: 5px;
+            padding-right: 5px;
+            margin-bottom: 4px;
+
+            .eventName {
+              width: 100%;
+
+              white-space: nowrap;
+              text-overflow: ellipsis;
+              overflow: hidden;
+            }
+          }
+        }
+
+        &_currentDate {
+          .date {
+            color: #ff0000;
+            font-weight: bold;
+          }
+        }
+
+        &_notInCurrentMonth {
+          .date {
+            color: #b8b8b8;
+          }
+        }
+      }
+      height: 111px;
+    }
+  }
+}

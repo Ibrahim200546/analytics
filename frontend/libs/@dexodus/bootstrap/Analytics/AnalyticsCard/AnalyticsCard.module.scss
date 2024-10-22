@@ -1,0 +1,42 @@
+.analyticsCardTitleActions {
+  cursor: pointer;
+
+  > svg {
+    width: 16px;
+    height: 16px;
+    transition: .3s;
+  }
+
+  &:hover {
+    > svg {
+      transition: .3s;
+      width: 20px;
+      height: 20px;
+      margin-right: -2px;
+    }
+  }
+}
+
+.analyticsCard {
+  &__switcher {
+    display: flex;
+    justify-content: space-around;
+
+    &__item {
+      user-select: none;
+      cursor: pointer;
+      height: 24px;
+      width: 24px;
+
+      > svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      &_active {
+        cursor: not-allowed;
+        color: #00f800;
+      }
+    }
+  }
+}

@@ -1,0 +1,2 @@
+entity_form:
+    resource: '@EntityHistoryBundle/Resources/config/routing.yaml'

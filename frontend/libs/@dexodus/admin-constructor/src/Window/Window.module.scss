@@ -1,0 +1,11 @@
+$windowColor: #E7E7E7;
+
+.window {
+  display: inline-flex;
+  padding: 32px 32px;
+  flex-direction: column;
+  border-radius: 29px;
+  background: $windowColor;
+  box-shadow: 0 8px 9px 0 rgba(0, 0, 0, 0.25);
+  min-width: 300px;
+}

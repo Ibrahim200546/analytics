@@ -1,0 +1,21 @@
+{
+  "name": "dexodus/entity-table-bundle",
+  "description": "description",
+  "minimum-stability": "stable",
+  "version": "1.0.1",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Daniil Yaroshuk",
+      "email": "the.dexodus@gmail.com"
+    }
+  ],
+  "require": {
+    "dexodus/entity-form-bundle": "1.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Dexodus\\EntityTableBundle\\": "src/"
+    }
+  }
+}

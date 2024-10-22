@@ -1,0 +1,40 @@
+@import "../SideBar/SideBar.module";
+
+$topBarHeight: 80px;
+$topBarColor: #FFFFFF;
+
+.topBar {
+  display: flex;
+  align-items: center;
+  width: calc(100vw - $sideBarWidth);
+  height: $topBarHeight;
+  background: $topBarColor;
+  position: fixed;
+  top: 0;
+  left: $sideBarWidth;
+  z-index: 10;
+  justify-content: space-between;
+  padding: 0 60px 0 30px;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.15);
+
+  .currentPageName {
+    font-weight: 600;
+    font-size: 24px;
+  }
+
+  .rightPartWrapper {
+    display: flex;
+
+    .centerPart {
+      display: flex;
+      justify-content: center;
+      margin-right: 25px  ;
+    }
+
+    .rightPart {
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: center;
+    }
+  }
+}

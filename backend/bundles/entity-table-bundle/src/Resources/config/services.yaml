@@ -1,0 +1,17 @@
+services:
+    _instanceof:
+        Dexodus\EntityTableBundle\Service\Filter\FilterGeneratorInterface:
+            tags: ['entity_table.filter_generator']
+        Dexodus\EntityTableBundle\Service\DataGenerator\DataGeneratorInterface:
+            tags: ['entity_table.data_generator']
+
+    Dexodus\EntityTableBundle\:
+        resource: '../..'
+        public: true
+        autowire: true
+        autoconfigure: true
+        exclude:
+            - '../../Attribute/'
+            - '../../Dto/'
+            - '../../Exception/'
+            - '../../Action/'

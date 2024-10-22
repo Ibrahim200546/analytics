@@ -1,0 +1,22 @@
+.paginator {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  user-select: none;
+
+  .page {
+    width: 12px;
+    margin: 0 4px;
+    color: -webkit-link;
+    cursor: pointer;
+
+    &:hover {
+      color: -webkit-activelink;
+    }
+
+    &.active {
+      color: #000;
+      text-decoration: underline;
+    }
+  }
+}

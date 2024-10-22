@@ -1,0 +1,52 @@
+$itemHeight: 40px;
+$itemBottomBorderWidth: 1px;
+$itemTopAndBottomPadding: 8px;
+$listMaxItemsView: 5;
+
+.selectInput {
+  position: relative;
+
+  .inputWrapper {
+    text-overflow: ellipsis;
+    text-wrap: nowrap;
+    overflow: hidden;
+
+    .input {
+      position: absolute;
+      top: 15px;
+    }
+  }
+
+  .list {
+    z-index: 100;
+    background: #FFFFFF;
+    margin-top: 4px;
+    position: absolute;
+    border: 1px solid #00000055;
+    border-radius: 4px;
+
+    display: flex;
+    flex-direction: column;
+    max-height: $listMaxItemsView * $itemHeight;
+    overflow-y: scroll;
+
+    .item {
+      padding: 8px 16px;
+      //min-height: $itemHeight;
+      //height: $itemHeight;
+      border-bottom: $itemBottomBorderWidth solid #00000055;
+
+      &:last-of-type {
+        border-bottom: none;
+      }
+
+      &.selectable {
+        cursor: pointer;
+
+        &:hover, &.active {
+          background: #9ecbff;
+        }
+      }
+    }
+  }
+}

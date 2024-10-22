@@ -1,0 +1,26 @@
+.breadcrumb {
+  margin-bottom: 16px;
+
+  a {
+    color: #212BB5;
+    text-decoration: none;
+    font-size: 14px;
+    margin-right: 8px;
+  }
+
+  span {
+    color: #6A757D;
+    font-size: 14px;
+    margin-right: 8px;
+  }
+
+  .splitter {
+    position: relative;
+    margin-top: 3px;
+    display: inline-block;
+    background: #73797d;
+    width: 1px;
+    height: 20px;
+    transform: rotateZ(20deg);
+  }
+}

@@ -1,0 +1,19 @@
+services:
+    _instanceof:
+        Dexodus\AdminConstructorBundle\PageProcessor\PageProcessorInterface:
+            tags: ['admin_constructor.page_processor']
+
+    Dexodus\AdminConstructorBundle\:
+        resource: '../..'
+        public: true
+        autowire: true
+        autoconfigure: true
+        exclude:
+            - '../../Dto/'
+            - '../../Attribute/'
+
+    Twig\Extension\StringLoaderExtension:
+        tags: ['twig.extension']
+
+    Dexodus\AdminConstructorBundle\Twig\MorphosTwigExtension:
+        tags: ['twig.extension']

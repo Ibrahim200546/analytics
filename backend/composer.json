@@ -4,17 +4,48 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.1",
+        "php": ">=8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "api-platform/core": "^3.2",
+        "cijic/phpmorphy": "^0.3.3",
+        "dexodus/admin-constructor-bundle": "^1.0",
+        "dexodus/bundle-constructor": "^1.0",
+        "dexodus/dql-functions-bundle": "^1.0",
+        "dexodus/entity-disable-bundle": "^1.0",
+        "dexodus/entity-export-bundle": "^1.0",
+        "dexodus/entity-form-bundle": "^1.0",
+        "dexodus/entity-history-bundle": "^1.0",
+        "dexodus/entity-table-bundle": "^1.0",
+        "dexodus/free-currency-api-bundle": "^1.0",
+        "dexodus/search-engine-bundle": "^1.0",
+        "dexodus/title-bundle": "^1.0",
+        "dexodus/translation-api-bundle": "^1.0",
+        "dexodus/user-session-history-bundle": "^1.0",
+        "doctrine/doctrine-bundle": "^2.11",
+        "doctrine/doctrine-migrations-bundle": "^3.3",
+        "doctrine/orm": "^2.17",
+        "fzaninotto/faker": "^1.5",
+        "lexik/jwt-authentication-bundle": "^2.20",
+        "nelmio/cors-bundle": "^2.4",
+        "phpdocumentor/reflection-docblock": "^5.3",
+        "phpstan/phpdoc-parser": "^1.24",
+        "symfony/asset": "6.3.*",
         "symfony/console": "6.3.*",
         "symfony/dotenv": "6.3.*",
+        "symfony/event-dispatcher": "6.3.*",
+        "symfony/expression-language": "6.3.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "6.3.*",
+        "symfony/mime": "6.3.*",
+        "symfony/property-access": "6.3.*",
+        "symfony/property-info": "6.3.*",
         "symfony/runtime": "6.3.*",
+        "symfony/security-bundle": "6.3.*",
+        "symfony/serializer": "6.3.*",
+        "symfony/twig-bundle": "6.3.*",
+        "symfony/validator": "6.3.*",
         "symfony/yaml": "6.3.*"
-    },
-    "require-dev": {
     },
     "config": {
         "allow-plugins": {
@@ -61,7 +92,71 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "6.3.*"
+            "require": "6.3.*",
+            "endpoint": [
+                "https://gitlab.com/api/v4/projects/54254810/repository/files/index.json/raw?ref=main",
+                "flex://defaults"
+            ]
         }
-    }
+    },
+    "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.5",
+        "symfony/maker-bundle": "^1.52",
+        "symfony/stopwatch": "6.3.*",
+        "symfony/web-profiler-bundle": "6.3.*"
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "bundles/entity-form-bundle"
+        },
+        {
+            "type": "path",
+            "url": "bundles/entity-table-bundle"
+        },
+        {
+            "type": "path",
+            "url": "bundles/translation-api-bundle"
+        },
+        {
+            "type": "path",
+            "url": "bundles/admin-constructor-bundle"
+        },
+        {
+            "type": "path",
+            "url": "bundles/search-engine-bundle"
+        },
+        {
+            "type": "path",
+            "url": "bundles/dql-functions-bundle"
+        },
+        {
+            "type": "path",
+            "url": "bundles/entity-export-bundle"
+        },
+        {
+            "type": "path",
+            "url": "bundles/user-session-history-bundle"
+        },
+        {
+            "type": "path",
+            "url": "bundles/title-bundle"
+        },
+        {
+            "type": "path",
+            "url": "bundles/bundle-constructor"
+        },
+        {
+            "type": "path",
+            "url": "bundles/entity-history-bundle"
+        },
+        {
+            "type": "path",
+            "url": "bundles/entity-disable-bundle"
+        },
+        {
+            "type": "path",
+            "url": "bundles/free-currency-api-bundle"
+        }
+    ]
 }

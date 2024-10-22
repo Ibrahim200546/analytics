@@ -1,0 +1,21 @@
+.numberField {
+  line-height: 24px;
+  padding: 9px 14px;
+  height: 45px;
+  box-shadow: none;
+  border-radius: 2px;
+  display: block;
+  width: -webkit-fill-available;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ccd1d9;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+
+  &:focus {
+    border-color: #00aeff;
+    -webkit-box-shadow: 0 0 12px 0 rgba(0,0,0,.12);
+    -moz-box-shadow: 0 0 12px 0 rgba(0,0,0,.12);
+    box-shadow: 0 0 12px 0 rgba(0,0,0,.12);
+    outline: 0;
+  }
+}

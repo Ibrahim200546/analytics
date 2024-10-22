@@ -1,0 +1,2 @@
+admin_constructor:
+  resource: '@AdminConstructorBundle/Resources/config/routing.yaml'

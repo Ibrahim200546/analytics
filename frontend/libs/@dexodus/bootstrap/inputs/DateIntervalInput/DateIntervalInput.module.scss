@@ -1,0 +1,22 @@
+.dateIntervalInput {
+  position: relative;
+
+  .dateIntervalClear {
+    position: absolute;
+    top: 15px;
+    left: 12px;
+
+    svg {
+      cursor: pointer;
+      width: 19px;
+      height: 19px;
+      color: #999999;
+      transition: color .3s;
+
+      &:hover {
+        color: #000000;
+        transition: color .3s;
+      }
+    }
+  }
+}

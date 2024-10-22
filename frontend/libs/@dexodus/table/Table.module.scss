@@ -1,0 +1,51 @@
+$borderColor: #dee2e6;
+
+.fade {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  cursor: wait;
+}
+
+.tableContainer {
+  position: relative;
+
+  .table {
+    width: 100%;
+
+    border-top: 1px solid $borderColor;
+    border-left: 1px solid $borderColor;
+
+    tr:nth-of-type(even), th {
+      background: rgba(0, 0, 0, .05);
+    }
+
+    td, th {
+      border-bottom: 1px solid $borderColor;
+      border-right: 1px solid $borderColor;
+      padding: 9px;
+      font-size: 12px;
+      line-height: 1.5em;
+
+      &.actions {
+        width: 1%;
+        white-space: nowrap;
+
+        .action {
+          font-size: 12px;
+          margin-right: 4px;
+        }
+      }
+    }
+
+    .tableFooter {
+      display: flex;
+      justify-content: space-between;
+      white-space: nowrap;
+    }
+  }
+}

@@ -1,0 +1,5 @@
+controllers:
+    resource:
+        path: '@EntityTableBundle/Controller/'
+        namespace: Dexodus\EntityTableBundle\Controller
+    type: attribute

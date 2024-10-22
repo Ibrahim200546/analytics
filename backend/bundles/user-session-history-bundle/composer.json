@@ -1,0 +1,21 @@
+{
+  "name": "dexodus/user-session-history-bundle",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Daniil Yaroshuk",
+      "email": "the.dexodus@gmail.com"
+    }
+  ],
+  "require": {
+    "dexodus/entity-table-bundle": "1.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Dexodus\\UserSessionHistoryBundle\\": "src/"
+    }
+  }
+}

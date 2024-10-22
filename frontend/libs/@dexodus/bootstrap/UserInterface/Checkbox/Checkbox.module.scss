@@ -1,0 +1,88 @@
+$backgroundColors: (
+        "Default": #4b67ff,
+        "Primary": #304ffe,
+        "Success": #00bf4f,
+        "Info": #00aeff,
+        "Warning": #fbbc05,
+        "Danger": #ea4335,
+        "Violet": #7045ff,
+        "Pink": #ff8acc,
+        "Inverse": #212121,
+);
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  position: relative;
+  user-select: none;
+
+  &__mark {
+    display: none;
+  }
+
+  &__label {
+    &_disabled {
+      color: lighten(#000, 40%);
+      cursor: not-allowed;
+    }
+
+    &:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 17px;
+      height: 17px;
+      border: 1px solid #ccc;
+      background: #fff;
+      top: 3px;
+      transition: .4s;
+    }
+
+    &_rounded {
+      &:before {
+        border-radius: 50%;
+      }
+    }
+
+    &:after {
+      content: url("data:image/svg+xml,%3Csvg fill='white' stroke-width='0' viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg' %3E%3Cpath d='M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z'/%3E%3C/svg%3E ");;
+      width: 13px;
+      height: 13px;
+      left: 2px;
+      top: 0;
+      position: absolute;
+      opacity: 0;
+      transition: .2s;
+    }
+
+    &_checked {
+      &:before {
+        transition: .4s;
+      }
+
+      @each $styleName, $color in $backgroundColors {
+        &_style#{$styleName} {
+          &:before {
+            background: $color;
+            border-color: $color;
+          }
+
+          &_disabled {
+            &:before {
+              background: lighten($color, 10%);
+              border-color: lighten($color, 10%);
+            }
+          }
+        }
+      }
+
+      &:after {
+        transition: .2s;
+        opacity: 1;
+      }
+    }
+
+    padding-left: 25px;
+    cursor: pointer;
+  }
+}

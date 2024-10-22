@@ -1,0 +1,9 @@
+services:
+    Dexodus\SearchEngineBundle\:
+        resource: '../..'
+        public: true
+        autowire: true
+        autoconfigure: true
+        exclude:
+            - '../../Dto/'
+            - '../../Attribute/'

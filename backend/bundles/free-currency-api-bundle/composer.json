@@ -1,0 +1,21 @@
+{
+  "name": "dexodus/free-currency-api-bundle",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Daniil Yaroshuk",
+      "email": "the.dexodus@gmail.com"
+    }
+  ],
+  "require": {
+    "guzzlehttp/guzzle": "^7.9"
+  },
+  "autoload": {
+    "psr-4": {
+      "Dexodus\\FreeCurrencyApiBundle\\": "src/"
+    }
+  }
+}

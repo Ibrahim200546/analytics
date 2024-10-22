@@ -1,0 +1,2 @@
+translation_api:
+  resource: '@TranslationApiBundle/Resources/config/routing.yaml'

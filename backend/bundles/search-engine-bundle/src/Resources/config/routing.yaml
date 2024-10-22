@@ -1,0 +1,5 @@
+controllers:
+    resource:
+        path: '@SearchEngineBundle/Controller/'
+        namespace: Dexodus\SearchEngineBundle\Controller
+    type: attribute

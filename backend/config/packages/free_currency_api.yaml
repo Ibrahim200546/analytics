@@ -1,0 +1,2 @@
+free_currency_api:
+  api_key: '%env(FREE_CURRENCY_API_KEY)%'

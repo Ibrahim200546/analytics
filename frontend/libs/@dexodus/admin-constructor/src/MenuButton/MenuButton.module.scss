@@ -1,0 +1,43 @@
+.menuButton {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+
+  .line {
+    position: relative;
+    width: 100%;
+    height: 10%;
+    border-radius: 8px;
+
+    &.line1 {
+      transition: 0.3s;
+
+      &.closed {
+        transition: 0.3s;
+        transform: rotateZ(45deg);
+        top: 45%;
+      }
+    }
+
+    &.line2 {
+      opacity: 1;
+      transition: 0.3s;
+
+      &.closed {
+        opacity: 0;
+        transition: 0.3s;
+      }
+    }
+
+    &.line3 {
+      transition: 0.3s;
+
+      &.closed {
+        transform: rotateZ(-45deg);
+        top: -45%;
+        transition: 0.3s;
+      }
+    }
+  }
+}

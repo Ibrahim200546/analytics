@@ -1,0 +1,2 @@
+search_engine:
+    resource: '@SearchEngineBundle/Resources/config/routing.yaml'

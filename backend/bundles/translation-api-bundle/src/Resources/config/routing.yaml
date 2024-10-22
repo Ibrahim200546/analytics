@@ -1,0 +1,5 @@
+controllers:
+    resource:
+        path: '@TranslationApiBundle/Controller/'
+        namespace: Dexodus\TranslationApiBundle\Controller
+    type: attribute

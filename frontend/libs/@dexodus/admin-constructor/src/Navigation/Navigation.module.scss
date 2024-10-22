@@ -1,0 +1,65 @@
+$navigationColor: #ffffff;
+$subNavigationColor: rgba(0,0,0,.03);
+
+.navigation {
+  font-size: 14px;
+  font-weight: 400;
+  overflow-y: auto;
+
+  .buttonContainer {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    .downIcon {
+      font-size: 14px;
+      font-weight: 400;
+      margin-right: 22px;
+      transition: 0.3s;
+      transform: rotateZ(-180deg);
+
+      &.show {
+        transform: rotateZ(0deg);
+        transition: 0.3s;
+      }
+    }
+  }
+
+  .button {
+    background: none;
+    display: flex;
+    width: 100%;
+    height: 50px;
+    border: none;
+    text-decoration: none;
+    align-items: center;
+    padding-left: 22px;
+    cursor: pointer;
+    color: #817F9B;
+
+    text-overflow: ellipsis;
+    overflow: hidden;
+
+    white-space: break-spaces;
+    text-align: left;
+  }
+
+  .collapse {
+    .button {
+    }
+  }
+
+  .link {
+  }
+
+  .text {
+    display: flex;
+    padding: 15px 12px;
+
+    &.active {
+      background: #1F6AFD;
+      border-radius: 10px;
+      color: white;
+    }
+  }
+}

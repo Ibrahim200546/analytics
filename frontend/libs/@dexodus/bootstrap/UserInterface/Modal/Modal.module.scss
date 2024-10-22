@@ -1,0 +1,63 @@
+$sizes: (
+  "Standard": 568px,
+  "Large": 868px,
+  "Small": 268px,
+);
+
+.fade {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  min-height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  transition: .4s;
+  z-index: 10000;
+
+  &_hidden {
+    opacity: 0;
+    transition: .4s;
+  }
+
+  .modal {
+    display: flex;
+    flex-direction: column;
+    padding: 0 15px;
+    border: 1px solid rgba(0, 0, 0, .2);
+    background: #ffffff;
+    width: 100%;
+    transition: .4s;
+
+    &_hidden {
+      transform: translateY(-200px);
+      transition: .4s;
+    }
+
+    @each $sizeName, $size in $sizes {
+      &_size#{$sizeName} {
+        max-width: $size;
+      }
+    }
+
+    &__header {
+      font-size: 21px;
+      color: #505458;
+      padding: 14px;
+      border-bottom: 1px solid #e9ecef;
+    }
+
+    &__content {
+      padding: 14px;
+    }
+
+    &__controls {
+      display: flex;
+      flex-direction: row-reverse;
+      padding: 14px;
+      border-top: 1px solid #e9ecef;
+    }
+  }
+}

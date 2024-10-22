@@ -1,0 +1,13 @@
+.sectionArranger {
+  display: flex;
+  flex-direction: column;
+
+  .sectionGroup {
+    display: flex;
+    flex-direction: row;
+
+    .section {
+      flex-basis: 100vw;
+    }
+  }
+}

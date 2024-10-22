@@ -1,0 +1,2 @@
+user_session_history:
+  userEntity: App\Entity\User

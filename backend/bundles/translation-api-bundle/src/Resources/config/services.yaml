@@ -1,0 +1,9 @@
+services:
+    Dexodus\TranslationApiBundle\:
+        resource: '../..'
+        public: true
+        autowire: true
+        autoconfigure: true
+        exclude:
+            - '../../Entity/'
+            - '../../Exception/'

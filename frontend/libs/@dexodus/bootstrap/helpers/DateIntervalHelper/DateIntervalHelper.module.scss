@@ -1,0 +1,157 @@
+@use 'sass:color';
+
+$dateIntervalHelperMinWidth: 300px;
+
+$backgroundColors: (
+        "Default": #e4e7ea,
+        "Primary": #304ffe,
+        "Success": #00bf4f,
+        "Info": #00aeff,
+        "Warning": #fbbc05,
+        "Danger": #ea4335,
+        "Violet": #7045ff,
+);
+
+$textColors: (
+        "Default": #000000,
+        "Primary": #ffffff,
+        "Success": #ffffff,
+        "Info": #ffffff,
+        "Warning": #ffffff,
+        "Danger": #ffffff,
+        "Violet": #ffffff,
+);
+
+.dateIntervalHelper {
+  min-width: $dateIntervalHelperMinWidth;
+  background: #FFFFFF;
+  border: 1px solid #00000055;
+  border-radius: 4px;
+  padding: 4px 8px;
+
+  .firstRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 8px;
+
+
+    .monthName {
+      width: 33%;
+    }
+
+    .yearName {
+      width: 33%;
+    }
+
+    .dateControls {
+      display: flex;
+
+      .dateControl {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        user-select: none;
+      }
+    }
+  }
+
+  .monthTable {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    touch-action: none;
+
+    &.isDraggable {
+      cursor: grabbing;
+    }
+
+    .daysNames {
+      display: flex;
+
+      .dayName {
+        width: $dateIntervalHelperMinWidth / 7 - 4px;
+        height: $dateIntervalHelperMinWidth / 7 - 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+
+    .week {
+      display: flex;
+
+      .date {
+        margin: 4px 0;
+        width: $dateIntervalHelperMinWidth / 7 - 4px;
+        height: $dateIntervalHelperMinWidth / 7 - 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #808080;
+        cursor: pointer;
+        border-radius: 50%;
+        user-select: none;
+
+        &.currentMonth {
+          color: #000000;
+          transition: .3s;
+        }
+
+        &:hover {
+          background: color.scale(map-get($backgroundColors, "Primary"), $alpha: -40%);
+          color: color.scale(map-get($textColors, "Primary"), $alpha: -40%);
+          transition: .3s;
+        }
+
+        &.betweenStartAndEnd {
+          border-radius: unset;
+          transition: unset;
+
+          &:first-of-type {
+            border-radius: 50% 0 0 50%;
+          }
+
+          &:last-of-type {
+            border-radius: 0 50% 50% 0;
+          }
+        }
+
+        &.start {
+          border-radius: 50% 0 0 50%;
+
+          &.end, &:last-of-type {
+            border-radius: 50%;
+          }
+        }
+
+        &.end {
+          border-radius: 0 50% 50% 0;
+
+          &.start, &:first-of-type {
+            border-radius: 50%;
+          }
+        }
+
+        &.ghost {
+          background: color.scale(map-get($backgroundColors, "Primary"), $alpha: -40%);
+          color: color.scale(map-get($textColors, "Primary"), $alpha: -40%);
+        }
+
+        &.active {
+          background: map-get($backgroundColors, "Primary");
+          color: map-get($textColors, "Primary");
+          transition: .3s;
+        }
+
+        &.isCanDraggable {
+          cursor: grab;
+        }
+
+        &.isDraggable {
+          cursor: grabbing;
+        }
+      }
+    }
+  }
+}

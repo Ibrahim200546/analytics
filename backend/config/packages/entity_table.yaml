@@ -1,0 +1,6 @@
+entity_table:
+    mapping:
+        -   dir: '%kernel.project_dir%/src/Entity'
+            prefix: 'App\Entity'
+        -   dir: '%kernel.project_dir%/vendor/dexodus/user-session-history-bundle/src/Entity'
+            prefix: 'Dexodus\UserSessionHistoryBundle\Entity'

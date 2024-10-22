@@ -1,0 +1,21 @@
+{
+  "name": "dexodus/title-bundle",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "dexodus",
+      "email": "the.dexodus@gmail.com"
+    }
+  ],
+  "require": {
+    "dexodus/text-case-bundle": "1.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Dexodus\\TitleBundle\\": "src/"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+services:
+    Dexodus\EntityExportBundle\:
+        resource: '../..'
+        public: true
+        autowire: true
+        autoconfigure: true
+        exclude:
+            - '../../Attribute/'
+            - '../../Dto/'
+            - '../../Exception/'

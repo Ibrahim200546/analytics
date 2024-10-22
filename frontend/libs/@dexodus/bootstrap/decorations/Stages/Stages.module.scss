@@ -1,0 +1,71 @@
+.stages {
+  display: flex;
+  justify-content: center;
+  user-select: none;
+
+  .stageWrapper {
+    display: flex;
+
+    .line {
+      margin-top: 22px;
+      width: 136px;
+      height: 4px;
+      background: #DBDDE6;
+      border-radius: 2px;
+    }
+
+    &.previous {
+      .line {
+        background: #79D67B;
+      }
+
+      .stage {
+        .circle {
+          color: #F3F4F7;
+          background: #79D67B;
+        }
+
+        .text {
+          color: #79D67B;
+        }
+      }
+    }
+
+    &.current {
+      .stage {
+        .circle {
+          color: #F3F4F7;
+          background: #0083FE;
+        }
+
+        .text {
+          color: #0083FE;
+        }
+      }
+    }
+
+    .stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+
+      .circle {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: #DBDDE6;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px;
+        font-weight: 500;
+        margin-bottom: 15px;
+      }
+
+      .text {
+        color: #AEB3C1;
+      }
+    }
+  }
+}

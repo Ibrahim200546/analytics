@@ -1,0 +1,17 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Dexodus\AdminConstructorBundle\Attribute;
+
+use Attribute;
+
+#[Attribute(Attribute::TARGET_PROPERTY)]
+readonly class EntityFormPage implements PageAttributeInterface
+{
+    public function __construct(
+        public string $name,
+        public string $mode,
+    ) {
+    }
+}

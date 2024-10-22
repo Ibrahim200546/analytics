@@ -1,0 +1,36 @@
+.inputContainer {
+  background-color: #FFFFFF;
+  position: relative;
+  padding: 15px 14px;
+  border: 1px solid #BBBBBB;
+  border-radius: 10px;
+  cursor: text;
+  display: flex;
+  align-items: center;
+  min-width: 300px;
+
+  .input {
+    position: relative;
+    left: 30px;
+    border: none;
+    padding: 0;
+    width: calc(100% - 32px);
+    font-size: 14px;
+
+    &:focus-visible {
+      outline: none;
+    }
+  }
+
+  .icon {
+    position: absolute;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    &.emptyIcon {
+      display: inline-block;
+      width: 18px;
+    }
+  }
+}

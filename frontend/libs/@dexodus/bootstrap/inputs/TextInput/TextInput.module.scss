@@ -1,0 +1,23 @@
+.inputContainer {
+  padding: 8px 8px;
+  border: 1px solid #00000055;
+  border-radius: 4px;
+
+  .input {
+    border: none;
+    padding: 0;
+
+    &:focus-visible {
+      outline: none;
+    }
+  }
+
+  .icon {
+    display: inline-block;
+
+    &.emptyIcon {
+      display: inline-block;
+      width: 18px;
+    }
+  }
+}

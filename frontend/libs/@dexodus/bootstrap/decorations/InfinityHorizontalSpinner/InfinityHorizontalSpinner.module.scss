@@ -1,0 +1,29 @@
+.infinityHorizontalSpinner {
+  width: 95vw;
+  max-width: 95vw;
+  overflow: hidden;
+  white-space: nowrap;
+
+  .contentWrapper {
+    display: flex;
+    align-items: center;
+    animation: scrollRight 30s linear infinite;
+
+    &:hover {
+      animation-play-state: paused;
+    }
+  }
+
+  .item {
+    margin: 0 43px;
+  }
+}
+
+@keyframes scrollRight {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}

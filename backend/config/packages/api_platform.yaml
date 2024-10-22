@@ -1,0 +1,22 @@
+api_platform:
+    title: Hello API Platform
+    version: 1.0.0
+    enable_entrypoint: false
+    enable_docs: true
+    enable_swagger_ui: true
+    enable_re_doc: true
+    eager_loading:
+        max_joins: 100
+    mapping:
+        paths: 
+            - '%kernel.project_dir%/src/Entity'
+    patch_formats:
+        json: ['application/merge-patch+json']
+    swagger:
+        versions: [3]
+        api_keys:
+            apiKey:
+                name: Authorization
+                type: header
+    defaults:
+        pagination_items_per_page: 10

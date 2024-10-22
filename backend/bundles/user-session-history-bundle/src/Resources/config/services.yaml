@@ -1,0 +1,14 @@
+services:
+    Dexodus\UserSessionHistoryBundle\:
+        resource: '../..'
+        public: true
+        autowire: true
+        autoconfigure: true
+        exclude:
+            - '../../Entity/'
+
+    Dexodus\UserSessionHistoryBundle\EventListener\DynamicTargetEntitySubscriber:
+        arguments:
+            $userEntity: '%user_session_history.user_entity%'
+        tags:
+            - { name: 'doctrine.event_subscriber' }

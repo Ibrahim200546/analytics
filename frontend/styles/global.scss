@@ -1,0 +1,124 @@
+@import 'fonts';
+@import 'colors';
+
+* {
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+*,
+*:before,
+*:after {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+:focus,
+:active {
+    outline: none;
+}
+a:focus,
+a:active {
+    outline: none;
+}
+nav,
+footer,
+header,
+aside {
+    display: block;
+}
+body {
+    min-height: calc(100 * var(--vh));
+}
+html,
+body {
+    width: 100%;
+    font-family: Lato;
+    line-height: 1;
+    font-size: 16px;
+    -ms-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    position: relative;
+}
+html,
+body,
+a {
+    color: #000;
+}
+input::-ms-clear {
+    display: none;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+    -moz-appearance: textfield;
+}
+button {
+    cursor: pointer;
+    background-color: #fff;
+}
+button::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+}
+a {
+    text-decoration: none;
+    &:hover,
+    &:visited {
+        text-decoration: none;
+    }
+}
+ul li {
+    list-style: none;
+}
+div > img {
+    max-width: 100%;
+    max-height: 100%;
+}
+img {
+    vertical-align: top;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+#__next {
+    height: 100%;
+    min-height: inherit;
+}
+
+.noScroll {
+    overflow: hidden;
+}
+
+.text-no-overflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.flex {
+    display: flex;
+}
+
+.justify-center {
+    justify-content: center;
+}
+.justify-between {
+    justify-content: space-between;
+}
+
+.align-center {
+    align-items: center;
+}

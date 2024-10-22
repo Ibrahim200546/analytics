@@ -1,0 +1,9 @@
+services:
+  Dexodus\EntityHistoryBundle\:
+    resource: '../..'
+    public: true
+    autowire: true
+    autoconfigure: true
+    exclude:
+      - '../../Entity'
+      - '../../Attribute'

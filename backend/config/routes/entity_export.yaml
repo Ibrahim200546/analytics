@@ -1,0 +1,2 @@
+entity_export:
+  resource: '@EntityExportBundle/Resources/config/routing.yaml'

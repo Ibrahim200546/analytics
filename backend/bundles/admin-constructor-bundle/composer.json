@@ -1,0 +1,23 @@
+{
+  "name": "dexodus/admin-constructor-bundle",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "version": "1.0.1",
+  "authors": [
+    {
+      "name": "Daniil Yaroshuk",
+      "email": "the.dexodus@gmail.com"
+    }
+  ],
+  "require": {
+    "dexodus/entity-form-bundle": "1.*",
+    "dexodus/entity-table-bundle": "1.*",
+    "cijic/phpmorphy": "^0.3.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "Dexodus\\AdminConstructorBundle\\": "src/"
+    }
+  }
+}

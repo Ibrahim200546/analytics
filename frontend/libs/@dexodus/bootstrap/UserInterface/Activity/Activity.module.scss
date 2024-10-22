@@ -1,0 +1,31 @@
+$circleDiameter: 8px;
+$borderWidth: 2px;
+$leftPadding: 16px;
+
+.activity {
+  &__item {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    border-left: $borderWidth solid #000000;
+    padding-left: $leftPadding;
+    padding-bottom: 16px;
+
+    &__circle {
+      position: absolute;
+      width: $circleDiameter;
+      height: $circleDiameter;
+      border-radius: 50%;
+      left: -$borderWidth / 2 - $circleDiameter / 2;
+    }
+
+    &__title {
+
+    }
+
+    &__agoTime {
+      font-size: 10px;
+      color: #a3a3a3;
+    }
+  }
+}

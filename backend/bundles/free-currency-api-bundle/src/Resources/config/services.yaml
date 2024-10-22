@@ -1,0 +1,8 @@
+services:
+  Dexodus\FreeCurrencyApiBundle\:
+    resource: '../..'
+    public: true
+    autowire: true
+    autoconfigure: true
+    exclude:
+      - '../../Dto'

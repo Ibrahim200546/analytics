@@ -1,0 +1,30 @@
+.settings {
+  .columnsOrderItem {
+    display: flex;
+    align-items: center;
+    user-select: none;
+
+    &__icon {
+      &_canDrag {
+        cursor: grab;
+      }
+    }
+  }
+}
+
+.draggableListInput {
+  position: relative;
+  user-select: none;
+  border: 1px solid #ccc;
+  padding: 10px;
+  height: auto;
+}
+
+.draggableItem {
+  padding: 10px;
+  margin-bottom: 5px;
+  background-color: white;
+  border: 1px solid #ddd;
+  cursor: grab;
+  transition: transform 0.2s ease;
+}

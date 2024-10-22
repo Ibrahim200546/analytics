@@ -1,0 +1,10 @@
+.back {
+  position: absolute;
+  margin: 70px 0 0 145px;
+}
+
+@media screen and (max-width: 600px) {
+  .back {
+    margin: 0;
+  }
+}

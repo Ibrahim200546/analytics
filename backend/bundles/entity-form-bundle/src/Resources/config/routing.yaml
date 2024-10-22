@@ -1,0 +1,5 @@
+controllers:
+    resource:
+        path: '@EntityFormBundle/Controller/'
+        namespace: Dexodus\EntityFormBundle\Controller
+    type: attribute

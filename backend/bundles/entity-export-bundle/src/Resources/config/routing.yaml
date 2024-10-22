@@ -1,0 +1,5 @@
+controllers:
+    resource:
+        path: '@EntityExportBundle/Controller/'
+        namespace: Dexodus\EntityExportBundle\Controller
+    type: attribute

@@ -1,0 +1,5 @@
+controllers:
+    resource:
+        path: '@AdminConstructorBundle/Controller/'
+        namespace: Dexodus\AdminConstructorBundle\Controller
+    type: attribute

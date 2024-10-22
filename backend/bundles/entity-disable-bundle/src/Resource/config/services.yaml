@@ -1,0 +1,8 @@
+services:
+  Dexodus\EntityDisableBundle\:
+    resource: '../..'
+    public: true
+    autowire: true
+    autoconfigure: true
+    exclude:
+      - "../../EntityTable/Action"

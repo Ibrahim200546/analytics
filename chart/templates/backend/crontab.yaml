@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+    name: cap-cronjob-{{ $.Values.env }}
+spec:
+    schedule: "0 0 * * *"
+    jobTemplate:
+        spec:
+            template:
+                spec:
+                    imagePullSecrets:
+                        -   name: cap-regcred
+                    dnsPolicy: ClusterFirstWithHostNet
+                    containers:
+                        {{- range $.Values.crontab_one_day }}
+                        -   name: {{ . | replace ":" "-" }}
+                            image: "registry.gitlab.com/dexodus-group/exchange-rates/backend-php-{{ .Values.env }}:{{ .Values.image.tag }}"
+                            imagePullPolicy: IfNotPresent
+                            command:
+                                - php
+                                - /srv/app/bin/console
+                                - {{ . }}
+                        {{- end }}
+                    restartPolicy: Never
+    concurrencyPolicy: Forbid

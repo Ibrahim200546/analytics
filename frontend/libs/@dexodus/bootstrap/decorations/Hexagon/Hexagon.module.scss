@@ -1,0 +1,23 @@
+.hexagon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.line {
+  position: absolute;
+  border-left-style: solid;
+  border-right-style: solid;
+  border-left-width: inherit;
+  border-right-width: inherit;
+  box-sizing: border-box;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-sizing: border-box;
+}

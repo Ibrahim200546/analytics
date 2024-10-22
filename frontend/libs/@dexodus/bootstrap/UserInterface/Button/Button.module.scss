@@ -1,0 +1,138 @@
+@use 'sass:list';
+
+$styles: "Default", "Primary", "Success", "Info", "Warning", "Danger", "Violet";
+
+$sizes: (
+  "Default": ("fontSize": 16px, "padding": 8px 25px, "lineHeight": 26px),
+  "Large": ("fontSize": 18px, "padding": 15px 35px, "lineHeight": 26px),
+  "Small": ("fontSize": 14px, "padding": 7px 20px, "lineHeight": 26px),
+  "ExtraSmall": ("fontSize": 12px, "padding": 5px 15px, "lineHeight": 16px),
+);
+
+$backgroundColors: (
+        "Default": #e4e7ea,
+        "Primary": #304ffe,
+        "Success": #00bf4f,
+        "Info": #00aeff,
+        "Warning": #fbbc05,
+        "Danger": #ea4335,
+        "Violet": #7045ff,
+);
+
+$textColors: (
+        "Default": #000000,
+        "Primary": #ffffff,
+        "Success": #ffffff,
+        "Info": #ffffff,
+        "Warning": #ffffff,
+        "Danger": #ffffff,
+        "Violet": #ffffff,
+);
+
+$hoverBackgroundColors: (
+        "Default": #e4e7ea,
+        "Primary": #1e3ded,
+        "Success": #00ce55,
+        "Info": #00aeff,
+        "Warning": #ffa000,
+        "Danger": #ff3838,
+        "Violet": #8445ff,
+);
+
+.button, .button_styleDefault {
+  position: relative;
+  display: inline-flex;
+  font-family: "Poppins", Poppins, Arial, sans-serif;
+  font-weight: 600;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  line-height: 26px;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  align-items: center;
+  cursor: pointer;
+
+  .loaderBackground {
+    opacity: 0;
+  }
+
+  .loader {
+    position: absolute;
+    top: calc(-50% + 2px);
+    left: calc(50% - 12px);
+  }
+
+  @each $sizeName, $size in $sizes {
+    &_size#{$sizeName} {
+      padding: map-get($size, "padding");
+      font-size: map-get($size, "fontSize");
+      line-height: map-get($size, "lineHeight");
+
+      &_iconLeft > .icon, &_iconRight > .icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      &_iconLeft {
+        padding-left: 0;
+
+        .icon {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding-left: list.nth(map-get($size, "padding"), 2);
+          margin-right: 8px;
+        }
+      }
+
+      &_iconRight {
+        padding-right: 0;
+
+        .icon {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding-right: list.nth(map-get($size, "padding"), 2);
+          margin-left: 8px;
+        }
+      }
+    }
+  }
+
+  @each $styleName in $styles {
+    &_style#{$styleName} {
+      background: map-get($backgroundColors, $styleName);
+      color: map-get($textColors, $styleName);
+
+      &.enabled {
+        &:hover, &:focus, &:active {
+          color: map-get($textColors, $styleName);
+          background: map-get($hoverBackgroundColors, $styleName);
+        }
+      }
+
+      &:active {
+        border-color: darken(map-get($hoverBackgroundColors, $styleName), 10%);
+      }
+
+      &_bordered {
+        background: #ffffff;
+        color: map-get($backgroundColors, $styleName);
+        border: 2px solid map-get($backgroundColors, $styleName);
+      }
+
+      &_rounded {
+        border-radius: 23px;
+      }
+    }
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+  }
+
+  .contentContainer {
+    display: flex;
+  }
+}
