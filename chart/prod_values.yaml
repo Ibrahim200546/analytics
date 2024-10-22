@@ -4,3 +4,4 @@ domain:
     frontend: exchange-rates.dexodus.ru
 image:
     tag: latest
+

@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-    name: cap-cronjob-{{ $.Values.env }}
+    name: exchange-rates-cronjob-{{ $.Values.env }}
 spec:
     schedule: "0 0 * * *"
     jobTemplate:
@@ -12,9 +12,9 @@ spec:
                         -   name: cap-regcred
                     dnsPolicy: ClusterFirstWithHostNet
                     containers:
-                        {{- range $.Values.crontab_one_day }}
+                        {{- range $.Values.crontab }}
                         -   name: {{ . | replace ":" "-" }}
-                            image: "registry.gitlab.com/dexodus-group/exchange-rates/backend-php-{{ .Values.env }}:{{ .Values.image.tag }}"
+                            image: "registry.gitlab.com/dexodus-group/exchange-rates/backend-php-{{ $.Values.env }}:{{ $.Values.image.tag }}"
                             imagePullPolicy: IfNotPresent
                             command:
                                 - php

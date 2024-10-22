@@ -1,2 +1,2 @@
-crontab_one_day:
-  - 'currency:pairs:update'
+crontab:
+  - currency:pairs:update
