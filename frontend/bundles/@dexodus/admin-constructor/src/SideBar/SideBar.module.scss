@@ -1,0 +1,49 @@
+
+$sideBarWidth: 250px;
+$sideBarColor: #FFFFFF;
+$sideBarCloseSpeed: 0.3s;
+
+.sideBar {
+  display: flex;
+  flex-direction: column;
+  min-width: $sideBarWidth;
+  width: $sideBarWidth;
+  background: $sideBarColor;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  height: 100vh;
+  transition: $sideBarCloseSpeed;
+  z-index: 20;
+
+  .projectName {
+    font-weight: 500;
+    font-size: 28px;
+    text-decoration: none;
+    margin: 20px 0 25px 20px;
+    color: var(--brand-color);
+  }
+
+  &.closed {
+    margin-left: -$sideBarWidth;
+    transition: $sideBarCloseSpeed;
+  }
+
+  .logout {
+    display: flex;
+    align-items: center;
+    bottom: 170px;
+    position: absolute;
+    padding-top: 8px;
+    border-top: 1px solid #817F9B;
+    color: #817F9B;
+    text-decoration: none;
+    margin-left: 35px;
+    width: 180px;
+    height: 50px;
+
+    svg {
+      width: 20px;
+      height: 20px;
+      margin-right: 11px;
+    }
+  }
+}

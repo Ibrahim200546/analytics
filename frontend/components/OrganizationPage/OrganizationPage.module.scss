@@ -1,0 +1,44 @@
+.organizationPage {
+  .cardTitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .controls {
+    }
+
+    .cardName {
+      font-size: 24px;
+    }
+  }
+
+  .twoCardsInline {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+
+    > * {
+      max-width: calc(50% - 8px);
+      width: calc(50% - 8px);
+      flex: 1;
+      min-height: 100%;
+      box-sizing: border-box;
+      height: unset;
+    }
+  }
+
+  .oneCardInline {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+
+    > * {
+      max-width: 100%;
+      width: 100%;
+      flex: 1;
+      min-height: 100%;
+      box-sizing: border-box;
+      height: unset;
+    }
+  }
+}

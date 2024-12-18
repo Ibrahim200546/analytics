@@ -1,0 +1,8 @@
+{
+  "name": "@dexodus/next-auth-jwt-provider-bundle",
+  "type": "module",
+  "version": "1.0.0",
+  "dependencies": {
+    "@dexodus/next-auth-bundle": "file:../next-auth-bundle"
+  }
+}

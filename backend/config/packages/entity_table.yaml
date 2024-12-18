@@ -4,3 +4,7 @@ entity_table:
             prefix: 'App\Entity'
         -   dir: '%kernel.project_dir%/vendor/dexodus/user-session-history-bundle/src/Entity'
             prefix: 'Dexodus\UserSessionHistoryBundle\Entity'
+        -   dir: '%kernel.project_dir%/vendor/dexodus/web-resource-bundle/src/Entity'
+            prefix: 'Dexodus\WebResourceBundle\Entity'
+        -   dir: '%kernel.project_dir%/bundles/general/location-bundle/src/Entity'
+            prefix: 'Dexodus\LocationBundle\Entity'

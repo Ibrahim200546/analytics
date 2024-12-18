@@ -1,0 +1,20 @@
+{
+  "name": "dexodus/typescript-types-bundle",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Daniil Yaroshuk",
+      "email": "the.dexodus@gmail.com"
+    }
+  ],
+  "require": {
+  },
+  "autoload": {
+    "psr-4": {
+      "Dexodus\\TypescriptTypesBundle\\": "src/"
+    }
+  }
+}

@@ -1,0 +1,2 @@
+chat_gpt:
+  api_key: '%env(CHATGPT_KEY)%'

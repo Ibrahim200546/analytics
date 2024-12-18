@@ -1,6 +1,9 @@
+// import Translate from "@dexodus/native-translation-bundle/src/components/Translate";
+
 export default function Home() {
   return (
-    <main>
-    </main>
-  )
+    <div>
+      {/*<Translate/>*/}
+    </div>
+  );
 }

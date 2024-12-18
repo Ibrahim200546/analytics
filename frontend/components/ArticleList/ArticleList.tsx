@@ -1,0 +1,100 @@
+"use client";
+
+import React, {useEffect, useState} from "react";
+import styles from "./ArticleList.module.scss";
+import ArticleAnnounce from "@/components/ArticleAnnounce";
+import Article from "@/apiTypes/Dexodus/SmiParserInterface/Entity/Article";
+import Button, {ButtonStyle} from "@dexodus/bootstrap/src/UserInterface/Button";
+import ButtonsGroup from "@dexodus/bootstrap/src/UserInterface/ButtonsGroup";
+import {AiFillStar, AiOutlineStar} from "react-icons/ai";
+import {FaSort, FaSortDown, FaSortUp} from "react-icons/fa";
+import useForm from "@dexodus/react-form/src/hooks/useForm";
+import {Field} from "@dexodus/react-form";
+import AsyncDropdownField from "@dexodus/bootstrap/src/UserInterface/Fields/AsyncDropdownField";
+import {getCookie, setCookie} from "@dexodus/bootstrap/src/common/cookies";
+import {toast} from "react-toastify";
+import {useSession} from "next-auth/react";
+import Project from "@/apiTypes/App/Entity/Project";
+import HydraCollection from "@/types/HydraCollection";
+import ProjectArticle from "@/apiTypes/App/Entity/ProjectArticle";
+import InfinityContainer from "@dexodus/bootstrap/src/UserInterface/InfinityContainer";
+import useApiFetch from "@dexodus/api-fetch/src/hooks/useApiFetch";
+
+interface ArticleListProps {
+    projectArticlesHydraCollection: HydraCollection<ProjectArticle>;
+    project?: Project;
+    organizationId?: string;
+}
+
+const ArticleList: React.FC<ArticleListProps> = ({project, projectArticlesHydraCollection, organizationId}) => {
+    const [filters, setFilters] = useState<{
+        favorite: boolean,
+        createdAt: false | "asc" | "desc",
+    }>({
+        favorite: false,
+        createdAt: false,
+    });
+
+    const {data} = useSession();
+    const additionalQueryParameters = organizationId ? {organizationId} : {};
+    const apiFetch = useApiFetch();
+
+    const {component: projectForm, data: projectFormData} = useForm((
+        <Field component={AsyncDropdownField} property="project" label="Выбранный проект" componentProps={{
+            url: "/api/projects/for-my-organization",
+            label: "name",
+            additionalQueryParameters,
+        }}/>
+    ), {project: project ?? ''});
+
+    useEffect(() => {
+        if (projectFormData.project && typeof projectFormData.project === 'string') {
+            const projectId = projectFormData.project.split("/").pop() as string;
+            if (getCookie(`news-${data?.user?.id}-${organizationId}-project-id`) === projectId) {
+                return;
+            }
+
+            setCookie(`news-${data?.user?.id}-${organizationId}-project-id`, projectId);
+            toast("Проект был успешно изменён", {type: "success"});
+            window.location.reload();
+        }
+    }, [projectFormData]);
+
+    return (
+        <div className={styles.articleList}>
+            <div>
+                {projectForm}
+            </div>
+            <div>
+                <ButtonsGroup>
+                    <Button style={filters.favorite ? ButtonStyle.Primary : ButtonStyle.Info}
+                            icon={filters.favorite ? <AiFillStar/> : <AiOutlineStar/>}
+                            onClick={() => setFilters(filters => ({
+                                ...filters,
+                                favorite: !filters.favorite,
+                            }))}>{filters.favorite ? "Скрыть" : "Показать"} избранные</Button>
+                    <Button style={filters.createdAt ? ButtonStyle.Primary : ButtonStyle.Info}
+                            icon={filters.createdAt ? (filters.createdAt === "asc" ? <FaSortDown/> : <FaSortUp/>) :
+                                <FaSort/>} onClick={() => setFilters(filters => ({
+                        ...filters,
+                        createdAt: !filters.createdAt ? "asc" : (filters.createdAt === "asc" ? "desc" : false),
+                    }))}>{!filters.createdAt ? "Без сортировки по дате" : (filters.createdAt === "desc" ? "Сначала новые" : "Сначала старые")}</Button>
+                </ButtonsGroup>
+            </div>
+            <InfinityContainer className={styles.infinityContainer} loadPage={async (page) => {
+                let hydraCollection = projectArticlesHydraCollection;
+
+                if (page !== 1) {
+                    const response = await apiFetch(`/api/project-articles/${project?.id}?page=${page}`);
+                    hydraCollection = await response.json();
+                }
+
+                return hydraCollection['hydra:member'].map(projectArticle => projectArticle.article ? (
+                    <ArticleAnnounce key={projectArticle.id} projectArticle={projectArticle} article={projectArticle.article}/>
+                ) : '');
+            }}/>
+        </div>
+    );
+};
+
+export default ArticleList;

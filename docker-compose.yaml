@@ -61,8 +61,26 @@ services:
         networks:
             - exchange-rates
 
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.17.10
+        environment:
+            discovery.type: single-node
+            bootstrap.memory_lock: "true"
+            ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+        volumes:
+            - es-data:/usr/share/elasticsearch/data:rw
+        ports:
+            - "${ELASTICSEARCH_PORT}:9200"
+        networks:
+            - exchange-rates
+
 networks:
     exchange-rates:
 
 volumes:
     db-data:
+    es-data:

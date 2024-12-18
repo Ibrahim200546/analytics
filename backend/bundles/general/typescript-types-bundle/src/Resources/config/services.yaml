@@ -1,0 +1,9 @@
+services:
+  Dexodus\TypescriptTypesBundle\:
+    resource: '../..'
+    public: true
+    autowire: true
+    autoconfigure: true
+    exclude:
+      '../../Exception'
+      '../../Dto'

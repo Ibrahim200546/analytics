@@ -1,0 +1,23 @@
+.controls {
+  display: flex;
+  justify-content: end;
+
+  .control {
+    margin-left: 8px;
+  }
+}
+
+.formInlineThreeFields {
+  display: flex;
+
+  > * {
+    width: 33%;
+    max-width: 33%;
+    margin-right: 8px;
+  }
+}
+
+.underField {
+  margin-top: -16px;
+  margin-bottom: 16px;
+}

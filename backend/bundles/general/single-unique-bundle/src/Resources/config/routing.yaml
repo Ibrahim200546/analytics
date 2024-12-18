@@ -1,0 +1,5 @@
+controllers:
+    resource:
+        path: '@SingleUniqueBundle/Controller/'
+        namespace: Dexodus\SingleUniqueBundle\Controller
+    type: attribute

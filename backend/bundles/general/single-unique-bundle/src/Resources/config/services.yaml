@@ -1,0 +1,16 @@
+services:
+  Dexodus\SingleUniqueBundle\:
+    resource: '../..'
+    public: true
+    autowire: true
+    autoconfigure: true
+    exclude:
+      - '../../Attribute'
+
+  Dexodus\SingleUniqueBundle\Validator\Jsel\:
+    resource: '../../Validator/Jsel'
+    public: true
+    autowire: true
+    autoconfigure: true
+    tags:
+      - 'entity_form.validator'

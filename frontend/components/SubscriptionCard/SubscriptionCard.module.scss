@@ -1,0 +1,30 @@
+.subscriptionCard {
+  .subscriptionAbsent {
+    color: var(--secondary-color);
+  }
+
+  .subscriptionDuration {
+    margin-top: -16px;
+    color: var(--secondary-color);
+    font-style: italic;
+  }
+
+  .modalControls {
+    > * {
+      margin-left: 8px;
+    }
+  }
+
+  .date {
+    color: var(--brand-color);
+  }
+
+  .controls {
+    display: flex;
+    justify-content: end;
+
+    .control {
+      margin-left: 8px;
+    }
+  }
+}

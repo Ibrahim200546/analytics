@@ -1,0 +1,2 @@
+typescript_types:
+    resource: '@TypescriptTypesBundle/Resources/config/routing.yaml'

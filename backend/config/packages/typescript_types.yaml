@@ -1,0 +1,6 @@
+typescript_types:
+  mapping:
+    - dir: '%kernel.project_dir%/src/Entity'
+      prefix: 'App\Entity'
+    - dir: '%kernel.project_dir%/vendor/dexodus/smi-parser-interface/src/Entity'
+      prefix: 'Dexodus\SmiParserInterface\Entity'

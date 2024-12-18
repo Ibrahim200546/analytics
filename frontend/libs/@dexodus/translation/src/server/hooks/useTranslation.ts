@@ -1,7 +1,7 @@
 import { initI18n } from '../i18n';
 import { TFunction } from 'i18next';
 import { completeTranslation } from '../../api';
-import getApiFetch from "@/libs/@dexodus/api-fetch/src/server/getApiFetch";
+import getApiFetch from "@/bundles/@dexodus/api-fetch/src/server/getApiFetch";
 
 const createdKeys: string[] = [];
 

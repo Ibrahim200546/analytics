@@ -1,0 +1,41 @@
+.tagsField {
+  .underField {
+    .tagsTitle {
+      color: #5b5b5b;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 4px 0;
+      overflow: hidden;
+      align-items: stretch;
+      height: max-content;
+      margin-top: -16px;
+
+      .tag {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        margin-bottom: 4px;
+        margin-right: 4px;
+        text-wrap: nowrap;
+        color: #5b5b5b;
+        border: 1px solid var(--brand-color);
+        border-radius: 8px;
+        padding: 4px 8px;
+
+        .deleteTag {
+          cursor: pointer;
+          color: red;
+          transition: .3s;
+
+          &:hover {
+            transform: rotate(180deg);
+            transition: .3s;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,5 @@
+controllers:
+    resource:
+        path: '@TypescriptTypesBundle/Controller/'
+        namespace: Dexodus\TypescriptTypesBundle\Controller
+    type: attribute

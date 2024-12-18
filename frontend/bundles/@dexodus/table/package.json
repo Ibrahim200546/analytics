@@ -1,0 +1,12 @@
+{
+  "name": "@dexodus/table",
+  "type": "module",
+  "version": "1.0.0",
+  "dependencies": {
+    "moment": "^2.30.1",
+    "@dexodus/jsel": "^0.2.6",
+    "react-icons": "^5.4.0",
+    "classnames": "^2.5.1",
+    "react-loader-spinner": "^6.1.6"
+  }
+}

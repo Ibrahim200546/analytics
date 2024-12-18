@@ -1,0 +1,9 @@
+services:
+  Dexodus\WebResourceBundle\:
+    resource: '../..'
+    public: true
+    autowire: true
+    autoconfigure: true
+    exclude:
+      - '../../Dto'
+      - '../../Message'

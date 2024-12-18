@@ -1,39 +1,19 @@
-'use client';
+import styles from "./page.module.scss";
+import Button, {ButtonStyle} from "@dexodus/bootstrap/src/UserInterface/Button";
+import LinkButton from "@dexodus/bootstrap/src/UserInterface/LinkButton";
 
-import React from "react";
-import LoginForm from "@/libs/@dexodus/admin-constructor/src/LoginForm";
-import {login} from "@/app/lib/actions/login";
-import {useRouter} from "next/navigation";
-import Button, {ButtonStyle} from "@/libs/@dexodus/bootstrap/UserInterface/Button";
-import styles from './page.module.scss'
-import {FaChevronLeft} from "react-icons/fa";
-
-interface PageProps {
-}
-
-interface LoginData {
-    login: string;
-    password: string;
-}
-
-const Page: React.FC<PageProps> = () => {
-    const router = useRouter();
-
+const Page = () => {
     return (
-        <>
-            <Button style={ButtonStyle.Primary} bordered={true} className={styles.back} icon={<FaChevronLeft/>} onClick={() => router.push('/')}>
-                Назад
-            </Button>
-            <LoginForm authenticate={async (loginData: any) => {
-                const result = await login(loginData);
+        <div className={styles.page}>
+            <div className={styles.loginWindow}>
+                Войти в систему
 
-                if (result) {
-                    return result;
-                }
-
-                router.push('/admin')
-            }}/>
-        </>
+                <div className={styles.loginButtons}>
+                    {                    <LinkButton href="/login/jwt" style={ButtonStyle.Default}>Войти используя почту и пароль</LinkButton>
+}
+                </div>
+            </div>
+        </div>
     )
 }
 

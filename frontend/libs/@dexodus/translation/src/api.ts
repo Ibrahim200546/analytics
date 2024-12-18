@@ -1,4 +1,4 @@
-import {ApiFetchFunction} from "@/libs/@dexodus/api-fetch/src/apiFetch";
+import {ApiFetchFunction} from "@/bundles/@dexodus/api-fetch/src/apiFetch";
 
 export interface TranslationList {
     locale: string;

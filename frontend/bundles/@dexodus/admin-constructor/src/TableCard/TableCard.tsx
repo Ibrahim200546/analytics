@@ -1,0 +1,119 @@
+"use client";
+
+import React, {useEffect, useRef, useState} from "react";
+import styles from "./TableCard.module.scss";
+import TextTranslation from "@/libs/@dexodus/translation/src/client/TextTranslation";
+import LinkButton from "@dexodus/bootstrap/src/UserInterface/LinkButton";
+import {VscDesktopDownload, VscSettings} from "react-icons/vsc";
+import Button, {ButtonSizes, ButtonStyle} from "@dexodus/bootstrap/src/UserInterface/Button";
+import {getApiDomain} from "@dexodus/api-fetch/src/apiFetch";
+import Card from "@dexodus/bootstrap/src/UserInterface/Card";
+import {EntityTableAdapter, EntityTableStructure} from "@dexodus/table/src/adapter/EntityTableAdapter";
+import useApiFetch from "@dexodus/api-fetch/src/hooks/useApiFetch";
+import {useSession} from "next-auth/react";
+import Table from "@dexodus/table/src/Table";
+import {Jsel} from "@dexodus/jsel";
+import useAdminConstructorDispatch from "@dexodus/admin-constructor/src/hooks/redux/useAdminConstructorDispatch";
+import {AdminConstructorSlice} from "@dexodus/admin-constructor/src/redux/adminConstructorReducer";
+
+interface TableCardProps {
+    cardTitle?: string;
+    entityTableStructure: EntityTableStructure;
+    entityTableName: string;
+    entitiesPath?: string;
+    additionalSearchParams?: {};
+    isDev?: boolean;
+    customControls?: React.ReactNode[];
+    setRerender?: (rerenderFunction: () => void) => void;
+    setJselRef?: (jselRef: React.RefObject<Jsel | null>) => void;
+    max?: number;
+}
+
+const TableCard: React.FC<TableCardProps> = ({cardTitle, entityTableStructure, entityTableName, entitiesPath, additionalSearchParams = {}, isDev = false, customControls= [], setRerender = () => {}, setJselRef = () => {}, max}) => {
+    const {data: session} = useSession();
+    const userName = session?.user?.email;
+    const apiFetch = useApiFetch();
+    const adapter = useRef(new EntityTableAdapter(getApiDomain(), `entity-table/structure/${entityTableName}`, entityTableStructure, apiFetch, entitiesPath && `/api/${entitiesPath}`, additionalSearchParams));
+    const [showSettings, setShowSettings] = useState<() => void>(() => {});
+    const tableName = `${userName}_${entitiesPath ? `/api/${entitiesPath}` : `entity-table/structure/${entityTableName}`}`;
+    const [renderTable, setRenderTable] = useState<boolean>(true);
+
+    useEffect(() => {
+        if (!renderTable) {
+            setRenderTable(true);
+        }
+    }, [renderTable]);
+
+    useEffect(() => {
+    }, []);
+
+    return (
+        <Card
+            fullWidth={true}
+            title={cardTitle && <TextTranslation label={cardTitle} defaultValue={cardTitle}/>}
+            titleActions={(
+                <div style={{display: "grid", gridTemplateColumns: `auto auto ${isDev ? 'auto' : ''} ${customControls.map(() => ' auto')}`, gridColumnGap: "8px"}}>
+                    {customControls}
+                    {isDev && (
+                        <Button
+                            onClick={async () => {
+                                window.localStorage.removeItem(`${tableName}_options`);
+                                window.sessionStorage.removeItem(`${tableName}_options`);
+                                const fetchResult = await apiFetch(`/entity-table/structure/${entityTableName}`, {cache: 'no-store'} );
+                                const loadedStructure = await fetchResult.json();
+                                adapter.current = new EntityTableAdapter(getApiDomain(), `entity-table/structure/${entityTableName}`, loadedStructure, apiFetch, entitiesPath && `/api/${entitiesPath}`, additionalSearchParams);
+                                setRenderTable(false);
+                            }}
+                            style={ButtonStyle.Danger}
+                            size={ButtonSizes.Small}
+                            rounded={true}
+                            bordered={true}
+                        >
+                            Перезагрузить
+                        </Button>
+                    )}
+                    <Button
+                        onClick={showSettings}
+                        icon={<VscSettings/>}
+                        className={styles.download}
+                        style={ButtonStyle.Violet}
+                        size={ButtonSizes.Small}
+                        rounded={true}
+                        bordered={true}
+                    >
+                        <TextTranslation label="tableOptions" defaultValue="Настройки таблицы"/>
+                    </Button>
+                    <LinkButton
+                        icon={<VscDesktopDownload/>}
+                        target="_blank"
+                        href={`${process.env.NEXT_PUBLIC_API_URL}/entity-table/export/${entityTableName}?access_token=${session?.user.token}`}
+                        className={styles.download}
+                        style={ButtonStyle.Info}
+                        size={ButtonSizes.Small}
+                        rounded={true}
+                        bordered={true}
+                    >
+                        <TextTranslation label="download" defaultValue="Скачать"/>
+                    </LinkButton>
+                </div>
+            )}
+            className={styles.entityTablePage}
+        >
+            <div className={styles.cardContent}>
+                {renderTable && (
+                    <Table
+                        adapter={adapter.current}
+                        name={tableName}
+                        setShowSettings={showSettings => setShowSettings(() => showSettings)}
+                        isDev={isDev}
+                        setJselRef={setJselRef}
+                        setRefresh={setRerender}
+                        max={max}
+                    />
+                )}
+            </div>
+        </Card>
+    );
+};
+
+export default TableCard;

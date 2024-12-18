@@ -25,4 +25,11 @@ return [
     Dexodus\EntityHistoryBundle\EntityHistoryBundle::class => ['all' => true],
     Dexodus\EntityDisableBundle\EntityDisableBundle::class => ['all' => true],
     Dexodus\FreeCurrencyApiBundle\FreeCurrencyApiBundle::class => ['all' => true],
+    Dexodus\TypescriptTypesBundle\TypescriptTypesBundle::class => ['all' => true],
+    Dexodus\WebResourceBundle\WebResourceBundle::class => ['all' => true],
+    Dexodus\ChatGPTBundle\ChatGPTBundle::class => ['all' => true],
+    Dexodus\SmiParserInterface\SmiParserInterfaceBundle::class => ['all' => true],
+    FOS\ElasticaBundle\FOSElasticaBundle::class => ['all' => true],
+    Dexodus\LocationBundle\LocationBundle::class => ['all' => true],
+    Dexodus\SingleUniqueBundle\SingleUniqueBundle::class => ['all' => true],
 ];

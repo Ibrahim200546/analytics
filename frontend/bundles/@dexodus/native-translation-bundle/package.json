@@ -1,0 +1,8 @@
+{
+  "name": "@dexodus/native-translation-bundle",
+  "type": "module",
+  "version": "1.0.0",
+  "dependencies": {
+    "@dexodus/redux-toolkit-bundle": "file:../redux-toolkit-bundle"
+  }
+}

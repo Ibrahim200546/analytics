@@ -1,0 +1,9 @@
+services:
+  _instanceof:
+    Dexodus\EntityFormBundle\Validator\ValidatorInterface:
+      tags: [ 'smi_parser.parser' ]
+  Dexodus\SmiParserInterface\:
+    resource: '../..'
+    public: true
+    autowire: true
+    autoconfigure: true

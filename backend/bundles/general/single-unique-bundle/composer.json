@@ -1,0 +1,20 @@
+{
+  "name": "dexodus/single-unique-bundle",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Daniil Yaroshuk",
+      "email": "the.dexodus@gmail.com"
+    }
+  ],
+  "require": {
+  },
+  "autoload": {
+    "psr-4": {
+      "Dexodus\\SingleUniqueBundle\\": "src/"
+    }
+  }
+}

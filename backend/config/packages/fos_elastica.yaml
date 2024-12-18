@@ -1,0 +1,25 @@
+# Read the documentation: https://github.com/FriendsOfSymfony/FOSElasticaBundle/blob/master/doc/setup.md
+fos_elastica:
+    clients:
+        default: { url: '%env(ELASTICSEARCH_URL)%' }
+    indexes:
+        articles: # Название индекса
+            properties:
+                title:
+                    type: text
+                    analyzer: standard
+                content:
+                    type: text
+                    analyzer: standard
+                announce:
+                    type: text
+                    analyzer: standard
+            persistence:
+                driver: orm
+                model: Dexodus\SmiParserInterface\Entity\Article
+                provider: ~
+                finder: ~
+                listener:
+                    insert: true
+                    update: true
+                    delete: true

@@ -2,7 +2,7 @@ import i18next from "i18next";
 import Backend, {HttpBackendOptions} from "i18next-http-backend";
 import {TranslationList} from "@/libs/@dexodus/translation/src/api";
 import {initReactI18next} from "react-i18next";
-import {getApiDomain} from "@/libs/@dexodus/api-fetch/src/apiFetch";
+import {getApiDomain} from "@/bundles/@dexodus/api-fetch/src/apiFetch";
 
 let isInitialized = false;
 

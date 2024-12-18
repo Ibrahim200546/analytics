@@ -2,7 +2,7 @@ import {TranslationList} from "../api";
 import {createInstance, i18n} from "i18next";
 import { initReactI18next } from 'react-i18next/initReactI18next'
 import Backend, {HttpBackendOptions} from "i18next-http-backend";
-import {getApiDomain} from "@/libs/@dexodus/api-fetch/src/apiFetch";
+import {getApiDomain} from "@/bundles/@dexodus/api-fetch/src/apiFetch";
 
 let i18nextInstance: i18n | undefined = undefined;
 

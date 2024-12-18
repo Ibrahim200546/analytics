@@ -1,0 +1,124 @@
+.article {
+  display: flex;
+
+  .image {
+    width: 305px;
+    height: 186px;
+    object-fit: cover;
+    margin-right: 27px;
+    flex-basis: 305px;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-basis: 700px;
+    flex-grow: 10;
+
+    .topContainer {
+      .header {
+        display: flex;
+        justify-content: space-between;
+
+        .title {
+          font-size: 20px;
+          margin-bottom: 0;
+        }
+
+        .createdAt {
+          font-size: 14px;
+          color: var(--secondary-color);
+          font-style: italic;
+        }
+
+        .controls {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          svg {
+            width: 32px;
+            height: 32px;
+          }
+
+          .control {
+            max-width: 32px;
+            max-height: 32px;
+          }
+
+          .favoriteControl {
+            cursor: pointer;
+
+            &.favorite {
+              svg:first-of-type {
+                fill: #FCDB03;
+              }
+            }
+
+            svg {
+              transition: .3s;
+              transform: rotate(0deg);
+
+              &:first-of-type {
+               fill: white;
+              }
+
+              &:last-of-type {
+                margin-top: -32px;
+              }
+            }
+
+            &:hover {
+              &.favorite {
+                svg:first-of-type {
+                  fill: white;
+                }
+              }
+
+              svg {
+                transform: rotate(72deg);
+                transition: .3s;
+
+                &:first-of-type {
+                  fill: #ffed7d;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .main {
+        font-size: 20px;
+        color: #7A7A7A;
+        line-height: 23px;
+        max-height: 92px;
+        margin-top: 8px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+
+      .reactions {
+        display: flex;
+
+        .reaction {
+          display: flex;
+          align-items: center;
+          font-size: 20px;
+          margin-right: 8px;
+        }
+      }
+
+      .readMore {
+        color: #0D9816;
+        font-size: 20px;
+      }
+    }
+  }
+}

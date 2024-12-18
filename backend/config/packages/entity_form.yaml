@@ -2,3 +2,7 @@ entity_form:
     mapping:
         -   dir: '%kernel.project_dir%/src/Entity'
             prefix: 'App\Entity'
+        -   dir: '%kernel.project_dir%/bundles/smi/web-resource-bundle/src/Entity'
+            prefix: 'Dexodus\WebResourceBundle\Entity'
+        -   dir: '%kernel.project_dir%/bundles/general/location-bundle/src/Entity'
+            prefix: 'Dexodus\LocationBundle\Entity'

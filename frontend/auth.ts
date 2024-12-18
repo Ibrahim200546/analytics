@@ -1,61 +1,28 @@
-import NextAuth from 'next-auth';
-import { authConfig } from './auth.config';
-import Credentials from 'next-auth/providers/credentials';
-import type {User} from '@/types/User'
-import {LoginData} from "@/libs/@dexodus/admin-constructor/src/LoginForm/LoginForm";
-import getUserDataFromToken from "@/app/lib/actions/getUserDataFromToken";
+import NextAuth, { type DefaultSession } from "next-auth"
+import User from "@/apiTypes/App/Entity/User";
+import jwtProvider from "@dexodus/next-auth-jwt-provider-bundle/src/resources/auth/jwtProvider";
 
-async function getUser(data: LoginData): Promise<User | undefined> {
-    try {
-        const result = await fetch(`${process.env.NEXT_PUBLIC_API_URL_FROM_SERVER}/login/authentication_token`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
 
-        const user: User = await result.json();
-
-        if ('code' in user) {
-            return undefined;
-        }
-
-        const userInfo = getUserDataFromToken(user.token);
-
-        const myProfileResult = await fetch(`${process.env.NEXT_PUBLIC_API_URL_FROM_SERVER}/my-profile`, {
-            headers: {
-                Authorization: `Bearer ${user.token}`,
-            },
-            cache: 'no-cache',
-        })
-        const profile = await myProfileResult.json();
-        console.log('profile', profile);
-
-        return {...user, ...userInfo, name: userInfo.username, roles: userInfo.roles, profile} as User;
-    } catch (error) {
-        throw new Error('Failed to fetch user.');
+declare module "next-auth" {
+    interface Session {
+        user: {
+            token: string,
+        } & User & DefaultSession["user"]
     }
 }
 
-export const { auth, signIn, signOut, handlers: { GET, POST } } = NextAuth({
-    ...authConfig,
+export const { handlers, signIn, signOut, auth } = NextAuth({
+    session: {
+        maxAge: 2678400 // 31 день * 24 часа * 60 минут * 60 секунд
+    },
     providers: [
-        Credentials({
-            async authorize(credentials) {
-                const user = await getUser({
-                    login: credentials.login as string,
-                    password: credentials.password as string,
-                } as LoginData);
+        jwtProvider,
 
-                return user ?? null;
-            },
-        }),
     ],
     callbacks: {
         async jwt(config) {
             if (config.trigger === 'signIn') {
-                config.token = {...config.token, ...config.user};
+                config.token = {...config.user, ...config.token};
             }
             return config.token
         },
@@ -65,4 +32,4 @@ export const { auth, signIn, signOut, handlers: { GET, POST } } = NextAuth({
             return config.session
         }
     },
-});
+})

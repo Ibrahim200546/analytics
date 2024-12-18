@@ -11,6 +11,7 @@
         "cijic/phpmorphy": "^0.3.3",
         "dexodus/admin-constructor-bundle": "^1.0",
         "dexodus/bundle-constructor": "^1.0",
+        "dexodus/chatgpt-bundle": "^1.0",
         "dexodus/dql-functions-bundle": "^1.0",
         "dexodus/entity-disable-bundle": "^1.0",
         "dexodus/entity-export-bundle": "^1.0",
@@ -18,34 +19,46 @@
         "dexodus/entity-history-bundle": "^1.0",
         "dexodus/entity-table-bundle": "^1.0",
         "dexodus/free-currency-api-bundle": "^1.0",
+        "dexodus/location-bundle": "^1.0",
         "dexodus/search-engine-bundle": "^1.0",
+        "dexodus/single-unique-bundle": "^1.0",
+        "dexodus/smi-parser-interface": "^1.0",
         "dexodus/title-bundle": "^1.0",
         "dexodus/translation-api-bundle": "^1.0",
+        "dexodus/typescript-types-bundle": "^1.0",
         "dexodus/user-session-history-bundle": "^1.0",
+        "dexodus/web-resource-bundle": "^1.0",
         "doctrine/doctrine-bundle": "^2.11",
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^2.17",
+        "friendsofsymfony/elastica-bundle": "^6.4",
         "fzaninotto/faker": "^1.5",
         "lexik/jwt-authentication-bundle": "^2.20",
         "nelmio/cors-bundle": "^2.4",
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpstan/phpdoc-parser": "^1.24",
-        "symfony/asset": "6.3.*",
-        "symfony/console": "6.3.*",
-        "symfony/dotenv": "6.3.*",
-        "symfony/event-dispatcher": "6.3.*",
-        "symfony/expression-language": "6.3.*",
+        "symfony/asset": "6.4.*",
+        "symfony/console": "6.4",
+        "symfony/css-selector": "6.4.*",
+        "symfony/doctrine-messenger": "6.4.*",
+        "symfony/dom-crawler": "6.4.*",
+        "symfony/dotenv": "6.4.*",
+        "symfony/event-dispatcher": "6.4.*",
+        "symfony/expression-language": "6.4.*",
         "symfony/flex": "^2",
-        "symfony/framework-bundle": "6.3.*",
-        "symfony/mime": "6.3.*",
-        "symfony/property-access": "6.3.*",
-        "symfony/property-info": "6.3.*",
-        "symfony/runtime": "6.3.*",
-        "symfony/security-bundle": "6.3.*",
-        "symfony/serializer": "6.3.*",
-        "symfony/twig-bundle": "6.3.*",
-        "symfony/validator": "6.3.*",
-        "symfony/yaml": "6.3.*"
+        "symfony/framework-bundle": "6.4.*",
+        "symfony/lock": "6.4.*",
+        "symfony/messenger": "6.4.*",
+        "symfony/mime": "6.4.*",
+        "symfony/property-access": "6.4.*",
+        "symfony/property-info": "6.4.*",
+        "symfony/runtime": "6.4.*",
+        "symfony/security-bundle": "6.4.*",
+        "symfony/serializer": "6.4.*",
+        "symfony/twig-bundle": "6.4.*",
+        "symfony/validator": "6.4.*",
+        "symfony/yaml": "6.4.*",
+        "ext-v8js": "*"
     },
     "config": {
         "allow-plugins": {
@@ -92,7 +105,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "6.3.*",
+            "require": "6.4.*",
             "endpoint": [
                 "https://gitlab.com/api/v4/projects/54254810/repository/files/index.json/raw?ref=main",
                 "flex://defaults"
@@ -102,61 +115,85 @@
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.5",
         "symfony/maker-bundle": "^1.52",
-        "symfony/stopwatch": "6.3.*",
-        "symfony/web-profiler-bundle": "6.3.*"
+        "symfony/stopwatch": "6.4.*",
+        "symfony/web-profiler-bundle": "6.4.*"
     },
     "repositories": [
         {
             "type": "path",
-            "url": "bundles/entity-form-bundle"
+            "url": "bundles/general/entity-form-bundle"
         },
         {
             "type": "path",
-            "url": "bundles/entity-table-bundle"
+            "url": "bundles/general/entity-table-bundle"
         },
         {
             "type": "path",
-            "url": "bundles/translation-api-bundle"
+            "url": "bundles/general/translation-api-bundle"
         },
         {
             "type": "path",
-            "url": "bundles/admin-constructor-bundle"
+            "url": "bundles/general/admin-constructor-bundle"
         },
         {
             "type": "path",
-            "url": "bundles/search-engine-bundle"
+            "url": "bundles/general/search-engine-bundle"
         },
         {
             "type": "path",
-            "url": "bundles/dql-functions-bundle"
+            "url": "bundles/general/dql-functions-bundle"
         },
         {
             "type": "path",
-            "url": "bundles/entity-export-bundle"
+            "url": "bundles/general/entity-export-bundle"
         },
         {
             "type": "path",
-            "url": "bundles/user-session-history-bundle"
+            "url": "bundles/general/user-session-history-bundle"
         },
         {
             "type": "path",
-            "url": "bundles/title-bundle"
+            "url": "bundles/general/title-bundle"
         },
         {
             "type": "path",
-            "url": "bundles/bundle-constructor"
+            "url": "bundles/general/bundle-constructor"
         },
         {
             "type": "path",
-            "url": "bundles/entity-history-bundle"
+            "url": "bundles/general/entity-history-bundle"
         },
         {
             "type": "path",
-            "url": "bundles/entity-disable-bundle"
+            "url": "bundles/general/entity-disable-bundle"
         },
         {
             "type": "path",
-            "url": "bundles/free-currency-api-bundle"
+            "url": "bundles/general/free-currency-api-bundle"
+        },
+        {
+            "type": "path",
+            "url": "bundles/smi/smi-parser-interface"
+        },
+        {
+            "type": "path",
+            "url": "bundles/general/typescript-types-bundle"
+        },
+        {
+            "type": "path",
+            "url": "bundles/general/chatgpt-bundle"
+        },
+        {
+            "type": "path",
+            "url": "bundles/general/location-bundle"
+        },
+        {
+            "type": "path",
+            "url": "bundles/general/single-unique-bundle"
+        },
+        {
+            "type": "path",
+            "url": "bundles/smi/web-resource-bundle"
         }
     ]
 }

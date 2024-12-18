@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from "react";
 import {useTranslation} from "./hooks/useTranslation";
-import useApiFetch from "@/libs/@dexodus/api-fetch/src/hooks/useApiFetch";
+import useApiFetch from "@/bundles/@dexodus/api-fetch/src/hooks/useApiFetch";
 
 interface TextTranslationProps {
     ns?: string;

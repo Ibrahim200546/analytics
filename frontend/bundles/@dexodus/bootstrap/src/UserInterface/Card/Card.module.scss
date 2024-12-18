@@ -1,0 +1,44 @@
+$cardStyles: (
+  "Default",
+  "WithTopBorder",
+  "WithFulledHeader",
+);
+
+.card {
+  margin-bottom: 20px;
+  max-width: 480px;
+  //box-shadow: 0 0 0 2px rgba(0,0,0,.05), 0 2px 2px rgba(0,0,0,.05);
+  border-radius: 10px;
+  display: inline-block;
+  background: #ffffff;
+  height: min-content;
+
+  &.fullWidth {
+    width: 100%;
+    max-width: unset;
+  }
+
+  &.anyWidth {
+    max-width: unset !important;
+  }
+
+  .title {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    font-weight: bold;
+    align-items: center;
+  }
+
+  .content {
+    padding: 10px 20px 20px 20px;
+    transition: .5s;
+    overflow: hidden;
+
+    &_closed {
+      height: 0;
+      padding: 0 20px;
+      transition: .5s;
+    }
+  }
+}

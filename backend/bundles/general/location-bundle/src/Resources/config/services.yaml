@@ -1,0 +1,6 @@
+services:
+  Dexodus\LocationBundle\:
+    resource: '../..'
+    public: true
+    autowire: true
+    autoconfigure: true

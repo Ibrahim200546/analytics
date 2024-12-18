@@ -1,0 +1,21 @@
+{
+  "name": "dexodus/web-resource-bundle",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Daniil Yaroshuk",
+      "email": "the.dexodus@gmail.com"
+    }
+  ],
+  "require": {
+    "ext-v8js": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Dexodus\\WebResourceBundle\\": "src/"
+    }
+  }
+}

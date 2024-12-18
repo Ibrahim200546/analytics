@@ -1,0 +1,2 @@
+single_unique:
+    resource: '@SingleUniqueBundle/Resources/config/routing.yaml'

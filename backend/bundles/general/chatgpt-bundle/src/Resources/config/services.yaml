@@ -1,0 +1,9 @@
+services:
+  Dexodus\ChatGPTBundle\:
+    resource: '../..'
+    public: true
+    autowire: true
+    autoconfigure: true
+    exclude:
+      - '../../Enum'
+      - '../../Dto'

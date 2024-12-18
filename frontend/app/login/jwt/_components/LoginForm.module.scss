@@ -1,0 +1,11 @@
+.loginForm {
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .error {
+    color: red;
+  }
+}

@@ -4,35 +4,33 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
-use App\Entity\TrackedCurrency;
-use App\Entity\User;
+use App\Entity\Organization;
 use App\Enum\Entity\UserRoleEnum;
 use Dexodus\AdminConstructorBundle\Attribute\CrudNavigation;
+use Dexodus\AdminConstructorBundle\Attribute\FrontendPage;
 use Dexodus\AdminConstructorBundle\Attribute\IsGranted;
 use Dexodus\AdminConstructorBundle\Dto\NavigationInterface;
-use Dexodus\AdminConstructorBundle\Dto\RootNavigationInterface;
+use Dexodus\AdminConstructorBundle\Dto\PageInterface;
 use Dexodus\TitleBundle\Attribute\Title;
-use Symfony\Component\Security\Core\User\UserInterface;
 
-class Navigation implements NavigationInterface, RootNavigationInterface
+class Navigation implements NavigationInterface
 {
+    #[FrontendPage('organizations/my')]
+    #[Title('Моя организация')]
+    #[IsGranted([UserRoleEnum::ROLE_SUPERVISOR])]
+    public PageInterface $myOrganization;
 
-    #[Title('Администраторы')]
-    #[CrudNavigation(User::ADMIN_FORM_NAME, User::ADMIN_FORM_NAME)]
+    #[FrontendPage('news')]
+    #[Title('Новости')]
+    #[IsGranted([UserRoleEnum::ROLE_SUPERVISOR])]
+    public PageInterface $news;
+
+    #[CrudNavigation(Organization::class, Organization::class)]
+    #[Title('Организации')]
     #[IsGranted([UserRoleEnum::ROLE_ADMIN])]
-    public NavigationInterface $admins;
+    public NavigationInterface $organizations;
 
-    #[Title('Валюты')]
-    #[CrudNavigation(TrackedCurrency::class, TrackedCurrency::class)]
+    #[Title('Настройки')]
     #[IsGranted([UserRoleEnum::ROLE_ADMIN])]
-    public NavigationInterface $trackedCurrencies;
-
-    public function getRedirectAfterLogin(UserInterface $user): ?string
-    {
-        if (in_array(UserRoleEnum::ROLE_ADMIN->value, $user->getRoles())) {
-            return '/admin/trackedCurrencies/list';
-        }
-
-        return null;
-    }
+    public Settings $settings;
 }

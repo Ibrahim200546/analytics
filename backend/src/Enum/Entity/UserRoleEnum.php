@@ -13,4 +13,10 @@ enum UserRoleEnum: string
 
     #[Title('Пользователь')]
     case ROLE_USER = 'ROLE_USER';
+
+    #[Title('Руководитель')]
+    case ROLE_SUPERVISOR = 'ROLE_SUPERVISOR';
+
+    #[Title('Сотрудник')]
+    case ROLE_EMPLOYEE = 'ROLE_EMPLOYEE';
 }
