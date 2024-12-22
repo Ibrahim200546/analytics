@@ -1,8 +1,0 @@
-{
-  "name": "@dexodus/ncalayer",
-  "type": "module",
-  "version": "1.0.0",
-  "dependencies": {
-    "ncalayer-js-client": "^1.5.3"
-  }
-}

@@ -75,6 +75,9 @@ class Article
     #[ORM\OneToMany(mappedBy: 'comments', targetEntity: ArticleComment::class)]
     public Collection $comments;
 
+    #[ORM\Column(options: ['default' => false])]
+    public bool $isScheduledForUpdate = false;
+
     public function getId(): ?int
     {
         return $this->id;

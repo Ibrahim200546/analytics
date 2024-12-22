@@ -23,8 +23,8 @@ class HttpClient
     {
         $guzzleClient = new Client();
 
-        $response = $guzzleClient->get($link);
+        $response = $guzzleClient->get('http://frontend:3000/api/parser?url=' .  $link);
 
-        return $response->getBody()->getContents();
+        return json_decode($response->getBody()->getContents(), true)['html'];
     }
 }

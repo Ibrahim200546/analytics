@@ -53,7 +53,7 @@ class WebResourceProcessor implements ProcessorInterface
         $data->createdAtCssPath = $articleStructure->createdAtCssPath;
         $data->imageCssPath = $articleStructure->imageCssPath;
         $data->createdAtFormat = $articleStructure->createdAtFormat;
-        $articleCommentsStructure = new ArticleCommentsStructure();
+        $articleCommentsStructure = null;
 
         foreach (array_reverse($articleLinks) as $articleLink) {
             $articleCommentsStructure = $this->articleCommentsStructureGenerator->generate($articleLink);
@@ -67,6 +67,16 @@ class WebResourceProcessor implements ProcessorInterface
             }
 
             break;
+        }
+
+        if ($articleCommentsStructure && $articleCommentsStructure->commentsContainerCssPath !== '' && $articleCommentsStructure->commentContainerCssPath !== '') {
+            $data->commentsContainerCssPath = $articleCommentsStructure->commentsContainerCssPath;
+            $data->commentContainerCssPath = $articleCommentsStructure->commentContainerCssPath;
+            $data->commentCommentatorNameCssPath = $articleCommentsStructure->commentatorNameCssPath;
+            $data->commentContentCssPath = $articleCommentsStructure->commentContentCssPath;
+            $data->commentLikesCssPath = $articleCommentsStructure->likesCssPath;
+            $data->commentDislikesCssPath = $articleCommentsStructure->dislikesCssPath;
+            $data->commentCreatedAtCssPath = $articleCommentsStructure->createdAtCssPath;
         }
 
         $crawler = $this->httpClient->getCrawlerFromUrl($articleLink);

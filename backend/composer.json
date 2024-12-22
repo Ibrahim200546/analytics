@@ -58,7 +58,8 @@
         "symfony/twig-bundle": "6.4.*",
         "symfony/validator": "6.4.*",
         "symfony/yaml": "6.4.*",
-        "ext-v8js": "*"
+        "ext-v8js": "*",
+      "ext-dom": "*"
     },
     "config": {
         "allow-plugins": {

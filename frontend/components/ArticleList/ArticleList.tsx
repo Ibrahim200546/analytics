@@ -3,13 +3,12 @@
 import React, {useEffect, useState} from "react";
 import styles from "./ArticleList.module.scss";
 import ArticleAnnounce from "@/components/ArticleAnnounce";
-import Article from "@/apiTypes/Dexodus/SmiParserInterface/Entity/Article";
 import Button, {ButtonStyle} from "@dexodus/bootstrap/src/UserInterface/Button";
 import ButtonsGroup from "@dexodus/bootstrap/src/UserInterface/ButtonsGroup";
 import {AiFillStar, AiOutlineStar} from "react-icons/ai";
 import {FaSort, FaSortDown, FaSortUp} from "react-icons/fa";
 import useForm from "@dexodus/react-form/src/hooks/useForm";
-import {Field} from "@dexodus/react-form";
+import Field from "@dexodus/react-form/src/fields/Field";
 import AsyncDropdownField from "@dexodus/bootstrap/src/UserInterface/Fields/AsyncDropdownField";
 import {getCookie, setCookie} from "@dexodus/bootstrap/src/common/cookies";
 import {toast} from "react-toastify";

@@ -14,7 +14,6 @@ readonly class ArticleCommentsStructure
         public string $likesCssPath = '',
         public string $dislikesCssPath = '',
         public string $createdAtCssPath = '',
-        public string $getCommentsUrl = '',
     ) {
     }
 }

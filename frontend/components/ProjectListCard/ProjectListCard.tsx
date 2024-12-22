@@ -9,7 +9,7 @@ import {AiOutlineFileAdd} from "react-icons/ai";
 import useModal from "@dexodus/bootstrap/src/UserInterface/Modal/useModal";
 import styles from "./ProjectListCard.module.scss";
 import useForm from "@dexodus/react-form/src/hooks/useForm";
-import {Field} from "@dexodus/react-form";
+import Field from "@dexodus/react-form/src/fields/Field";
 import StringField from "@dexodus/bootstrap/src/UserInterface/Fields/StringField";
 import notBlank from "@dexodus/react-form/src/validators/notBlank";
 import {ModalSize} from "@dexodus/bootstrap/src/UserInterface/Modal/Modal";

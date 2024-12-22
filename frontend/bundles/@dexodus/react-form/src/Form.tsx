@@ -3,8 +3,7 @@
 import React, {createContext, useEffect, useRef, useState} from "react";
 import styles from "./Form.module.scss";
 import classNames from "classnames";
-import {Jsel, JselContext} from "@dexodus/jsel";
-import {EventType} from "@dexodus/jsel/src/Event/Event";
+import {Jsel, JselContext, EventType} from "@dexodus/jsel";
 import useApiFetch from "@dexodus/api-fetch/src/hooks/useApiFetch";
 
 export type FormData = { [property: string]: any | FormData };

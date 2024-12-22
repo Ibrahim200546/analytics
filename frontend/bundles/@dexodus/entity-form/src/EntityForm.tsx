@@ -1,7 +1,9 @@
 "use client";
 
 import React, {useState} from "react";
-import {ArrayField, Field, ObjectField} from "@dexodus/react-form";
+import ArrayField from "@dexodus/react-form/src/fields/ArrayField";
+import Field from "@dexodus/react-form/src/fields/Field";
+import ObjectField from "@dexodus/react-form/src/fields/ObjectField";
 import EntityFormStructure, {EntityFormEventType} from "@dexodus/entity-form/src/EntityFormStructure";
 import EntityFormField from "@dexodus/entity-form/src/EntityFormField";
 import MultipleDropdownField from "@dexodus/entity-form-common-fields/src/MultipleDropdownField";

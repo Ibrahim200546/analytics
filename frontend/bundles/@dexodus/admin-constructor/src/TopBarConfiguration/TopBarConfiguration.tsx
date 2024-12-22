@@ -3,9 +3,9 @@
 import React from "react";
 import styles from "./TopBarConfiguration.module.scss";
 import useForm from "@dexodus/react-form/src/hooks/useForm";
-import {Field} from "@dexodus/react-form";
+import Field from "@dexodus/react-form/src/fields/Field";
 import AsyncDropdownField from "@dexodus/bootstrap/src/UserInterface/Fields/AsyncDropdownField";
-import {EventType} from "@dexodus/jsel/src/Event/Event";
+import {EventType} from "@dexodus/jsel";
 import {getCookie, setCookie} from "@dexodus/bootstrap/src/common/cookies";
 import {toast} from "react-toastify";
 import Organization from "@/apiTypes/App/Entity/Organization";

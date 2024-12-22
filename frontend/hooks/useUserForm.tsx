@@ -1,5 +1,5 @@
 import useForm from "@dexodus/react-form/src/hooks/useForm";
-import {Field} from "@dexodus/react-form";
+import Field from "@dexodus/react-form/src/fields/Field";
 import StringField from "@dexodus/bootstrap/src/UserInterface/Fields/StringField";
 import notBlank from "@dexodus/react-form/src/validators/notBlank";
 import emailValidator from "@dexodus/react-form/src/validators/emailValidator";

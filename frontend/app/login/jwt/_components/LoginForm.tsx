@@ -1,7 +1,8 @@
 "use client";
 
 import React, {useState} from "react";
-import {Field, Form} from "@dexodus/react-form";
+import Field from "@dexodus/react-form/src/fields/Field";
+import Form from "@dexodus/react-form/src/Form";
 import StringField from "@/bundles/@dexodus/bootstrap/src/UserInterface/Fields/StringField";
 import PasswordField from "@/bundles/@dexodus/bootstrap/src/UserInterface/Fields/PasswordField";
 import Button, {ButtonStyle} from "@/bundles/@dexodus/bootstrap/src/UserInterface/Button";

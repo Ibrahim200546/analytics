@@ -8,7 +8,7 @@ import GeneralField, {GeneralFieldEventName, GeneralFieldProps} from "../General
 import useValidationErrors from "../../hooks/useValidationErrors";
 import ValidationErrors from "../../ValidationErrors";
 import classNames from "classnames";
-import {EventType} from "@dexodus/jsel/src/Event/Event";
+import {EventType} from "@dexodus/jsel";
 
 interface ObjectFieldProps extends GeneralFieldProps {
     children?: React.ReactNode;

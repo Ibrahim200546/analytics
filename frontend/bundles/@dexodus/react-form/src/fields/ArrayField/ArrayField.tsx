@@ -9,7 +9,7 @@ import GeneralField, {GeneralFieldClassName, GeneralFieldEventName, GeneralField
 import classNames from "classnames";
 import ValidationErrors from "../../ValidationErrors";
 import useValidationErrors from "../../hooks/useValidationErrors";
-import {EventType} from "@dexodus/jsel/src/Event/Event";
+import {EventType} from "@dexodus/jsel";
 
 interface ArrayFieldClassName extends GeneralFieldClassName {
     addChildButton?: string;

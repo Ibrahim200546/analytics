@@ -13,7 +13,6 @@ import { redirect } from "next/navigation";
 import getApiFetch from "@dexodus/api-fetch/src/server/getApiFetch";
 import SetDefaultNavigation from "../SetDefaultNavigation";
 import {ToastContainer} from "react-toastify";
-import "react-toastify/scss/main.scss"
 
 interface AdminLayoutProps {
     children: React.ReactNode;

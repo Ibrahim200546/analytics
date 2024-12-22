@@ -6,7 +6,7 @@ import useFormContext from "../hooks/useFormContext";
 import GeneralField, {GeneralFieldEventName, GeneralFieldProps} from "./GeneralField";
 import useValidationErrors from "../hooks/useValidationErrors";
 import ValidationErrors from "../ValidationErrors";
-import {EventType} from "@dexodus/jsel/src/Event/Event";
+import {EventType} from "@dexodus/jsel";
 import classnames from "classnames";
 import formGroupStyles from '../FormGroup.module.scss';
 

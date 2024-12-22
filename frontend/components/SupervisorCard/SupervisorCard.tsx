@@ -8,7 +8,7 @@ import Button, {ButtonSizes, ButtonStyle} from "@dexodus/bootstrap/src/UserInter
 import useModal from "@dexodus/bootstrap/src/UserInterface/Modal/useModal";
 import {ModalSize} from "@dexodus/bootstrap/src/UserInterface/Modal/Modal";
 import useForm from "@dexodus/react-form/src/hooks/useForm";
-import {Field} from "@dexodus/react-form";
+import Field from "@dexodus/react-form/src/fields/Field";
 import "../../hooks/useUserForm.css";
 import notBlank from "@dexodus/react-form/src/validators/notBlank";
 import useApiFetch from "@dexodus/api-fetch/src/hooks/useApiFetch";

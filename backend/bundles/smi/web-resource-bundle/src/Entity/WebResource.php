@@ -54,6 +54,7 @@ class WebResource
     #[Groups([self::ROLE_VIEW, self::ROLE_LIST, self::ROLE_CREATE, self::ROLE_EDIT])]
     #[Title('Имя ресурса')]
     #[Assert\NotBlank(message: 'Поле должно быть заполнено')]
+    #[EntityTableColumn]
     public string $name;
 
     #[ORM\Column]
@@ -81,4 +82,18 @@ class WebResource
     public ?string $createdAtFormat = null;
     #[ORM\Column(nullable: true)]
     public ?string $faviconUrl = null;
+    #[ORM\Column(nullable: true)]
+    public ?string $commentsContainerCssPath = null;
+    #[ORM\Column(nullable: true)]
+    public ?string $commentContainerCssPath = null;
+    #[ORM\Column(nullable: true)]
+    public ?string $commentCommentatorNameCssPath = null;
+    #[ORM\Column(nullable: true)]
+    public ?string $commentContentCssPath = null;
+    #[ORM\Column(nullable: true)]
+    public ?string $commentLikesCssPath = null;
+    #[ORM\Column(nullable: true)]
+    public ?string $commentDislikesCssPath = null;
+    #[ORM\Column(nullable: true)]
+    public ?string $commentCreatedAtCssPath = null;
 }

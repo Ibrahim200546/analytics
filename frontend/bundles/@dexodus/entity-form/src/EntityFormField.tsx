@@ -1,9 +1,13 @@
 import React from "react";
 import {EntityFormField} from "@dexodus/entity-form/src/EntityFormStructure";
 import {EntityFormFieldComponents, EntityFormGeneralFieldComponents} from "@dexodus/entity-form/src/EntityForm";
-import {ArrayField, Field, JselValidator, ObjectField, ValidatorInterface} from "@dexodus/react-form";
 import SectionArranger from "@dexodus/section/src/SectionArranger";
 import {Section} from "@dexodus/section/src/types";
+import ValidatorInterface from "@dexodus/react-form/src/validators/ValidatorInterface";
+import JselValidator from "@dexodus/react-form/src/validators/JselValidator";
+import ArrayField from "@dexodus/react-form/src/fields/ArrayField";
+import ObjectField from "@dexodus/react-form/src/fields/ObjectField";
+import Field from "@dexodus/react-form/src/fields/Field";
 
 interface EntityFormFieldProps {
     fields: EntityFormField[];

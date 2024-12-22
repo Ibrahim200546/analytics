@@ -6,11 +6,13 @@ namespace Dexodus\WebResourceBundle\Service;
 
 use DateTimeImmutable;
 use Dexodus\SmiParserInterface\Entity\Article;
+use Dexodus\SmiParserInterface\Entity\ArticleComment;
 use Dexodus\SmiParserInterface\Repository\ArticleRepository;
 use Dexodus\SmiParserInterface\Service\SmiParserInterface;
 use Dexodus\WebResourceBundle\Entity\WebResource;
 use Dexodus\WebResourceBundle\Message\WebResourceRawArticle;
 use Dexodus\WebResourceBundle\Repository\WebResourceRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -25,6 +27,7 @@ class WebResourceParser implements SmiParserInterface
         private MessageBusInterface $messageBus,
         private WebResourceRepository $webResourceRepository,
         private WebResourceDateTimeParser $webResourceDateTimeParser,
+        private EntityManagerInterface $entityManager,
     ) {
     }
 
@@ -40,7 +43,9 @@ class WebResourceParser implements SmiParserInterface
             $article->parser = $this->getParserName();
         }
 
+        $article->isScheduledForUpdate = false;
         $article->lastUpdate = new DateTimeImmutable();
+        $this->parseComments($article, $crawler, $webResource);
 
         return $this->parseGeneralInformation($article, $crawler, $webResource);
     }
@@ -54,6 +59,30 @@ class WebResourceParser implements SmiParserInterface
     public function getParserName(): string
     {
         return 'WebResource';
+    }
+
+    protected function parseComments(Article $article, Crawler $crawler, WebResource $webResource): Article
+    {
+        $commentsCrawler = $crawler->filter($webResource->commentsContainerCssPath . ' ' . $webResource->commentContainerCssPath);
+
+        foreach ($commentsCrawler as $commentNode) {
+            $commentCrawler = new Crawler($commentNode);
+
+            $articleComment = new ArticleComment();
+            $articleComment->commentatorName = $commentCrawler->filter($webResource->commentCommentatorNameCssPath)->text();
+            $articleComment->createdAtString = $commentCrawler->filter($webResource->commentCreatedAtCssPath)->text();
+            $articleComment->content = $commentCrawler->filter($webResource->commentContentCssPath)->text();
+            try {
+                $articleComment->likes = (int) $commentCrawler->filter($webResource->commentLikesCssPath)->text();
+                $articleComment->dislikes = (int) $commentCrawler->filter($webResource->commentDislikesCssPath)->text();
+            } catch (Exception) {
+            }
+            $article->comments->add($articleComment);
+            $articleComment->article = $article;
+            $this->entityManager->persist($articleComment);
+        }
+
+        return $article;
     }
 
     protected function parseGeneralInformation(Article $article, Crawler $crawler, WebResource $webResource): Article

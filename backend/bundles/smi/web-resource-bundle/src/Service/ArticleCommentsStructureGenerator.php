@@ -27,10 +27,10 @@ class ArticleCommentsStructureGenerator
     public function generate(string $link): ArticleCommentsStructure
     {
         $crawler = $this->httpClient->getCrawlerFromUrl($link);
-        $usefulBody = $crawler->html();
+        $usefulBody = $this->htmlUsefulBodyExtractor->extract($crawler);
 
         $prompt = <<<PROMPT
-На основе предоставленного HTML-кода страницы, выдели и укажи CSS пути до следующих элементов, связанных с комментариями:
+На основе предоставленного HTML-кода страницы, выдели и укажи CSS пути(не используй аттрибут id) до следующих элементов, связанных с комментариями:
 
 1. commentsContainerCssPath: CSS путь до контейнера с комментариями. Если на странице есть несколько таких контейнеров, выбери тот, в котором больше всего комментариев.
 2. commentContainerCssPath: CSS путь до контейнера с одним комментарием относительно commentsContainerCssPath.
@@ -39,7 +39,6 @@ class ArticleCommentsStructureGenerator
 5. likesCssPath: CSS путь до количества лайков комментария относительно commentContainerCssPath.
 6. dislikesCssPath: CSS путь до количества дизлайков комментария относительно commentContainerCssPath.
 7. createdAtCssPath: CSS путь до даты создания комментария относительно commentContainerCssPath.
-8. getCommentsUrl: URL для получения комментариев. Возможно тебе придётся анализировать скрипты.
 
 Верни результат в формате:
 {commentsContainerCssPath:"",commentContainerCssPath:"",commentatorNameCssPath:"",commentContentCssPath:"",likesCssPath:"",dislikesCssPath:"",createdAtCssPath:"",getCommentsUrl:""}
