@@ -65,5 +65,3 @@ Deploy In Production Environment:
     script:
         - kubectl config use-context dexodus-group/exchange-rates:exchange-rates
         - helm upgrade exchange-rates -n default ./chart/ -f ./chart/prod_values.yaml --set image.tag=${IMAGE_TAG} --install
-
-# helm upgrade exchange-rates -n default ./chart/ -f ./chart/prod_values.yaml --set image.tag=b5ec9d49 --install
