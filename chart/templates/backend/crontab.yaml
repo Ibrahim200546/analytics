@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
     name: exchange-rates-cronjob-{{ $.Values.env }}
 spec:
-    schedule: "0 0 * * *"
+    schedule: "*/5 * * * *"
     jobTemplate:
         spec:
             template:

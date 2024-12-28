@@ -34,27 +34,27 @@ Build Backend Nginx:
         - docker push $REGISTRY_IMAGE_PREFIX/backend-nginx:${IMAGE_TAG}
         - 'echo "Docker image: ${REGISTRY_IMAGE_PREFIX}/backend-nginx:${IMAGE_TAG}"'
 
-#Build and push Frontend:
-#    stage: 'build'
-#    services:
-#        - docker:dind
-#    parallel:
-#        matrix:
-#            - ENVIRONMENT: 'prod'
-#              PROJECT_ENVIRONMENT: $PROJECT_ENVIRONMENT_PROD
-#    rules:
-#        -   if: $CI_COMMIT_BRANCH == "main"
-#
-#    cache:
-#        paths:
-#            - frontend/node_modules/
-#            - frontend/.next/
-#    script:
-#        - echo "$PROJECT_ENVIRONMENT" > frontend/.env
-#        - docker login $REGISTRY_URL -u $REGISTRY_USER -p $REGISTRY_PASSWORD
-#        - docker build -f docker/frontend/prod.Dockerfile -t $REGISTRY_IMAGE_PREFIX/frontend-${ENVIRONMENT}:${IMAGE_TAG} .
-#        - docker push ${REGISTRY_IMAGE_PREFIX}/frontend-${ENVIRONMENT}:${IMAGE_TAG}
-#        - 'echo "Docker image: $REGISTRY_IMAGE_PREFIX/frontend-${ENVIRONMENT}:${IMAGE_TAG}"'
+Build and push Frontend:
+    stage: 'build'
+    services:
+        - docker:dind
+    parallel:
+        matrix:
+            - ENVIRONMENT: 'prod'
+              PROJECT_ENVIRONMENT: $PROJECT_ENVIRONMENT_PROD
+    rules:
+        -   if: $CI_COMMIT_BRANCH == "main"
+
+    cache:
+        paths:
+            - frontend/node_modules/
+            - frontend/.next/
+    script:
+        - echo "$PROJECT_ENVIRONMENT" > frontend/.env
+        - docker login $REGISTRY_URL -u $REGISTRY_USER -p $REGISTRY_PASSWORD
+        - docker build -f docker/frontend/prod.Dockerfile -t $REGISTRY_IMAGE_PREFIX/frontend-${ENVIRONMENT}:${IMAGE_TAG} .
+        - docker push ${REGISTRY_IMAGE_PREFIX}/frontend-${ENVIRONMENT}:${IMAGE_TAG}
+        - 'echo "Docker image: $REGISTRY_IMAGE_PREFIX/frontend-${ENVIRONMENT}:${IMAGE_TAG}"'
 
 Deploy In Production Environment:
     stage: deploy

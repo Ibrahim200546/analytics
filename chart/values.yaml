@@ -1,2 +1,3 @@
 crontab:
-  - currency:pairs:update
+  - article:parse-new
+  - articles:distribute
