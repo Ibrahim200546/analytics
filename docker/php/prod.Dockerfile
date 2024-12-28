@@ -1,4 +1,4 @@
-FROM dexodus/php:8.2-fpm-alpine3.17
+FROM dexodus/php:8.2.27-fpm-alpine3.21
 
 COPY docker/php/php.ini /usr/local/etc/php/php.ini
 COPY --chown=1000 ./backend /srv/app/
@@ -20,6 +20,7 @@ RUN apk update \
         zsh \
 		zlib \
 		freetype \
+        libssl3 \
         libjpeg-turbo \
         libpng \
         libzip-dev \
@@ -51,6 +52,10 @@ RUN cd /tmp \
     && make install
 
 RUN docker-php-ext-enable v8js
+
+RUN apk add --no-cache postgresql-dev \
+    && docker-php-ext-install pdo_pgsql pgsql \
+    && docker-php-ext-enable pgsql
 
 RUN composer install --prefer-dist --no-interaction --no-scripts
 

@@ -35,8 +35,10 @@ class CreateAdminCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $email = 'admin@admin.test';
+        $email = 'admin@ismi.kz';
         $password = $input->getOption('generate-random-password') ? substr(sha1((string) microtime(true)), 0, 8) : '12345';
+
+        $output->writeln("<info>Admin password is <comment>$password</comment></info>");
 
         $user = $this->userRepository->findOneBy(['email' => $email]);
 
@@ -49,9 +51,9 @@ class CreateAdminCommand extends Command
             $user->patronymic = 'Admin';
             $user->iin = '000000000000';
             $this->entityManager->persist($user);
-        } else {
-            $user->setPassword($this->userPasswordHasher->hashPassword($user, $password));
         }
+
+        $user->setPassword($this->userPasswordHasher->hashPassword($user, $password));
 
         $this->entityManager->flush();
 
