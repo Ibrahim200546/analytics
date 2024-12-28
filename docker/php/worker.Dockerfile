@@ -64,4 +64,4 @@ RUN bin/console cache:warmup --env=prod \
 
 RUN chmod 777 -R ./
 
-CMD ["php /srv/app/bin/console messenger:consume async --time-limit=3600 --memory-limit=128M"]
+CMD ["php", "/srv/app/bin/console", "messenger:consume", "async", "--time-limit=3600", "--memory-limit=128M"]
