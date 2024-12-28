@@ -19,12 +19,19 @@ class HttpClient
         return new Crawler($html);
     }
 
-    public function getHtml(string $link): string
+    public function getHtml(string $link, bool $render = false): string
     {
         $guzzleClient = new Client();
 
-        $response = $guzzleClient->get('http://frontend:3000/api/parser?url=' .  $link);
+        if ($render) {
+            $response = $guzzleClient->get('http://frontend:3000/api/parser?url=' .  $link);
 
-        return json_decode($response->getBody()->getContents(), true)['html'];
+            return json_decode($response->getBody()->getContents(), true)['html'];
+        } else {
+            $guzzleClient = new Client();
+            $response = $guzzleClient->get($link);
+
+            return $response->getBody()->getContents();
+        }
     }
 }

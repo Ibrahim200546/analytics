@@ -8,3 +8,5 @@ entity_table:
             prefix: 'Dexodus\WebResourceBundle\Entity'
         -   dir: '%kernel.project_dir%/bundles/general/location-bundle/src/Entity'
             prefix: 'Dexodus\LocationBundle\Entity'
+        -   dir: '%kernel.project_dir%/bundles/smi/telegram-parser-bundle/src/Entity'
+            prefix: 'Dexodus\TelegramParserBundle\Entity'

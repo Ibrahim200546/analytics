@@ -31,6 +31,16 @@ class MyOrganizationsProvider implements ProviderInterface
     {
         $user = $this->security->getUser();
 
+        if ($user instanceof User && in_array(UserRoleEnum::ROLE_EMPLOYEE->value, $user->getRoles())) {
+            $queryBuilder = $this->organizationRepository->createQueryBuilder('Organization');
+            $queryBuilder
+                ->andWhere('User.id = :userId')
+                ->innerJoin('Organization.employees', 'User')
+                ->setParameter('userId', $user->getId());
+
+            return $queryBuilder->getQuery()->getOneOrNullResult();
+        }
+
         if (!($user instanceof User) || !in_array(UserRoleEnum::ROLE_SUPERVISOR->value, $user->getRoles())) {
             throw new ForbiddenException();
         }

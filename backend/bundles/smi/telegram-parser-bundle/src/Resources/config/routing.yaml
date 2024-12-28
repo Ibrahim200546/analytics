@@ -1,0 +1,5 @@
+controllers:
+    resource:
+        path: '@TelegramParserBundle/Controller/'
+        namespace: Dexodus\TelegramParserBundle\Controller
+    type: attribute

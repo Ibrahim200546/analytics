@@ -7,7 +7,7 @@ namespace App\Command;
 use App\Entity\Project;
 use App\Entity\ProjectArticle;
 use App\Repository\ProjectRepository;
-use Dexodus\SmiParserInterface\Entity\Article;
+use Dexodus\SmiParserBundle\Entity\Article;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\ElasticaBundle\Finder\FinderInterface;
 use Symfony\Component\Console\Attribute\AsCommand;

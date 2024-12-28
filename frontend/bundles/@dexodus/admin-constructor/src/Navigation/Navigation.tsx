@@ -42,8 +42,8 @@ const Navigation: React.FC<NavigationProps> = ({rootItem, context = "", icon}) =
     const navigationPath = useAdminConstructorSelector(state => state.navigationPath);
     const currentPage = useAdminConstructorSelector(state => state.currentPage);
 
-    const paddingLeft = `${(context.split('.').length) * 32 - 12}px`;
-    const paddingLeftLink = `${(context.split('.').length) * 32 + (!context ? 0 : 32) - 12}px`;
+    const paddingLeft = `${(context.split('.').length) * 12}px`;
+    const paddingLeftLink = `${(context.split('.').length) * 12 + (!context ? 0 : 12)}px`;
 
     const subItems = Object.entries(rootItem).map(([path, item]) => {
         if (typeof item === 'string' || (typeof item === 'object' && item === null) || path === '_icons') {

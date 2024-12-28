@@ -1,0 +1,8 @@
+services:
+  Dexodus\TelegramParserBundle\:
+    resource: '../..'
+    public: true
+    autowire: true
+    autoconfigure: true
+    exclude:
+      - '../../Message'

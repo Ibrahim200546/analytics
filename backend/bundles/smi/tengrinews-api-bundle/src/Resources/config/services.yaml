@@ -1,0 +1,8 @@
+services:
+  Dexodus\TengrinewsApiBundle\:
+    resource: '../..'
+    public: true
+    autowire: true
+    autoconfigure: true
+    exclude:
+      - "../../Enum"

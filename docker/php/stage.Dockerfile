@@ -1,4 +1,4 @@
-FROM dexodus/8.2-fpm-alpine3.17
+FROM dexodus/php:8.2.27-fpm-alpine3.21
 
 COPY --from=surnet/alpine-wkhtmltopdf:3.16.2-0.12.6-full /bin/wkhtmltopdf /bin/wkhtmltopdf
 
@@ -7,7 +7,7 @@ RUN apk add --no-cache \
         libx11 \
         libxrender \
         libxext \
-        libssl1.1 \
+        libssl3 \
         ca-certificates \
         fontconfig \
         freetype \
@@ -58,6 +58,10 @@ RUN cd /tmp \
     && make install
 
 RUN docker-php-ext-enable v8js
+
+RUN apk add --no-cache postgresql-dev \
+    && docker-php-ext-install pdo_pgsql pgsql \
+    && docker-php-ext-enable pgsql
 
 COPY docker/php/php.ini /usr/local/etc/php/php.ini
 COPY --chown=1000 ./backend/ /srv/app/

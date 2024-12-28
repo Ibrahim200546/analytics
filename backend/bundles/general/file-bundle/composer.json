@@ -1,0 +1,22 @@
+{
+  "name": "dexodus/file-bundle",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Daniil Yaroshuk",
+      "email": "the.dexodus@gmail.com"
+    }
+  ],
+  "require": {
+    "league/flysystem-aws-s3-v3": "^3.15",
+    "league/flysystem-bundle": "^3.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Dexodus\\FileBundle\\": "src/"
+    }
+  }
+}

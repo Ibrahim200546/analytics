@@ -66,7 +66,7 @@ class Organization
 
     #[ORM\Id, ORM\Column, ORM\GeneratedValue]
     #[EntityTableColumn]
-    #[Groups([self::ROLE_VIEW, self::ROLE_LIST])]
+    #[Groups([self::ROLE_VIEW, self::ROLE_LIST, OrganizationAccount::ROLE_VIEW])]
     public readonly int $id;
 
     #[ORM\ManyToOne(targetEntity: City::class)]
@@ -133,12 +133,16 @@ class Organization
     #[Assert\NotBlank(message: 'Поле должно быть заполнено')]
     public int $limitProjects;
 
+    #[ORM\OneToMany(mappedBy: 'organization', targetEntity: OrganizationAccount::class)]
+    public Collection $accounts;
+
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
         $this->subscriptions = new ArrayCollection();
         $this->projects = new ArrayCollection();
         $this->employees = new ArrayCollection();
+        $this->accounts = new ArrayCollection();
         $this->timestampConstruct();
     }
 

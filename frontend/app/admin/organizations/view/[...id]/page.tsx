@@ -18,6 +18,8 @@ const Page: NextJS.SFC<PageProps> = async ({params}) => {
         apiFetch(`/api/organizations/${organizationId}.jsonld`),
         apiFetch(`/entity-table/structure/app.entity.project`),
         apiFetch(`/entity-table/structure/app.entity.user:employee`),
+        apiFetch(`/entity-table/structure/app.entity.organization-account`),
+        apiFetch(`/entity-form/structure/dexodus.telegram-parser-bundle.entity.telegram-account`),
     ]);
 
     for (const response of responses) {
@@ -26,7 +28,7 @@ const Page: NextJS.SFC<PageProps> = async ({params}) => {
         }
     }
 
-    const [organization, projectStructure, employeeStructure] = await Promise.all(responses.map(response => response.json()));
+    const [organization, projectStructure, employeeStructure, organizationAccountStructure, telegramAccountStructure] = await Promise.all(responses.map(response => response.json()));
 
     return (
         <PageGasket title={`Организация "${organization.name}"`}>
@@ -34,6 +36,8 @@ const Page: NextJS.SFC<PageProps> = async ({params}) => {
                 organization={organization}
                 projectStructure={projectStructure}
                 employeeStructure={employeeStructure}
+                organizationAccountStructure={organizationAccountStructure}
+                telegramAccountStructure={telegramAccountStructure}
             />
         </PageGasket>
     );

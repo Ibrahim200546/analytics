@@ -1,0 +1,20 @@
+.helpInformation {
+  display: inline-flex;
+  align-items: center;
+  cursor: help;
+
+  svg {
+    height: 16px;
+    width: 16px;
+  }
+
+  .tooltip {
+    background: white;
+    z-index: 1000;
+    padding: 8px 16px;
+    border: 1px solid #b1b1b1;
+    border-radius: 4px;
+    color: #2f2f2f;
+    max-width: 300px;
+  }
+}

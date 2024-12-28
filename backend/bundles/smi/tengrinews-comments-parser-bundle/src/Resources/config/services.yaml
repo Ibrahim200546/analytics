@@ -1,0 +1,6 @@
+services:
+  Dexodus\TengrinewsCommentsParserBundle\:
+    resource: '../..'
+    public: true
+    autowire: true
+    autoconfigure: true

@@ -6,24 +6,35 @@ import Reaction, {ReactionTypeEnum} from "../Reaction/Reaction";
 import Link from "next/link";
 import {AiFillStar, AiOutlineStar} from "react-icons/ai";
 import {BiDotsHorizontalRounded} from "react-icons/bi";
-import Article from "@/apiTypes/Dexodus/SmiParserInterface/Entity/Article";
+import Article from "@/apiTypes/Dexodus/SmiParserBundle/Entity/Article";
 import classnames from "classnames";
 import {toast} from "react-toastify";
 import useApiFetch from "@dexodus/api-fetch/src/hooks/useApiFetch";
 import ProjectArticle from "@/apiTypes/App/Entity/ProjectArticle";
 import moment from "moment";
 import "moment/locale/ru";
+import ArticleComment from "@/apiTypes/Dexodus/SmiParserBundle/Entity/ArticleComment";
+import ArticleImage from "@/components/ArticleImage";
 
 interface ArticleAnnounceProps {
     projectArticle: ProjectArticle;
     article: Article;
+    viewMore: (projectArticle: ProjectArticle) => void;
 }
 
-const ArticleAnnounce: React.FC<ArticleAnnounceProps> = ({projectArticle, article}) => {
+interface Tones {
+    positive: number;
+    neutral: number;
+    negative: number;
+    unknown: number;
+}
+
+const ArticleAnnounce: React.FC<ArticleAnnounceProps> = ({projectArticle, article, viewMore}) => {
     const [favoriteChangeLoading, setFavoriteChangeLoading] = useState<boolean>(false);
     const [articleFavorite, setArticleFavorite] = useState(projectArticle.favorite);
     const apiFetch = useApiFetch();
 
+    const tones: Tones = article.comments.reduce((acc: Tones, comment: ArticleComment) => ({...acc, [comment.tone]: acc[comment.tone] + 1}), {positive: 0, neutral: 0, negative: 0, unknown: 0}) as Tones;
     const toggleFavorite = async () => {
         if (favoriteChangeLoading) {
             return;
@@ -52,7 +63,7 @@ const ArticleAnnounce: React.FC<ArticleAnnounceProps> = ({projectArticle, articl
 
     return (
         <div className={styles.article}>
-            <img className={styles.image} src={article.imageUrl ?? ''} alt=""/>
+            <ArticleImage imageUrl={article.imageUrl ?? ''} className={styles.image}/>
             <div className={styles.content}>
                 <div className={styles.topContainer}>
                     <div className={styles.header}>
@@ -78,22 +89,22 @@ const ArticleAnnounce: React.FC<ArticleAnnounceProps> = ({projectArticle, articl
                     <div className={styles.reactions}>
                         <div className={styles.reaction}>
                             <Reaction type={ReactionTypeEnum.POSITIVE} size={34}/>
-                            {1}
+                            {tones.positive}
                         </div>
                         <div className={styles.reaction}>
                             <Reaction type={ReactionTypeEnum.NEUTRAL} size={34}/>
-                            {2}
+                            {tones.neutral}
                         </div>
                         <div className={styles.reaction}>
                             <Reaction type={ReactionTypeEnum.NEGATIVE} size={34}/>
-                            {3}
+                            {tones.negative}
                         </div>
                         <div className={styles.reaction}>
                             <Reaction type={ReactionTypeEnum.UNKNOWN} size={34}/>
-                            {4}
+                            {tones.unknown}
                         </div>
                     </div>
-                    <Link href={article.originalPath} target="_blank" className={styles.readMore}>Читать полностью</Link>
+                    <span className={styles.readMore} onClick={() => viewMore(projectArticle)}>Читать полностью</span>
                 </div>
             </div>
         </div>

@@ -9,7 +9,8 @@ import useApiFetch from "@dexodus/api-fetch/src/hooks/useApiFetch";
 export type FormData = { [property: string]: any | FormData };
 
 export type CallbackIfSuccessfulValidation = () => void | Promise<void>;
-export type ValidateCallback = (callbackIfSuccessful: CallbackIfSuccessfulValidation) => void;
+export type CallbackIfFailedValidation = () => void | Promise<void>;
+export type ValidateCallback = (callbackIfSuccessful?: CallbackIfSuccessfulValidation, callbackIfFailed?: CallbackIfFailedValidation) => void;
 
 interface FormProps {
     className?: string;
@@ -61,10 +62,12 @@ const Form: React.FC<FormProps> = (
     const [errorsMap, setErrorsMap] = useState<ErrorsMap>({});
     const [_, setCounter] = useState<number>(0);
     const [callbackIfSuccessfulValidation, setCallbackIfSuccessfulValidation] = useState<() => void>(() => {});
+    const [callbackIfFailedValidation, setCallbackIfFailedValidation] = useState<() => void>(() => {});
     const prevDataRef = useRef<FormData>(data);
     const jselRef = useRef<Jsel>();
-    const validate = (callbackIfSuccessful: () => void) => {
+    const validate: ValidateCallback = (callbackIfSuccessful = () => {}, callbackIfFailed = () => {}) => {
         setCallbackIfSuccessfulValidation(() => callbackIfSuccessful);
+        setCallbackIfFailedValidation(() => callbackIfFailed);
         setErrorsMap(errorsMap => Object.keys(errorsMap).reduce(
             (acc, property) => ({...acc, [property]: null}),
             errorsMap,
@@ -80,6 +83,7 @@ const Form: React.FC<FormProps> = (
     useEffect(() => {
         if (enableValidation) {
             const isCorrect = Object.values(errorsMap).find(haveErrors => haveErrors === null || haveErrors === true) === undefined;
+            const isIncorrect = Object.values(errorsMap).find(haveErrors => haveErrors === true) !== undefined;
 
             if (isCorrect) {
                 setEnableValidation(false);
@@ -89,6 +93,12 @@ const Form: React.FC<FormProps> = (
                     callbackIfSuccessfulValidation();
                 }
                 setCallbackIfSuccessfulValidation(() => () => {});
+            } else if (isIncorrect) {
+                if (callbackIfFailedValidation instanceof Promise) {
+                    callbackIfFailedValidation.then();
+                } else {
+                    callbackIfFailedValidation();
+                }
             }
         }
     }, [errorsMap]);

@@ -14,7 +14,7 @@ const jwtProvider = Credentials({
         })
 
         if (!authenticationTokenResponse.ok) {
-            throw new Error('Authentication token is failed')
+            throw new Error(`Authentication token is failed. Error: ${await authenticationTokenResponse.text()}`)
         }
 
         const token = (await authenticationTokenResponse.json()).token;

@@ -1,0 +1,2 @@
+smi_parser:
+  article_comments_toner: 'Dexodus\ChatgptTonerBundle\Service\ChatGPTArticleCommentsToner'

@@ -6,23 +6,30 @@
     "require": {
         "php": ">=8.2",
         "ext-ctype": "*",
+        "ext-dom": "*",
         "ext-iconv": "*",
+        "ext-v8js": "*",
         "api-platform/core": "^3.2",
         "cijic/phpmorphy": "^0.3.3",
         "dexodus/admin-constructor-bundle": "^1.0",
         "dexodus/bundle-constructor": "^1.0",
         "dexodus/chatgpt-bundle": "^1.0",
+        "dexodus/chatgpt-toner-bundle": "^1.0",
         "dexodus/dql-functions-bundle": "^1.0",
         "dexodus/entity-disable-bundle": "^1.0",
         "dexodus/entity-export-bundle": "^1.0",
         "dexodus/entity-form-bundle": "^1.0",
         "dexodus/entity-history-bundle": "^1.0",
         "dexodus/entity-table-bundle": "^1.0",
+        "dexodus/file-bundle": "^1.0",
         "dexodus/free-currency-api-bundle": "^1.0",
         "dexodus/location-bundle": "^1.0",
         "dexodus/search-engine-bundle": "^1.0",
         "dexodus/single-unique-bundle": "^1.0",
-        "dexodus/smi-parser-interface": "^1.0",
+        "dexodus/smi-parser-bundle": "^1.0",
+        "dexodus/telegram-parser-bundle": "^1.0",
+        "dexodus/tengrinews-api-bundle": "^1.0",
+        "dexodus/tengrinews-comments-parser-bundle": "^1.0",
         "dexodus/title-bundle": "^1.0",
         "dexodus/translation-api-bundle": "^1.0",
         "dexodus/typescript-types-bundle": "^1.0",
@@ -57,9 +64,7 @@
         "symfony/serializer": "6.4.*",
         "symfony/twig-bundle": "6.4.*",
         "symfony/validator": "6.4.*",
-        "symfony/yaml": "6.4.*",
-        "ext-v8js": "*",
-      "ext-dom": "*"
+        "symfony/yaml": "6.4.*"
     },
     "config": {
         "allow-plugins": {
@@ -174,10 +179,6 @@
         },
         {
             "type": "path",
-            "url": "bundles/smi/smi-parser-interface"
-        },
-        {
-            "type": "path",
             "url": "bundles/general/typescript-types-bundle"
         },
         {
@@ -194,7 +195,31 @@
         },
         {
             "type": "path",
+            "url": "bundles/general/file-bundle"
+        },
+        {
+            "type": "path",
             "url": "bundles/smi/web-resource-bundle"
+        },
+        {
+            "type": "path",
+            "url": "bundles/smi/smi-parser-bundle"
+        },
+        {
+            "type": "path",
+            "url": "bundles/smi/tengrinews-comments-parser-bundle"
+        },
+        {
+            "type": "path",
+            "url": "bundles/smi/tengrinews-api-bundle"
+        },
+        {
+            "type": "path",
+            "url": "bundles/smi/telegram-parser-bundle"
+        },
+        {
+            "type": "path",
+            "url": "bundles/smi/chatgpt-toner-bundle"
         }
     ]
 }

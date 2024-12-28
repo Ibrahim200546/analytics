@@ -1,0 +1,9 @@
+services:
+  Dexodus\SmiParserBundle\:
+    resource: '../..'
+    public: true
+    autowire: true
+    autoconfigure: true
+    exclude:
+      - "../../Enum"
+      - "../../Dto"

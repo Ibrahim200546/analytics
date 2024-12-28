@@ -1,7 +1,7 @@
 env: prod
 domain:
-    backend: api.exchange-rates.dexodus.ru
-    frontend: exchange-rates.dexodus.ru
+    backend: api.ismi.kz
+    frontend: ismi.kz
 image:
     tag: latest
 

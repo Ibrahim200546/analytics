@@ -12,6 +12,8 @@ framework:
         routing:
           'Dexodus\WebResourceBundle\Message\WebResourceRawArticleList': async
           'Dexodus\WebResourceBundle\Message\WebResourceRawArticle': async
+          'Dexodus\TelegramParserBundle\Message\ParseTelegramChannelMessage': async
+          'Dexodus\TelegramParserBundle\Message\UpdateTelegramArticleMessage': async
 
 # when@test:
 #    framework:

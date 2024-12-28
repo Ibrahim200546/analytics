@@ -4,18 +4,24 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import styles from "./InfinityContainer.module.scss";
 import classnames from "classnames";
 
-interface InfinityContainerProps {
-    loadPage: (page: number) => React.ReactNode[] | Promise<React.ReactNode[]>;
-    className?: string;
+interface LoadPage {
+    components: React.ReactNode[];
+    isFinish?: boolean;
 }
 
-const InfinityContainer: React.FC<InfinityContainerProps> = ({ loadPage, className }) => {
+interface InfinityContainerProps {
+    loadPage: (page: number) => (LoadPage | Promise<LoadPage>);
+    className?: string;
+    firstPageComponents?: React.ReactNode[];
+}
+
+const InfinityContainer: React.FC<InfinityContainerProps> = ({ loadPage, className, firstPageComponents }) => {
     const [isFinish, setIsFinish] = useState<boolean>(false);
-    const [page, setPage] = useState<number>(1);
-    const [items, setItems] = useState<React.ReactNode[]>([]);
+    const [page, setPage] = useState<number>(firstPageComponents ? 2 : 1);
+    const [items, setItems] = useState<React.ReactNode[]>(firstPageComponents ?? []);
     const [loading, setLoading] = useState<boolean>(false);
 
-    const containerRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement | null>(null);
     const scrollParentRef = useRef<HTMLElement | Window>(window);
 
     // Функция для поиска родительского элемента с прокруткой
@@ -31,24 +37,31 @@ const InfinityContainer: React.FC<InfinityContainerProps> = ({ loadPage, classNa
         return window; // По умолчанию window
     };
 
+    useEffect(() => {
+        if (firstPageComponents) {
+            setPage(2);
+            setItems(firstPageComponents);
+            setIsFinish(false);
+            setLoading(false);
+        }
+    }, [firstPageComponents]);
+
     const applyLoadPage = useCallback(async () => {
         if (isFinish || loading) return;
 
         setLoading(true);
         const result = loadPage(page);
-        const loadedItems = result instanceof Promise ? await result : result;
+        const loadedPage = result instanceof Promise ? await result : result;
+        const loadedItems = loadedPage.components;
 
-        if (!loadedItems.length) {
-            setIsFinish(true);
-        } else {
-            setPage((prevPage) => prevPage + 1);
-            setItems((prevItems) => [...prevItems, ...loadedItems]);
-        }
+        setIsFinish(loadedPage.isFinish === true);
+        setPage((prevPage) => prevPage + 1);
+        setItems((prevItems) => [...prevItems, ...loadedItems]);
         setLoading(false);
     }, [isFinish, loading, loadPage, page]);
 
     const handleScroll = useCallback(() => {
-        if (!containerRef.current) return;
+        if (!(containerRef.current instanceof HTMLDivElement)) return;
 
         const scrollParent = scrollParentRef.current as HTMLElement | Window;
 
@@ -71,7 +84,7 @@ const InfinityContainer: React.FC<InfinityContainerProps> = ({ loadPage, classNa
     }, [applyLoadPage]);
 
     useEffect(() => {
-        if (containerRef.current) {
+        if (containerRef.current instanceof HTMLDivElement) {
             scrollParentRef.current = findScrollParent(containerRef.current);
         }
 

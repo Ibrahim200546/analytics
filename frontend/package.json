@@ -10,8 +10,9 @@
     "bundler": "npx tsx bundle-loader.ts"
   },
   "dependencies": {
-    "@dexodus/jsel": "^0.2.9",
+    "@dexodus/jsel": "^0.2.10",
     "@files-ui/react": "^1.2.4",
+    "@floating-ui/react": "^0.27.2",
     "@reduxjs/toolkit": "^2.5.0",
     "@types/next-auth": "^3.15.0",
     "@types/react-toastify": "^4.1.0",

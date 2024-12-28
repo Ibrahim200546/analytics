@@ -1,0 +1,5 @@
+controllers:
+    resource:
+        path: '@FileBundle/Controller/'
+        namespace: Dexodus\FileBundle\Controller
+    type: attribute

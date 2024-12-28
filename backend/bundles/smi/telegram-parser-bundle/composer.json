@@ -1,0 +1,21 @@
+{
+  "name": "dexodus/telegram-parser-bundle",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Daniil Yaroshuk",
+      "email": "the.dexodus@gmail.com"
+    }
+  ],
+  "require": {
+    "danog/madelineproto": "^8.4.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Dexodus\\TelegramParserBundle\\": "src/"
+    }
+  }
+}

@@ -13,6 +13,7 @@ import { redirect } from "next/navigation";
 import getApiFetch from "@dexodus/api-fetch/src/server/getApiFetch";
 import SetDefaultNavigation from "../SetDefaultNavigation";
 import {ToastContainer} from "react-toastify";
+import FloatingContainer from "@dexodus/bootstrap/src/UserInterface/FloatingContainer";
 
 interface AdminLayoutProps {
     children: React.ReactNode;
@@ -50,9 +51,11 @@ const AdminLayout = async ({children, params}) => {
                     <TopBar/>
                     <div style={{display: 'flex'}}>
                         <SideBar navigation={json} slug={slug}/>
-                        <Content>
-                            {children}
-                        </Content>
+                        <FloatingContainer>
+                            <Content>
+                                {children}
+                            </Content>
+                        </FloatingContainer>
                     </div>
                 </AdminConstructorStoreProvider>
             </SessionProvider>

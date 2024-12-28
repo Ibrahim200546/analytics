@@ -16,7 +16,7 @@ fos_elastica:
                     analyzer: standard
             persistence:
                 driver: orm
-                model: Dexodus\SmiParserInterface\Entity\Article
+                model: Dexodus\SmiParserBundle\Entity\Article
                 provider: ~
                 finder: ~
                 listener:

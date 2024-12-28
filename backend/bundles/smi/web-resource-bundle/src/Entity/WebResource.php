@@ -82,18 +82,4 @@ class WebResource
     public ?string $createdAtFormat = null;
     #[ORM\Column(nullable: true)]
     public ?string $faviconUrl = null;
-    #[ORM\Column(nullable: true)]
-    public ?string $commentsContainerCssPath = null;
-    #[ORM\Column(nullable: true)]
-    public ?string $commentContainerCssPath = null;
-    #[ORM\Column(nullable: true)]
-    public ?string $commentCommentatorNameCssPath = null;
-    #[ORM\Column(nullable: true)]
-    public ?string $commentContentCssPath = null;
-    #[ORM\Column(nullable: true)]
-    public ?string $commentLikesCssPath = null;
-    #[ORM\Column(nullable: true)]
-    public ?string $commentDislikesCssPath = null;
-    #[ORM\Column(nullable: true)]
-    public ?string $commentCreatedAtCssPath = null;
 }

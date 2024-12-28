@@ -9,6 +9,7 @@ import ValidationErrors from "../ValidationErrors";
 import {EventType} from "@dexodus/jsel";
 import classnames from "classnames";
 import formGroupStyles from '../FormGroup.module.scss';
+import renderLabel from "@dexodus/react-form/src/utils/renderLabel";
 
 interface FieldProps extends GeneralFieldProps {
     component: FieldComponent<any>;
@@ -70,7 +71,7 @@ const Field: GeneralField<FieldProps> = ({className, property, component, label,
         <>
             {value !== undefined && visible && (
                 <div className={classnames(formGroupStyles.formGroup, className?.formGroup)}>
-                    <div className={classnames(formGroupStyles.title, className?.label)} style={{color: componentProps?.color ?? 'black'}}>{label ?? property}</div>
+                    <div className={classnames(formGroupStyles.title, className?.label)} style={{color: componentProps?.color ?? 'black'}}>{renderLabel(label ?? property)}</div>
                     <Component
                         {...componentProps}
                         value={value}

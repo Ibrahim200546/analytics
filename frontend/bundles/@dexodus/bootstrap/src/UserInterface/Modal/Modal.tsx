@@ -17,6 +17,7 @@ interface ModalProps {
     visible?: boolean;
     setVisible?: React.Dispatch<React.SetStateAction<boolean>>;
     size?: ModalSize;
+    onHide?: () => void;
 }
 
 const Modal: React.FC<ModalProps> = (
@@ -27,6 +28,7 @@ const Modal: React.FC<ModalProps> = (
         visible = false,
         setVisible = () => {},
         size = ModalSize.Standard,
+        onHide = () => {},
     }
 ) => {
     const [displayNone, setDisplayNone] = useState<boolean>(true);
@@ -42,6 +44,12 @@ const Modal: React.FC<ModalProps> = (
             setTimeout(() => setDisplayNone(true), 400);
         }
     }, [visible])
+
+    useEffect(() => {
+        if (displayNone) {
+            onHide();
+        }
+    }, [displayNone]);
 
     const fadeClick = (event: React.MouseEvent<HTMLDivElement>) => {
         if (event.target === fadeRef.current) {

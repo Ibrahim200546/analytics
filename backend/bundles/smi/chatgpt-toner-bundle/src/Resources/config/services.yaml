@@ -1,0 +1,6 @@
+services:
+  Dexodus\ChatgptTonerBundle\:
+    resource: '../..'
+    public: true
+    autowire: true
+    autoconfigure: true

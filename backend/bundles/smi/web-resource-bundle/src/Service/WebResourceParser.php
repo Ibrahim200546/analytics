@@ -5,15 +5,17 @@ declare(strict_types=1);
 namespace Dexodus\WebResourceBundle\Service;
 
 use DateTimeImmutable;
-use Dexodus\SmiParserInterface\Entity\Article;
-use Dexodus\SmiParserInterface\Entity\ArticleComment;
-use Dexodus\SmiParserInterface\Repository\ArticleRepository;
-use Dexodus\SmiParserInterface\Service\SmiParserInterface;
+use Dexodus\SmiParserBundle\Entity\Article;
+use Dexodus\SmiParserBundle\Entity\ArticleComment;
+use Dexodus\SmiParserBundle\Entity\ParserAccountInterface;
+use Dexodus\SmiParserBundle\Repository\ArticleRepository;
+use Dexodus\SmiParserBundle\Service\SmiParserInterface;
 use Dexodus\WebResourceBundle\Entity\WebResource;
 use Dexodus\WebResourceBundle\Message\WebResourceRawArticle;
+use Dexodus\WebResourceBundle\Message\WebResourceRawArticleList;
 use Dexodus\WebResourceBundle\Repository\WebResourceRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Exception;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -27,8 +29,60 @@ class WebResourceParser implements SmiParserInterface
         private MessageBusInterface $messageBus,
         private WebResourceRepository $webResourceRepository,
         private WebResourceDateTimeParser $webResourceDateTimeParser,
-        private EntityManagerInterface $entityManager,
     ) {
+    }
+
+    public function parseNewArticles(ConsoleOutputInterface $output): void
+    {
+        $webResourceSection = $output->section();
+        $webResourceSection->writeln('<info>Обработка веб ресурсов...</info>');
+
+        foreach ($this->webResourceRepository->findAll() as $webResource) {
+            $section = $output->section();
+            $progressBarSection = $output->section();
+            $section->writeln("<info>Обработка веб-ресурса <comment>$webResource->name</comment>...</info>");
+
+            $countArticleLists = $this->getCountArticleList($webResource);
+            $progressBar = new ProgressBar($progressBarSection, $countArticleLists);
+            $section->overwrite("<info>Добавление новостных страниц веб-ресурса <comment>$webResource->name</comment> в очередь...</info>");
+            $countAdded = 0;
+
+            for ($page = 1; $page <= $countArticleLists; $page++) {
+                $progressBar->setProgress($page);
+                $articleListUrl = $this->webResourceUrlManager->buildUrlByPattern($webResource->articlesPathPattern, ['page' => $page]);
+                $articleListCrawler = $this->httpClient->getCrawlerFromUrl($articleListUrl);
+                $aElements = $articleListCrawler->filter($webResource->containerCssPath . ' ' . $webResource->articleLinkCssPath);
+                $articleAlreadyExists = false;
+
+                foreach ($aElements as $aElement) {
+                    $href = $aElement->attributes->getNamedItem('href')->nodeValue;
+
+                    if (is_null($href)) {
+                        continue;
+                    }
+
+                    $extendedHref = $this->webResourceUrlManager->extendUrl($webResource, $href);
+
+                    if (is_null($this->articleRepository->findOneBy(['originalPath' => $extendedHref]))) {
+                        $countAdded++;
+                        $this->messageBus->dispatch(new WebResourceRawArticle($webResource->id, $extendedHref));
+                    }
+
+                    $articleAlreadyExists = true;
+                    break;
+                }
+
+                if ($articleAlreadyExists) {
+                    break;
+                }
+            }
+
+            $progressBar->finish();
+            $progressBarSection->clear();
+            $section->overwrite("<info>Добавлено <comment>$countAdded</comment> из <comment>$countArticleLists</comment> новостных страниц веб-ресурса <comment>$webResource->name</comment> в очередь</info>");
+        }
+
+        $webResourceSection->overwrite('<info>Обработка веб ресурсов завершена</info>');
     }
 
     public function processArticle(WebResource $webResource, string $articleUrl): Article
@@ -45,7 +99,6 @@ class WebResourceParser implements SmiParserInterface
 
         $article->isScheduledForUpdate = false;
         $article->lastUpdate = new DateTimeImmutable();
-        $this->parseComments($article, $crawler, $webResource);
 
         return $this->parseGeneralInformation($article, $crawler, $webResource);
     }
@@ -61,28 +114,14 @@ class WebResourceParser implements SmiParserInterface
         return 'WebResource';
     }
 
-    protected function parseComments(Article $article, Crawler $crawler, WebResource $webResource): Article
+    public function getSourceFavicon(Article $article): string
     {
-        $commentsCrawler = $crawler->filter($webResource->commentsContainerCssPath . ' ' . $webResource->commentContainerCssPath);
+        return $this->webResourceRepository->findOneBy(['name' => $article->source])->faviconUrl;
+    }
 
-        foreach ($commentsCrawler as $commentNode) {
-            $commentCrawler = new Crawler($commentNode);
-
-            $articleComment = new ArticleComment();
-            $articleComment->commentatorName = $commentCrawler->filter($webResource->commentCommentatorNameCssPath)->text();
-            $articleComment->createdAtString = $commentCrawler->filter($webResource->commentCreatedAtCssPath)->text();
-            $articleComment->content = $commentCrawler->filter($webResource->commentContentCssPath)->text();
-            try {
-                $articleComment->likes = (int) $commentCrawler->filter($webResource->commentLikesCssPath)->text();
-                $articleComment->dislikes = (int) $commentCrawler->filter($webResource->commentDislikesCssPath)->text();
-            } catch (Exception) {
-            }
-            $article->comments->add($articleComment);
-            $articleComment->article = $article;
-            $this->entityManager->persist($articleComment);
-        }
-
-        return $article;
+    public function getSourceName(Article $article): string
+    {
+        return $article->source;
     }
 
     protected function parseGeneralInformation(Article $article, Crawler $crawler, WebResource $webResource): Article
@@ -104,5 +143,42 @@ class WebResourceParser implements SmiParserInterface
         }
 
         return $article;
+    }
+
+    protected function getCountArticleList(WebResource $webResource): int
+    {
+        $firstArticleListUrl = $this->webResourceUrlManager->buildUrlByPattern($webResource->articlesPathPattern, ['page' => 1]);
+        $articleListCrawler = $this->httpClient->getCrawlerFromUrl($firstArticleListUrl);
+
+        $maxPage = 1;
+
+        foreach ($articleListCrawler->filter('a') as $aElement) {
+            $href = $aElement->attributes->getNamedItem('href')->nodeValue;
+
+            if (is_null($href)) {
+                continue;
+            }
+
+            $extendedHref = $this->webResourceUrlManager->extendUrl($webResource, $href);
+            $options = $this->webResourceUrlManager->extractOptionsFromUrl($webResource->articlesPathPattern, $extendedHref);
+
+            if (is_null($options) || !is_numeric($options['page'])) {
+                continue;
+            }
+
+            $maxPage = max($maxPage, (int) $options['page']);
+        }
+
+        return $maxPage;
+    }
+
+    public function getSourceLink(Article $article): string
+    {
+        return $article->originalPath;
+    }
+
+    public function replyComment(ArticleComment $articleComment, string $comment, ParserAccountInterface $parserAccount): string | false
+    {
+        return false;
     }
 }

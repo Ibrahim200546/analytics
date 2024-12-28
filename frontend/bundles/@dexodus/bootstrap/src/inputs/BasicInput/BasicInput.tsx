@@ -1,6 +1,6 @@
 "use client";
 
-import React, {HTMLInputTypeAttribute, useEffect, useRef} from "react";
+import React, {HTMLInputTypeAttribute, useEffect, useRef, useState} from "react";
 import styles from "./BasicInput.module.scss";
 import {InputProps} from "../types";
 import classnames from "classnames";
@@ -27,9 +27,9 @@ const BasicInput: React.FC<BasicInputProps> = (
         placeholder,
     }
 ) => {
+    const [focused, setFocused] = useState<boolean>(false);
     const basicContainerRef: React.RefObject<HTMLDivElement> = containerRef ?? useRef<HTMLDivElement>(null);
     const basicInputRef: React.RefObject<HTMLInputElement> = inputRef ?? useRef<HTMLInputElement>(null);
-
     const clickInContainer = () => {
         basicInputRef?.current?.focus();
     }
@@ -44,7 +44,7 @@ const BasicInput: React.FC<BasicInputProps> = (
 
     return (
         <div
-            className={classnames(styles.inputContainer, containerClassName, 'input-container')}
+            className={classnames(styles.inputContainer, containerClassName, 'input-container', focused && styles.focused)}
             ref={basicContainerRef}
         >
             {children(
@@ -61,6 +61,8 @@ const BasicInput: React.FC<BasicInputProps> = (
                     type={type}
                     ref={basicInputRef}
                     placeholder={placeholder}
+                    onFocus={() => setFocused(true)}
+                    onBlur={() => setFocused(false)}
                 />
             )}
         </div>

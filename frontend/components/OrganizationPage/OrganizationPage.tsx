@@ -14,14 +14,18 @@ import EmployeeListCard from "@/components/EmployeeListCard";
 import SupervisorCard from "@/components/SupervisorCard";
 import {useSession} from "next-auth/react";
 import useCheckHavingRole from "@/hooks/useCheckHavingRole";
+import OrganizationAccountListCard from "@/components/OrganizationAccountListCard";
+import EntityFormStructure from "@dexodus/entity-form/src/EntityFormStructure";
 
 interface OrganizationPageProps {
     organization: Organization;
     projectStructure: EntityTableStructure;
     employeeStructure: EntityTableStructure;
+    organizationAccountStructure: EntityTableStructure;
+    telegramAccountStructure: EntityFormStructure;
 }
 
-const OrganizationPage: React.FC<OrganizationPageProps> = ({organization, projectStructure, employeeStructure}) => {
+const OrganizationPage: React.FC<OrganizationPageProps> = ({organization, projectStructure, employeeStructure, organizationAccountStructure, telegramAccountStructure}) => {
     const isAdmin = useCheckHavingRole('ROLE_ADMIN');
 
     return (
@@ -53,6 +57,7 @@ const OrganizationPage: React.FC<OrganizationPageProps> = ({organization, projec
                     <EmployeeListCard organization={organization} employeeStructure={employeeStructure}/>
                 </div>
             )}
+            <OrganizationAccountListCard organization={organization} organizationAccountStructure={organizationAccountStructure} telegramAccountStructure={telegramAccountStructure}/>
         </div>
     );
 };

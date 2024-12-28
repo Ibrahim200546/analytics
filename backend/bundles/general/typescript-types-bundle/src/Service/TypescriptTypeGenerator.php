@@ -28,9 +28,11 @@ class TypescriptTypeGenerator
 
         foreach (array_unique($implodedProperties['imports']) as $importName => $importPath) {
             $importRelativePath = $this->getRelativePathFromTypescriptTypeToImport($typescriptType->fullName, $importPath);
-            $importCodes[] = <<<TS
+            if (!is_null($importRelativePath)) {
+                $importCodes[] = <<<TS
 import $importName from "$importRelativePath";
 TS;
+            }
         }
 
         $importCode = (!empty($importCodes) ? PHP_EOL : '') . implode(PHP_EOL, $importCodes) . (!empty($importCodes) ? PHP_EOL : '');
@@ -49,7 +51,7 @@ TS;
         return $code;
     }
 
-    private function getRelativePathFromTypescriptTypeToImport(string $from, string $to): string
+    private function getRelativePathFromTypescriptTypeToImport(string $from, string $to): ?string
     {
         $fromParts = explode('/', trim($from, '/'));
         $toParts = explode('/', trim($to, '/'));
@@ -57,6 +59,10 @@ TS;
 
         while ($commonLength < count($fromParts) && $commonLength < count($toParts) && $fromParts[$commonLength] === $toParts[$commonLength]) {
             $commonLength++;
+        }
+
+        if (count($fromParts) - $commonLength - 1 <= 0) {
+            return null;
         }
 
         $upwards = array_fill(0, count($fromParts) - $commonLength - 1, '..') ;
@@ -92,7 +98,7 @@ TS;
         $reflectionProperty = new ReflectionProperty($class, $property);
         $reflectionType = $reflectionProperty->getType();
 
-        $processedTypes = $this->processTypes($types, $reflectionType, $groups, $depth);
+        $processedTypes = $this->processTypes($class, $types, $reflectionType, $groups, $depth);
 
         return [
             'imports' => $processedTypes['imports'],
@@ -107,7 +113,7 @@ TS;
      * @param int $depth
      * @return array
      */
-    private function processTypes(null|array $types, ?ReflectionType $reflectionType, array $groups, int $depth): array
+    private function processTypes(string $class, null|array $types, ?ReflectionType $reflectionType, array $groups, int $depth): array
     {
         $tsTypes = [];
         $imports = [];
@@ -132,6 +138,32 @@ TS;
                     if (!in_array('string', $tsTypes)) {
                         $tsTypes[] = 'string';
                     }
+                } elseif (!is_null($type->getClassName()) && !$type->isCollection() && $type->getClassName() === $class) {
+                    $subTypescriptTypes = $this->typescriptTypesLoader->getTypescriptTypesForClass($type->getClassName());
+                    $findSubTypescriptType = null;
+
+                    foreach ($subTypescriptTypes as $subTypescriptType) {
+                        if (count(array_intersect($subTypescriptType->groups, $groups)) === count($subTypescriptType->groups)) {
+                            $findSubTypescriptType = $subTypescriptType;
+                            break;
+                        }
+                    }
+
+                    $imports[$findSubTypescriptType->name] = $findSubTypescriptType->fullName;
+                    $tsTypes[] = "{$findSubTypescriptType->name}";
+                }  elseif (!is_null($type->getClassName()) && $type->isCollection() && $type->getClassName() === $class) {
+                    $subTypescriptTypes = $this->typescriptTypesLoader->getTypescriptTypesForClass($type->getCollectionValueTypes()[0]->getClassName());
+                    $findSubTypescriptType = null;
+
+                    foreach ($subTypescriptTypes as $subTypescriptType) {
+                        if (count(array_intersect($subTypescriptType->groups, $groups)) === count($subTypescriptType->groups)) {
+                            $findSubTypescriptType = $subTypescriptType;
+                            break;
+                        }
+                    }
+
+                    $imports[$findSubTypescriptType->name] = $findSubTypescriptType->fullName;
+                    $tsTypes[] = "{$findSubTypescriptType->name}[]";
                 } elseif (!is_null($type->getClassName()) && !$type->isCollection()) {
                     $subType = $this->generateProperties($type->getClassName(), $groups, $depth + 1);
 
@@ -158,7 +190,7 @@ TS;
                         $tsTypes[] = "{$findSubTypescriptType->name}";
                     }
                 } elseif ($type->isCollection()) {
-                    $subType = $this->processTypes($type->getCollectionValueTypes(), null, $groups, $depth);
+                    $subType = $this->processTypes($class, $type->getCollectionValueTypes(), null, $groups, $depth);
                     $tsTypes[] = "({$subType['code']})[]";
                     $imports = [...$imports, ...$subType['imports']];
                 }

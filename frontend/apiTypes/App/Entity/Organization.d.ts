@@ -1,8 +1,5 @@
 /* Typescript Type "App/Entity/Organization" */
 
-import Subscription from "./Subscription";
-import User from "./User";
-
 interface Organization {
    id: number;
    city: {

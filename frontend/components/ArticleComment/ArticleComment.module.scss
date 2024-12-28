@@ -1,0 +1,58 @@
+.articleComment {
+  margin-bottom: 16px;
+
+  .header {
+    display: flex;
+
+    .commentatorAvatar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #e2e2e2;
+      font-size: 22px;
+      margin-right: 16px;
+    }
+
+    .reaction {
+      margin-right: 4px;
+    }
+
+    .commentatorName {
+      font-weight: bold;
+      margin-right: 8px;
+
+      .yourOrganization {
+        color: var(--secondary-color);
+      }
+    }
+
+    .createdAt {
+      color: var(--secondary-color);
+    }
+  }
+
+  .content {
+    margin-top: -16px;
+    margin-left: 64px;
+
+    .text {
+      margin-bottom: 8px;
+    }
+
+    .reply {
+      margin-top: -8px;
+      cursor: pointer;
+      color: var(--secondary-color);
+      margin-bottom: 8px;
+    }
+
+    .replyFormControls {
+      > * {
+        margin-right: 8px;
+      }
+    }
+  }
+}

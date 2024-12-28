@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import ArrayField from "@dexodus/react-form/src/fields/ArrayField";
 import Field from "@dexodus/react-form/src/fields/Field";
 import ObjectField from "@dexodus/react-form/src/fields/ObjectField";
@@ -30,6 +30,7 @@ import {useRouter} from "next/navigation";
 import useApiFetch from "@dexodus/api-fetch/src/hooks/useApiFetch";
 import PhoneField from "@dexodus/bootstrap/src/UserInterface/Fields/PhoneField";
 import DateField from "@dexodus/bootstrap/src/UserInterface/Fields/DateField";
+import {ValidateCallback} from "@dexodus/react-form/src/Form";
 
 export type EntityFormFieldComponents = { [fieldComponentName: string]: FieldComponent<FieldComponentProps | any> };
 
@@ -41,6 +42,9 @@ interface EntityFormProps {
     generalFieldComponents?: EntityFormGeneralFieldComponents;
     defaultEntity?: any;
     token?: string;
+    renderControls?: (options: RenderControlsOptions) => React.ReactNode;
+    onChange?: (data: any) => void;
+    setValidateCb?: React.Dispatch<React.SetStateAction<ValidateCallback>>;
 }
 
 export const entityFormDefaultFields: EntityFormFieldComponents = {
@@ -66,6 +70,17 @@ export const entityFormDefaultGeneralFields: EntityFormGeneralFieldComponents = 
     CollectionField: ArrayField,
 };
 
+export interface RenderControlsOptions {
+    defaultButton: React.ReactNode;
+    isLoading: boolean;
+    validate: ValidateCallback;
+    save: () => void;
+}
+
+export const defaultRenderControls = ({defaultButton}: RenderControlsOptions): React.ReactNode => {
+    return defaultButton;
+}
+
 const EntityForm: React.FC<EntityFormProps> = (
     {
         structure,
@@ -73,6 +88,9 @@ const EntityForm: React.FC<EntityFormProps> = (
         generalFieldComponents = entityFormDefaultGeneralFields,
         defaultEntity = {},
         token = undefined,
+        renderControls = defaultRenderControls,
+        onChange = () => {},
+        setValidateCb = () => {},
     },
 ) => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -127,6 +145,14 @@ const EntityForm: React.FC<EntityFormProps> = (
         });
     })
 
+    useEffect(() => {
+        onChange(entity);
+    }, [entity])
+
+    useEffect(() => {
+        setValidateCb(() => validate);
+    }, [validate]);
+
     const save = () => {
         validate(async () => {
             setLoading(true);
@@ -175,14 +201,21 @@ const EntityForm: React.FC<EntityFormProps> = (
     return (
         <div className={styles.entityForm}>
             {component}
-            <Button
-                isLoading={loading}
-                style={ButtonStyle.Success}
-                onClick={() => save()}
-                className={styles.entityForm__save}
-            >
-                {mode === "create" ? "Создать" : "Редактировать"}
-            </Button>
+            {renderControls({
+                defaultButton: (
+                    <Button
+                        isLoading={loading}
+                        style={ButtonStyle.Success}
+                        onClick={() => save()}
+                        className={styles.entityForm__save}
+                    >
+                        {mode === "create" ? "Создать" : "Редактировать"}
+                    </Button>
+                ),
+                isLoading: loading,
+                save: save,
+                validate: validate,
+            })}
         </div>
     );
 };

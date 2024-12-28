@@ -19,6 +19,9 @@
     "dexodus/chatgpt-bundle": {
         "version": "1.0.0"
     },
+    "dexodus/chatgpt-toner-bundle": {
+        "version": "1.0.0"
+    },
     "dexodus/dql-functions-bundle": {
         "version": "1.0.0"
     },
@@ -36,6 +39,9 @@
     },
     "dexodus/entity-table-bundle": {
         "version": "1.0.1"
+    },
+    "dexodus/file-bundle": {
+        "version": "1.0.0"
     },
     "dexodus/free-currency-api-bundle": {
         "version": "1.0.0"
@@ -58,10 +64,19 @@
     "dexodus/single-unique-bundle": {
         "version": "1.0.0"
     },
+    "dexodus/smi-parser-bundle": {
+        "version": "1.0.0"
+    },
     "dexodus/smi-parser-interface": {
         "version": "1.0.0"
     },
-    "dexodus/tengrinews-parser-bundle": {
+    "dexodus/telegram-parser-bundle": {
+        "version": "1.0.0"
+    },
+    "dexodus/tengrinews-api-bundle": {
+        "version": "1.0.0"
+    },
+    "dexodus/tengrinews-comments-parser-bundle": {
         "version": "1.0.0"
     },
     "dexodus/text-case-bundle": {
@@ -129,6 +144,19 @@
             "version": "5.0",
             "ref": "46c9cd2c1e07f0fcfd97e96f12b03b2e0845c4cd"
         }
+    },
+    "league/flysystem-bundle": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "913dc3d7a5a1af0d2b044c5ac3a16e2f851d7380"
+        },
+        "files": [
+            "config/packages/flysystem.yaml",
+            "var/storage/.gitignore"
+        ]
     },
     "lexik/jwt-authentication-bundle": {
         "version": "2.21",

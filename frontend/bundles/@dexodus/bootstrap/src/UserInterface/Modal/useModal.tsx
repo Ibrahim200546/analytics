@@ -14,7 +14,6 @@ const useModal = (
     const [visible, setVisible] = useState<boolean>(false);
 
     const hide = () => {
-        onHide();
         setVisible(false);
     };
 
@@ -23,10 +22,11 @@ const useModal = (
             <Modal
                 content={content}
                 header={header}
-                controls={controls && controls({close: hide, closeButton: <Button onClick={hide}>Close</Button>})}
+                controls={controls && controls({close: hide, closeButton: <Button onClick={hide}>Закрыть</Button>})}
                 visible={visible}
                 setVisible={setVisible}
                 size={size}
+                onHide={onHide}
             />
         ),
         setVisible,
