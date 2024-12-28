@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: exchange-rates-{{ .Values.env }}-backend-worker
+  labels:
+    env: {{ .Values.env }}
+    app: exchange-rates-{{ .Values.env }}-worker
+spec:
+  replicas: {{ .Values.worker.replicas }}
+  selector:
+    matchLabels:
+      env: {{ .Values.env }}
+      app: exchange-rates-{{ .Values.env }}-worker
+  template:
+    metadata:
+      labels:
+        env: {{ .Values.env }}
+        app: exchange-rates-{{ .Values.env }}-worker
+    spec:
+      containers:
+        - name: worker
+          image: "registry.gitlab.com/dexodus-group/exchange-rates/backend-php-{{ .Values.env }}:{{ .Values.image.tag }}"
+          imagePullPolicy: IfNotPresent
+          command: {{ .Values.worker.command }}
+          resources:
+            requests:
+              cpu: {{ .Values.worker.resources.requests.cpu }}
+              memory: {{ .Values.worker.resources.requests.memory }}
+            limits:
+              cpu: {{ .Values.worker.resources.limits.cpu }}
+              memory: {{ .Values.worker.resources.limits.memory }}
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: cap-regcred

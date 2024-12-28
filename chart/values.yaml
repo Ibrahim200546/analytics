@@ -1,3 +1,21 @@
 crontab:
   - article:parse-new
   - articles:distribute
+
+worker:
+  enabled: true
+  replicas: 2
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "500m"
+      memory: "256Mi"
+  command:
+    - php
+    - /srv/app/bin/console
+    - messenger:consume
+    - --time-limit=3600
+    - --memory-limit=128M
+    - async
