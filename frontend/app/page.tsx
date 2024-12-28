@@ -1,9 +1,7 @@
-// import Translate from "@dexodus/native-translation-bundle/src/components/Translate";
+import {redirect} from "next/navigation";
 
-export default function Home() {
-  return (
-    <div>
-      {/*<Translate/>*/}
-    </div>
-  );
+const Page = async () => {
+  return redirect('/login');
 }
+
+export default Page;

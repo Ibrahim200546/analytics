@@ -7,6 +7,7 @@ import Popup from "../Popup";
 import useOnClickInDocument from "@dexodus/bootstrap/src/hooks/useOnClickInDocument";
 import {useSession} from "next-auth/react";
 import {FaUser} from "react-icons/fa";
+import User from "@/apiTypes/App/Entity/User";
 
 interface UserMenuProps {
     logout: () => Promise<void>
@@ -16,6 +17,7 @@ const UserMenu: React.FC<UserMenuProps> = ({logout}) => {
     const [menuOpened, setMenuOpened] = useState<boolean>(false);
     const divRef = useRef<HTMLDivElement>(null);
     const {data} = useSession();
+    const user = data?.user as (User | undefined);
     useOnClickInDocument([divRef], () => setMenuOpened(false));
 
     const toggleMenu = () => {
@@ -32,22 +34,21 @@ const UserMenu: React.FC<UserMenuProps> = ({logout}) => {
             <div className={styles.content}>
                 <div className={styles.avatar}>
                     <FaUser/>
-                    {/*<Image width={50} height={50} src="/images/avatar.png" alt="/images/avatar.png"/>*/}
                 </div>
                 <div className={styles.name}>
                     <span className={styles.fullname}>
-                        {data?.user?.firstName} {data?.user?.lastName}
+                        {user?.lastName} {user?.firstName} {user?.patronymic}
                     </span>
                     <span className={styles.email}>
                         {data?.user?.email}
                     </span>
-                    {data?.user?.roles?.includes('ROLE_ADMIN') && (
+                    {user?.roles?.includes('ROLE_ADMIN') && (
                         <span className={styles.role}>Администратор</span>
                     )}
-                    {data?.user?.roles?.includes('ROLE_SUPERVISOR') && (
+                    {user?.roles?.includes('ROLE_SUPERVISOR') && (
                         <span className={styles.role}>Руководитель</span>
                     )}
-                    {data?.user?.roles?.includes('ROLE_EMPLOYEE') && (
+                    {user?.roles?.includes('ROLE_EMPLOYEE') && (
                         <span className={styles.role}>Сотрудник</span>
                     )}
                 </div>

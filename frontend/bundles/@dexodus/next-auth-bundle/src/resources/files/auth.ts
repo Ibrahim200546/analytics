@@ -15,6 +15,7 @@ declare module "next-auth" {
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+    trustHost: true,
     session: {
         maxAge: 2678400 // 31 день * 24 часа * 60 минут * 60 секунд
     },

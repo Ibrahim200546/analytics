@@ -14,19 +14,6 @@ services:
         networks:
             - exchange-rates
 
-    tensorflow:
-        build:
-            dockerfile: docker/tensorflow/dev.Dockerfile
-            context: .
-        volumes:
-            - ./tensorflow:/srv/app
-        ports:
-            - "5678:8000"
-        depends_on:
-            - database
-        networks:
-            - exchange-rates
-
     frontend:
         build:
             dockerfile: docker/frontend/dev.Dockerfile
@@ -38,7 +25,7 @@ services:
         volumes:
             - ./frontend:/srv/app
             - .env:/srv/app/.env.local
-        command: yarn run start
+        command: yarn run dev
         networks:
             - exchange-rates
 

@@ -2,8 +2,8 @@ import type {Metadata} from "next";
 import AdminLayout from "@dexodus/admin-constructor/src/AdminLayout";
 
 export const metadata: Metadata = {
-    title: "СМИ",
-    description: "Админ панель для СМИ",
+    title: "ISMI",
+    description: "Админ панель для ISMI",
 };
 
 export default AdminLayout;

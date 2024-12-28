@@ -31,7 +31,7 @@ const SideBar: React.FC<SideBarProps> = ({navigation, slug}) => {
     return (
         <div className={classNames(styles.sideBar, sideBarClosed && styles.closed)}>
             <Link href="/main" className={styles.projectName}>
-                <ClientTextTranslation label={'projectName'} defaultValue={'СМИ'}/>
+                <ClientTextTranslation label={'project.name'} defaultValue={'ISMI'}/>
             </Link>
             <Navigation rootItem={navigation} autoOpenPath={slug.join('.')}/>
             <Link href="/logout" className={styles.logout} onClick={event => {

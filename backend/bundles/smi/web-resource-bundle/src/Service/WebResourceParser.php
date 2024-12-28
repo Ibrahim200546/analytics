@@ -66,10 +66,10 @@ class WebResourceParser implements SmiParserInterface
                     if (is_null($this->articleRepository->findOneBy(['originalPath' => $extendedHref]))) {
                         $countAdded++;
                         $this->messageBus->dispatch(new WebResourceRawArticle($webResource->id, $extendedHref));
+                    } else {
+                        $articleAlreadyExists = true;
+                        break;
                     }
-
-                    $articleAlreadyExists = true;
-                    break;
                 }
 
                 if ($articleAlreadyExists) {
