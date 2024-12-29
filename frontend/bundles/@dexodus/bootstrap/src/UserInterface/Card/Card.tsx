@@ -23,6 +23,7 @@ interface CardProps {
     fullWidth?: boolean;
     anyWidth?: boolean;
     className?: string;
+    contentClassName?: string;
 }
 
 const Card: React.FC<CardProps> = (
@@ -36,6 +37,7 @@ const Card: React.FC<CardProps> = (
         fullWidth = false,
         anyWidth = false,
         className,
+        contentClassName,
     }
 ) => {
     const [contentCollapsed, setContentCollapsed] = useState<boolean>(true);
@@ -65,6 +67,7 @@ const Card: React.FC<CardProps> = (
             </div>
             <div className={classNames(
                 styles.content,
+                contentClassName,
                 !contentCollapsed && styles.content_closed,
             )}>{children}</div>
         </div>

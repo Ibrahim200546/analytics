@@ -7,6 +7,7 @@ import getApiFetch from "@dexodus/api-fetch/src/server/getApiFetch";
 import {auth} from "@/auth";
 import PageGasket from "@dexodus/admin-constructor/src/pages/PageGasket";
 import {useTranslation} from "@/libs/@dexodus/translation/src/server/hooks/useTranslation";
+import styles from "./EntityFormPage.module.scss";
 
 interface EntityFormPageProps extends PageProps {
     options: {
@@ -31,7 +32,7 @@ const EntityFormPage: Page<EntityFormPageProps> = async ({options, searchParams}
     }
 
     return (
-        <Card title={<TextTranslation label={`navigation.${options.path}`}/>}>
+        <Card title={<TextTranslation label={`navigation.${options.path}`}/>} contentClassName={styles.entityFormPage}>
             <PageGasket title={t(`navigation.${options.path}`)}>
                 <EntityForm structure={structure} defaultEntity={defaultEntity} token={session?.user?.token}/>
             </PageGasket>

@@ -17,6 +17,7 @@ enum EntityFormFieldComponentEnum: string
     case ASYNC_DROPDOWN_FIELD = 'AsyncDropdownField';
     case ASYNC_MULTIPLE_DROPDOWN_FIELD = 'AsyncMultipleDropdownField';
     case DATETIME_PICKER_FIELD = 'DateTimePickerField';
+    case DATE_FIELD = 'DateField';
     case FILE_DROPZONE_FIELD = 'FileDropzoneField';
 
     case HIDDEN_FIELD = 'HiddenField';

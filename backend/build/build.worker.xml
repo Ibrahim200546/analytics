@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<project name="EDUCATION_DEPLOY" basedir="." default="build">
+    <target name="build" depends="install" />
+
+    <target name="install">
+        <exec
+                command="echo Install finish"
+                dir="/srv/app"
+                passthru="true"
+                checkreturn="true"
+        />
+    </target>
+</project>

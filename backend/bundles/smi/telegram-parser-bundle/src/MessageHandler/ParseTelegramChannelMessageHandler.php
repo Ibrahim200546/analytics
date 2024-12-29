@@ -57,7 +57,7 @@ class ParseTelegramChannelMessageHandler
         foreach ($messages as $message) {
             $article = $this->parseTelegramMessage($message, $telegramChannel);
 
-            if (!is_null($article->getId())) {
+            if (!is_null($article->getId()) || $article->createdAt < $telegramChannel->parseToDate) {
                 $countAlreadyExists++;
             } else {
                 while ($article instanceof Article) {

@@ -23,11 +23,11 @@
                 passthru="true"
                 checkreturn="true"
         />
-        <exec
-                command="bin/console fos:elastica:populate"
-                dir="/srv/app"
-                passthru="true"
-                checkreturn="true"
-        />
+<!--        <exec-->
+<!--                command="bin/console fos:elastica:populate"-->
+<!--                dir="/srv/app"-->
+<!--                passthru="true"-->
+<!--                checkreturn="true"-->
+<!--        />-->
     </target>
 </project>

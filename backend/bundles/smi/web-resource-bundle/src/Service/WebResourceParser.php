@@ -54,7 +54,7 @@ class WebResourceParser implements SmiParserInterface
                 $aElements = $articleListCrawler->filter($webResource->containerCssPath . ' ' . $webResource->articleLinkCssPath);
                 $articleAlreadyExists = false;
 
-                foreach ($aElements as $aElement) {
+                foreach ($aElements as $index => $aElement) {
                     $href = $aElement->attributes->getNamedItem('href')->nodeValue;
 
                     if (is_null($href)) {
@@ -62,8 +62,13 @@ class WebResourceParser implements SmiParserInterface
                     }
 
                     $extendedHref = $this->webResourceUrlManager->extendUrl($webResource, $href);
+                    $article = null;
 
-                    if (is_null($this->articleRepository->findOneBy(['originalPath' => $extendedHref]))) {
+                    if ($countAdded % 100 === 0) {
+                        $article = $this->processArticle($webResource, $extendedHref);
+                    }
+
+                    if (is_null($this->articleRepository->findOneBy(['originalPath' => $extendedHref])) && (!$article || $article->createdAt >= $webResource->parseToDate)) {
                         $countAdded++;
                         $this->messageBus->dispatch(new WebResourceRawArticle($webResource->id, $extendedHref));
                     } else {

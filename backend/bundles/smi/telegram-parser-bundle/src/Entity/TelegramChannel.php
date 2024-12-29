@@ -13,7 +13,9 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use DateTimeImmutable;
 use Dexodus\EntityFormBundle\Attribute\EntityForm;
+use Dexodus\EntityFormBundle\Attribute\EntityFormField;
 use Dexodus\EntityFormBundle\Dto\EntityFormMode;
+use Dexodus\EntityFormBundle\Enum\EntityFormFieldTypeEnum;
 use Dexodus\EntityTableBundle\Action\Edit;
 use Dexodus\EntityTableBundle\Attribute\EntityTable;
 use Dexodus\EntityTableBundle\Attribute\EntityTableColumn;
@@ -23,6 +25,7 @@ use Dexodus\TelegramParserBundle\State\TelegramChannelProcessor;
 use Dexodus\TitleBundle\Attribute\Title;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TelegramChannelRepository::class)]
 #[ApiFilter(OrderFilter::class)]
@@ -52,6 +55,7 @@ class TelegramChannel
     #[ORM\Column]
     #[EntityTableColumn]
     #[Groups([self::ROLE_VIEW, self::ROLE_LIST, self::ROLE_CREATE, self::ROLE_EDIT])]
+    #[Assert\NotBlank(message: 'Поле должно быть заполнено')]
     #[Title('ID телеграмм канала(пример: "@telegram")')]
     public string $channelId;
 
@@ -73,6 +77,13 @@ class TelegramChannel
 
     #[ORM\Column(options: ['default' => false])]
     public bool $isScheduledForUpdate = false;
+
+    #[Title('Ограничение по дате')]
+    #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[Groups([self::ROLE_VIEW, self::ROLE_LIST, self::ROLE_CREATE, self::ROLE_EDIT])]
+    #[Assert\NotBlank(message: 'Поле должно быть заполнено')]
+    #[EntityFormField(type: EntityFormFieldTypeEnum::DATE)]
+    public DateTimeImmutable $parseToDate;
 
     public function __construct()
     {

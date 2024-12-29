@@ -17,6 +17,7 @@ enum EntityFormFieldTypeEnum: string
     case ASYNC_ENUM_COLLECTION = 'async_enum_collection';
     case ASYNC_ENUM = 'async_enum';
     case DATETIME = 'datetime';
+    case DATE = 'date';
     case FILE = 'file';
     case HIDDEN = 'hidden';
     case BUTTON = 'button';

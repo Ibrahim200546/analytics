@@ -11,8 +11,11 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use DateTimeImmutable;
 use Dexodus\EntityFormBundle\Attribute\EntityForm;
+use Dexodus\EntityFormBundle\Attribute\EntityFormField;
 use Dexodus\EntityFormBundle\Dto\EntityFormMode;
+use Dexodus\EntityFormBundle\Enum\EntityFormFieldTypeEnum;
 use Dexodus\EntityTableBundle\Action\Edit;
 use Dexodus\EntityTableBundle\Attribute\EntityTable;
 use Dexodus\EntityTableBundle\Attribute\EntityTableColumn;
@@ -82,4 +85,16 @@ class WebResource
     public ?string $createdAtFormat = null;
     #[ORM\Column(nullable: true)]
     public ?string $faviconUrl = null;
+
+    #[Title('Ограничение по дате')]
+    #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[Groups([self::ROLE_VIEW, self::ROLE_LIST, self::ROLE_CREATE, self::ROLE_EDIT])]
+    #[Assert\NotBlank(message: 'Поле должно быть заполнено')]
+    #[EntityFormField(type: EntityFormFieldTypeEnum::DATE)]
+    public DateTimeImmutable $parseToDate;
+
+    public function __construct()
+    {
+        $this->parseToDate = new DateTimeImmutable();
+    }
 }

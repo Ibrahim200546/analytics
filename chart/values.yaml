@@ -4,14 +4,15 @@ crontab:
 
 worker:
   enabled: true
-  replicas: 1
+#  replicas: 64
+  replicas: 0
   resources:
     requests:
+      cpu: "50m"
+      memory: "64Mi"
+    limits:
       cpu: "100m"
       memory: "128Mi"
-    limits:
-      cpu: "500m"
-      memory: "256Mi"
   command:
     - php
     - /srv/app/bin/console
