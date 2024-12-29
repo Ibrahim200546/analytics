@@ -10,6 +10,7 @@ use ApiPlatform\Doctrine\Orm\Paginator;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGenerator;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
+use App\Entity\Organization;
 use App\Entity\User;
 use App\Enum\Entity\UserRoleEnum;
 use App\Exception\ForbiddenException;
@@ -52,8 +53,8 @@ class MyOrganizationsProvider implements ProviderInterface
             ->setParameter('userId', $user->getId());
 
         $queryNameGenerator = new QueryNameGenerator();
-        $this->filterExtension->applyToCollection($queryBuilder, $queryNameGenerator, User::class, $operation, $context);
-        $this->paginationExtension->applyToCollection($queryBuilder, $queryNameGenerator, User::class, $operation, $context);
+        $this->filterExtension->applyToCollection($queryBuilder, $queryNameGenerator, Organization::class, $operation, $context);
+        $this->paginationExtension->applyToCollection($queryBuilder, $queryNameGenerator, Organization::class, $operation, $context);
 
         return new Paginator(new DoctrinePaginator($queryBuilder));
     }

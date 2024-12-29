@@ -13,6 +13,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Enum\Entity\SubscriptionTypeEnum;
+use App\Repository\SubscriptionRepository;
 use App\State\DeleteSubscriptionProcessor;
 use DateTimeImmutable;
 use Dexodus\EntityDisableBundle\Entity\EntityDisableTrait;
@@ -27,7 +28,7 @@ use Dexodus\TypescriptTypesBundle\Attribute\AsTSType;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: SubscriptionRepository::class)]
 #[ApiFilter(OrderFilter::class)]
 #[ApiResource(operations: [
     new Delete(processor: DeleteSubscriptionProcessor::class),

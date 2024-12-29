@@ -77,12 +77,13 @@ class DistributeArticlesByProjectsCommand extends Command
         $searchQuery = [
             'query' => [
                 'multi_match' => [
-                    'query' => $tag, // Строка поиска
-                    'fields' => ['title', 'announce', 'content'], // Поля для поиска
-                    'type' => 'best_fields', // Используем лучшее совпадение
-                    'operator' => 'and', // Все слова должны совпадать
+                    'query' => $tag,
+                    'fields' => ['title', 'announce', 'content'],
+                    'type' => 'most_fields',
+                    'operator' => 'and',
                 ]
-            ]
+            ],
+            'size' => 1000000,
         ];
 
         return $this->articlesFinder->find($searchQuery);

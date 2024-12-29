@@ -1,11 +1,11 @@
 crontab:
   - article:parse-new
   - articles:distribute
+  - subscription:status:update
 
 worker:
   enabled: true
-#  replicas: 64
-  replicas: 0
+  replicas: 64
   resources:
     requests:
       cpu: "50m"

@@ -32,7 +32,7 @@ const ArticleList: React.FC<ArticleListProps> = ({project, projectArticlesHydraC
         createdAt: false | "asc" | "desc",
     }>({
         favorite: false,
-        createdAt: false,
+        createdAt: 'desc',
     });
 
     const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
