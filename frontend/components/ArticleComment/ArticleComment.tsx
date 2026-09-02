@@ -74,7 +74,7 @@ const ArticleComment: React.FC<ArticleCommentProps> = ({articleComment, organiza
         setMessageSending(false);
     }
 
-    const {component: replyForm, validate, data} = useForm<{content: string, account: string}>((_, validate) => (
+    const {component: replyForm, data} = useForm<{content: string, account: string}>((_, validate) => (
         <>
             <Field component={StringField} property="content" label="Сообщение" validators={[notBlank('Поле должно быть заполнено')]}/>
             <Field component={AsyncDropdownField} property="account" label="Аккаунт"  validators={[notBlank('Поле должно быть заполнено')]} componentProps={{
@@ -96,7 +96,10 @@ const ArticleComment: React.FC<ArticleCommentProps> = ({articleComment, organiza
                     {articleComment.commentatorName.split('')[0].toUpperCase()}
                 </div>
                 <div className={styles.reaction}>
-                    <Reaction type={ReactionTypeEnum[articleComment.tone.toUpperCase()]} size={22}/>
+                    <Reaction
+                        type={ReactionTypeEnum[articleComment.tone.toUpperCase() as keyof typeof ReactionTypeEnum] as ReactionTypeEnum}
+                        size={22}
+                    />
                 </div>
                 <span className={styles.commentatorName}>
                     {articleComment.commentatorName}
@@ -114,8 +117,8 @@ const ArticleComment: React.FC<ArticleCommentProps> = ({articleComment, organiza
                         {showReplyForm && replyForm}
                     </div>
                 )}
-                {articleComment.replies.map(comment => (
-                    <ArticleComment articleComment={comment} organizationId={organizationId} reloadProjectArticle={reloadProjectArticle}/>
+                {(articleComment.replies as ArticleComment_View[]).map(comment => (
+                    <ArticleComment key={comment.id} articleComment={comment} organizationId={organizationId} reloadProjectArticle={reloadProjectArticle}/>
                 ))}
             </div>
         </div>

@@ -4,7 +4,6 @@ import React, {useEffect, useRef, useState} from "react";
 import styles from "./CreateTelegramAccountForm.module.scss";
 import TelegramAccount_Create from "@/apiTypes/Dexodus/TelegramParserBundle/Entity/TelegramAccount_Create";
 import useApiFetch from "@dexodus/api-fetch/src/hooks/useApiFetch";
-import {useRouter} from "next/navigation";
 import {toast} from "react-toastify";
 import responseIsNotOkSendError from "@dexodus/api-fetch/src/responseIsNotOkSendError";
 import useModal from "@dexodus/bootstrap/src/UserInterface/Modal/useModal";
@@ -12,12 +11,10 @@ import {TailSpin} from "react-loader-spinner";
 import HtmlView from "@dexodus/bootstrap/src/UserInterface/HtmlView";
 import {ModalSize} from "@dexodus/bootstrap/src/UserInterface/Modal/Modal";
 import useEntityForm from "@dexodus/entity-form/src/useEntityForm";
-import Button, {ButtonStyle} from "@dexodus/bootstrap/src/UserInterface/Button";
-import Card from "@dexodus/bootstrap/src/UserInterface/Card";
 import EntityFormStructure from "@dexodus/entity-form/src/EntityFormStructure";
 
 interface CreateTelegramAccountFormProps {
-    structure: EntityFormStructure | string;
+    structure?: EntityFormStructure | string;
     setShowQRCode: React.Dispatch<React.SetStateAction<() => void>>;
     onCreatedTelegramAccount?: (telegramAccountId: number, telegramAccountName: string) => void;
     onFailure?: () => void;
@@ -25,7 +22,6 @@ interface CreateTelegramAccountFormProps {
 
 const CreateTelegramAccountForm: React.FC<CreateTelegramAccountFormProps> = ({structure = '/entity-form/structure/dexodus.telegram-parser-bundle.entity.telegram-account', setShowQRCode = () => {}, onCreatedTelegramAccount = () => {}, onFailure = () => {}}) => {
     const [qrCodeLoading, setQrCodeLoading] = useState<boolean>(false);
-    const [telegramAccountFilled, setTelegramAccountFilled] = useState<boolean>(false);
     const [telegramAccountData, setTelegramAccountData] = useState<TelegramAccount_Create>({apiId: 0, apiHash: '', name: ''});
     const [qrCodeSvg, setQrCodeSvg] = useState<string>('');
     const abortControllerRef = useRef<AbortController | null>(null);
@@ -41,13 +37,12 @@ const CreateTelegramAccountForm: React.FC<CreateTelegramAccountFormProps> = ({st
         let qrCodeResponse;
 
         try {
-            console.log('abortController', abortControllerRef.current, 'abortController.signal', abortControllerRef.current?.signal);
-            qrCodeResponse = await toast.promise(responseIsNotOkSendError(apiFetch(`/telegram/accounts/qr-code/${telegramAccountData.name}/${telegramAccountData.apiId}/${telegramAccountData.apiHash}/get`, {signal: abortControllerRef.current.signal})), {
+            qrCodeResponse = await toast.promise(responseIsNotOkSendError(apiFetch(`/telegram/accounts/qr-code/${telegramAccountData.name}/${telegramAccountData.apiId}/${telegramAccountData.apiHash}/get`, {signal: abortControllerRef.current?.signal})), {
                 pending: 'Генерация QR-кода',
                 success: 'QR-код сгенерирован',
                 error: 'Не удалось сгенерировать QR-код',
             })
-        } catch (error) {
+        } catch {
             hide();
             onFailure();
             return;
@@ -83,14 +78,12 @@ const CreateTelegramAccountForm: React.FC<CreateTelegramAccountFormProps> = ({st
                 const createTelegramAccountJson = await createTelegramAccountResponse.json();
                 id = parseInt(createTelegramAccountJson['@id'].split('/').pop());
                 onCreatedTelegramAccount(id, telegramAccountData.name);
-            } catch (error) {
+            } catch {
                 hide();
                 onFailure();
-                setTelegramAccountFilled(false);
             }
         } else {
             onFailure();
-            setTelegramAccountFilled(false);
         }
         hide();
     }
@@ -104,7 +97,6 @@ const CreateTelegramAccountForm: React.FC<CreateTelegramAccountFormProps> = ({st
     ), (
         <h2>{qrCodeLoading ? 'QR-код генерируется' : 'Отсканируйте QR-код'}</h2>
     ), ({closeButton}) => closeButton, ModalSize.Standard, () => {
-        setTelegramAccountFilled(false);
         if (abortControllerRef.current instanceof AbortController) {
             abortControllerRef.current.abort();
             setTimeout(() => abortControllerRef.current = new AbortController());
@@ -116,14 +108,11 @@ const CreateTelegramAccountForm: React.FC<CreateTelegramAccountFormProps> = ({st
         renderControls: () => <></>,
         onChange: (data) => {
             setTelegramAccountData(data);
-            setTelegramAccountFilled(false)
         },
     })
 
     const showQRCode = () => {
-        setTelegramAccountFilled(false);
         validate(() => {
-            setTelegramAccountFilled(true);
             show();
             loadQrCode().then();
         }, () => {

@@ -1,7 +1,7 @@
 "use client";
 
 import React, {useEffect, useState} from "react";
-import {Field, Form} from "../../../react-form";
+import {Field, Form} from "@dexodus/react-form";
 import TextTranslation from "@/libs/@dexodus/translation/src/client/TextTranslation";
 import styles from "./LoginForm.module.scss";
 import StringField from "@dexodus/bootstrap/src/UserInterface/Fields/StringField";

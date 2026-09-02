@@ -3,24 +3,22 @@ import styles from "./page.module.scss";
 import Card from "@dexodus/bootstrap/src/UserInterface/Card";
 import ArticleList from "@/components/ArticleList";
 import getApiFetch from "@dexodus/api-fetch/src/server/getApiFetch";
-import {redirect} from "next/navigation";
 import HydraCollection from "@/types/HydraCollection";
-import Article from "@/apiTypes/Dexodus/SmiParserBundle/Entity/Article";
 import PageGasket from "@dexodus/admin-constructor/src/pages/PageGasket";
 import {cookies} from "next/headers";
 import {auth} from "@/auth";
 import HtmlView from "@dexodus/bootstrap/src/UserInterface/HtmlView";
-import User from "@/apiTypes/App/Entity/User";
 import Organization from "@/apiTypes/App/Entity/Organization";
+import Project from "@/apiTypes/App/Entity/Project";
 import ProjectArticle from "@/apiTypes/App/Entity/ProjectArticle";
 
-interface PageProps {
-}
+type PageProps = Record<string, never>;
 
 const Page: NextJS.SFC<PageProps> = async ({}) => {
     const apiFetch = await getApiFetch();
     const cookiesStore = await cookies();
-    const {user} = (await auth()) as {user: User};
+    const session = await auth();
+    const user = session?.user;
     let organizationId = undefined;
 
     if (!user) {
@@ -28,9 +26,9 @@ const Page: NextJS.SFC<PageProps> = async ({}) => {
     }
 
     if (user.roles.includes('ROLE_SUPERVISOR')) {
-        organizationId = cookiesStore.get(`supervisor-${user?.id}-organization-id` as any)?.value;
+        organizationId = cookiesStore.get(`supervisor-${user?.id}-organization-id`)?.value;
     } else if (user.roles.includes('ROLE_EMPLOYEE')) {
-        organizationId = cookiesStore.get(`employee-${user?.id}-organization-id` as any)?.value;
+        organizationId = cookiesStore.get(`employee-${user?.id}-organization-id`)?.value;
 
         if (!organizationId) {
             const myOrganizationResponse = await apiFetch('/api/organizations/my');
@@ -48,31 +46,41 @@ const Page: NextJS.SFC<PageProps> = async ({}) => {
         )
     }
 
-    const projectId = cookiesStore.get(`news-${user?.id}-${organizationId}-project-id` as any)?.value;
+    const projectId = cookiesStore.get(`news-${user?.id}-${organizationId}-project-id`)?.value;
 
-    const fetches = [projectId ? apiFetch(`/api/project-articles/${projectId}`) : new Promise(resolve => resolve({
-        ok: true,
-        json: async () => ({
-            "hydra:totalItems": 0,
-            "hydra:member": [],
-        } as HydraCollection<ProjectArticle>)
-    }))]
+    let projectArticlesHydraCollection: HydraCollection<ProjectArticle> = {
+        '@context': '',
+        '@id': '',
+        '@type': 'hydra:Collection',
+        'hydra:totalItems': 0,
+        'hydra:member': [],
+        'hydra:view': {
+            '@id': '',
+            '@type': 'hydra:PartialCollectionView',
+            'hydra:first': '',
+            'hydra:last': '',
+            'hydra:next': '',
+        },
+    };
+    let project: Project | undefined;
 
     if (projectId) {
-        fetches.push(apiFetch(`/api/projects/${projectId}`))
-    }
+        const responses = await Promise.all([
+            apiFetch("/api/project-articles/" + projectId),
+            apiFetch("/api/projects/" + projectId),
+        ]);
 
-    const responses = await Promise.all(fetches);
-
-    for (const response of responses) {
-        if (!response.ok) {
-            const errorMessage = await response.text();
-            return <HtmlView html={errorMessage}/>;
-            // return redirect('/something-went-wrong');
+        for (const response of responses) {
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                return <HtmlView html={errorMessage}/>;
+            }
         }
-    }
 
-    const [projectArticlesHydraCollection, project] = await Promise.all(responses.map(response => response.json()));
+        [projectArticlesHydraCollection, project] = await Promise.all(
+            responses.map(response => response.json()),
+        );
+    }
 
     return (
         <div className={styles.page}>

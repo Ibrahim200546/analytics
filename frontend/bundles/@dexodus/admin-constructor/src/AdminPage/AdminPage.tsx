@@ -45,9 +45,10 @@ const AdminPage: NextJS.SFC<AdminPageProps> = async ({params, searchParams}) => 
 
     const PageComponent = pages[pageOptions.type];
 
-    return (
-        <PageComponent options={{...pageOptions, path: slug.join('.')}} searchParams={searchParams}/>
-    );
+    return await PageComponent({
+        options: {...pageOptions, path: slug.join('.')},
+        searchParams,
+    });
 };
 
 export default AdminPage;

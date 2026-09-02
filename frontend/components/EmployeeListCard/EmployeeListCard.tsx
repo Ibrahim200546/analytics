@@ -32,9 +32,9 @@ const EmployeeListCard: React.FC<EmployeeListCardProps> = ({organization, employ
         toastWhenSaveFailed: `Не удалось ${mode === "create" ? "создать" : "изменить данные"} сотрудника`,
         modalHeader: (
             <>
-                <span>{mode === "create" ? "Создание" : "Изменение данных"} сотрудника {mode === "create" ? "для " : ""}организации "</span>
+                <span>{mode === "create" ? "Создание" : "Изменение данных"} сотрудника {mode === "create" ? "для " : ""}организации &quot;</span>
                 <span className="brand-color">{organization.name}</span>
-                <span>"</span>
+                <span>&quot;</span>
             </>
         ),
         actionAfterSaving: () => rerenderTable(),
@@ -43,9 +43,9 @@ const EmployeeListCard: React.FC<EmployeeListCardProps> = ({organization, employ
     const {form: deleteForm, show: showDeleteForm, loading: loadingDeleteForm} = useConfirmForm({
         modalHeader: (
             <>
-                <span>Удаление сотрудника из этой организации "</span>
+                <span>Удаление сотрудника из этой организации &quot;</span>
                 <span className="brand-color">{organization.name}</span>
-                <span>"</span>
+                <span>&quot;</span>
             </>
         ),
         modalContent: 'Вы уверены что хотите удалить сотрудника?',
@@ -78,6 +78,7 @@ const EmployeeListCard: React.FC<EmployeeListCardProps> = ({organization, employ
                 setRerender={setRerenderTable}
                 customControls={[
                     <Button
+                        key="add-employee"
                         isLoading={combinedLoading}
                         onClick={() => {
                             setMode("create");

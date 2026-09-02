@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useRef, useState} from "react";
+import React, {useState} from "react";
 import {EntityTableStructure} from "@dexodus/table/src/adapter/EntityTableAdapter";
 import TableCard from "@dexodus/admin-constructor/src/TableCard";
 import Organization from "@/apiTypes/App/Entity/Organization";
@@ -26,16 +26,22 @@ interface ProjectListCardProps {
     projectStructure: EntityTableStructure;
 }
 
+interface ProjectFormData {
+    id?: number;
+    name: string;
+    tags: string[];
+}
+
 const ProjectListCard: React.FC<ProjectListCardProps> = ({organization, projectStructure}) => {
     const [deleteId, setDeleteId] = useState<number>(-1);
     const [rerenderTable, setRerenderTable] = useState<() => void>(() => {});
     const [loading, setLoading] = useState<boolean>(false);
 
     const apiFetch = useApiFetch();
-    const createDefaultProject = () => ({name: '', tags: []})
+    const createDefaultProject = (): ProjectFormData => ({name: '', tags: []})
 
     const [mode, setMode] = useState<"create" | "edit">("create");
-    const {component: projectForm, data, jselRef, validate} = useForm((
+    const {component: projectForm, data, jselRef, validate} = useForm<ProjectFormData>((
         <>
             <Field component={StringField} property='name' label="Имя проекта" validators={[notBlank('Поле должно быть заполнено')]}/>
             <Field component={TagsField} property='tags' label="Тэги" validators={[arrayNotEmpty('Поле должно быть заполнено')]}/>
@@ -49,9 +55,9 @@ const ProjectListCard: React.FC<ProjectListCardProps> = ({organization, projectS
     ), (
         <h2>
             <span>{mode === 'create' ? "Добавление" : "Корректировка"}</span>
-            <span> проекта для организации "</span>
+            <span> проекта для организации &quot;</span>
             <span className="brand-color">{organization.name}</span>
-            <span>"</span>
+            <span>&quot;</span>
         </h2>
     ), ({close}) => (
         <div className={styles.modalControls}>
@@ -90,9 +96,9 @@ const ProjectListCard: React.FC<ProjectListCardProps> = ({organization, projectS
         </div>
     ), (
         <h2>
-            <span>Удаление проекта для организации "</span>
+            <span>Удаление проекта для организации &quot;</span>
             <span className="brand-color">{organization.name}</span>
-            <span>"</span>
+            <span>&quot;</span>
         </h2>
     ), ({close}) => (
         <div className={styles.modalControls}>
@@ -132,7 +138,7 @@ const ProjectListCard: React.FC<ProjectListCardProps> = ({organization, projectS
                 entitiesPath="projects.jsonld"
                 additionalSearchParams={{organization: organization.id}}
                 customControls={[
-                    <Button isLoading={loading} onClick={() => {
+                    <Button key="add-project" isLoading={loading} onClick={() => {
                         showProjectModal();
                         setMode('create');
                         jselRef.current?.assign('data', createDefaultProject());

@@ -48,6 +48,18 @@ const Button: React.FC<ButtonProps> = (
         }
     }
 
+    const buttonClassNames = [
+        styles.button,
+        !isLoading && styles.enabled,
+        isLoading && styles.disabled,
+        styles[`button_style${style}`],
+        styles[`button_size${size}`],
+        bordered && styles[`button_style${style}_bordered`],
+        rounded && styles[`button_style${style}_rounded`],
+        icon && styles[`button_size${size}_icon${iconPosition}`],
+        className,
+    ].filter((className): className is string => typeof className === "string");
+
     return (
         <button onClick={(event) => {
             if (isLoading) {
@@ -55,17 +67,7 @@ const Button: React.FC<ButtonProps> = (
             }
 
             return onClick(event);
-        }} style={customStyles} className={classnames(
-            styles.button,
-            !isLoading && styles.enabled,
-            isLoading && styles.disabled,
-            styles[`button_style${style}`],
-            styles[`button_size${size}`],
-            bordered && styles[`button_style${style}_bordered`],
-            rounded && styles[`button_style${style}_rounded`],
-            icon && styles[`button_size${size}_icon${iconPosition}`],
-            className,
-        )}>
+        }} style={customStyles} className={classnames(buttonClassNames)}>
             {isLoading && (
                 <TailSpin width={24} wrapperClass={styles.loader}/>
             )}

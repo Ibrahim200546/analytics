@@ -1,4 +1,5 @@
 @use 'sass:color';
+@use 'sass:math';
 
 $dateIntervalHelperMinWidth: 300px;
 
@@ -70,8 +71,8 @@ $textColors: (
       display: flex;
 
       .dayName {
-        width: $dateIntervalHelperMinWidth / 7 - 4px;
-        height: $dateIntervalHelperMinWidth / 7 - 4px;
+        width: math.div($dateIntervalHelperMinWidth, 7) - 4px;
+        height: math.div($dateIntervalHelperMinWidth, 7) - 4px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -83,8 +84,8 @@ $textColors: (
 
       .date {
         margin: 4px 0;
-        width: $dateIntervalHelperMinWidth / 7 - 4px;
-        height: $dateIntervalHelperMinWidth / 7 - 4px;
+        width: math.div($dateIntervalHelperMinWidth, 7) - 4px;
+        height: math.div($dateIntervalHelperMinWidth, 7) - 4px;
         display: flex;
         justify-content: center;
         align-items: center;

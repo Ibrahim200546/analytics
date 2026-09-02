@@ -1,7 +1,6 @@
-import NextAuth, { type DefaultSession } from "next-auth"
+import NextAuth, {type DefaultSession} from "next-auth";
 import User from "@/apiTypes/App/Entity/User";
 import jwtProvider from "@dexodus/next-auth-jwt-provider-bundle/src/resources/auth/jwtProvider";
-
 
 declare module "next-auth" {
     interface Session {
@@ -11,25 +10,35 @@ declare module "next-auth" {
     }
 }
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
-    trustHost: true,
+const authSecret = process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET;
+
+if (!authSecret) {
+    throw new Error("AUTH_SECRET or NEXTAUTH_SECRET must be configured");
+}
+
+export const {handlers, signIn, signOut, auth} = NextAuth({
+    secret: authSecret,
+    trustHost: process.env.AUTH_TRUST_HOST === "true" || process.env.VERCEL === "1",
     session: {
-        maxAge: 2678400 // 31 день * 24 часа * 60 минут * 60 секунд
+        strategy: "jwt",
+        maxAge: 2678400,
     },
     providers: [
         jwtProvider,
     ],
     callbacks: {
         async jwt(config) {
-            if (config.trigger === 'signIn') {
+            if (config.trigger === "signIn") {
                 config.token = {...config.user, ...config.token};
             }
-            return config.token
+            return config.token;
         },
         async session(config) {
-            // @ts-ignore
-            config.session.user = {...config.session.user, ...config.token}
-            return config.session
-        }
+            config.session.user = {
+                ...config.session.user,
+                ...config.token,
+            } as typeof config.session.user;
+            return config.session;
+        },
     },
-})
+});

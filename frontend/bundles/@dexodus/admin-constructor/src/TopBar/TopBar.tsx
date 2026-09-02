@@ -14,7 +14,8 @@ interface TopBarProps {
 const TopBar = async () => {
     const apiFetch = await getApiFetch();
     const cookiesStore = await cookies();
-    const {user} = await auth();
+    const session = await auth();
+    const user = session?.user;
 
     const organizationId = cookiesStore.get(`supervisor-${user?.id}-organization-id` as any)?.value;
     let organization: Organization | undefined = undefined;

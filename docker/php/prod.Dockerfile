@@ -2,7 +2,6 @@ FROM dexodus/php:8.2.27-fpm-alpine3.21
 
 COPY docker/php/php.ini /usr/local/etc/php/php.ini
 COPY --chown=1000 ./backend /srv/app/
-COPY --chown=1000 ./.env /srv/app/
 
 WORKDIR /srv/app
 
@@ -57,9 +56,4 @@ RUN apk add --no-cache postgresql-dev \
     && docker-php-ext-install pdo_pgsql pgsql \
     && docker-php-ext-enable pgsql
 
-RUN composer install --prefer-dist --no-interaction --no-scripts
-
-RUN bin/console cache:warmup --env=prod \
-    && bin/console assets:install --env=prod
-
-RUN chmod 777 -R ./
+RUN composer install --prefer-dist --no-dev --no-interaction --no-progress --no-scripts --classmap-authoritative

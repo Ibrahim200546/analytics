@@ -1,7 +1,8 @@
 env: prod
+imagePullSecret: cap-regcred
+existingSecret: exchange-rates-prod-secrets
 domain:
     backend: api.ismi.kz
     frontend: ismi.kz
 image:
     tag: latest
-

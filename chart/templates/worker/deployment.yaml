@@ -1,3 +1,4 @@
+{{- if .Values.worker.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -17,20 +18,33 @@ spec:
         env: {{ .Values.env }}
         app: exchange-rates-{{ .Values.env }}-worker
     spec:
-      dnsPolicy: ClusterFirstWithHostNet
+      automountServiceAccountToken: false
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecret }}
       securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
         fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: worker
           image: "registry.gitlab.com/dexodus-group/exchange-rates/worker-php-{{ .Values.env }}:{{ .Values.image.tag }}"
           imagePullPolicy: IfNotPresent
+          command:
+            {{- toYaml .Values.worker.command | nindent 12 }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
           resources:
-            requests:
-              cpu: {{ .Values.worker.resources.requests.cpu }}
-              memory: {{ .Values.worker.resources.requests.memory }}
-            limits:
-              cpu: {{ .Values.worker.resources.limits.cpu }}
-              memory: {{ .Values.worker.resources.limits.memory }}
+            {{- toYaml .Values.worker.resources | nindent 12 }}
+          {{- if .Values.existingSecret }}
+          envFrom:
+            - secretRef:
+                name: {{ .Values.existingSecret }}
+          {{- end }}
       restartPolicy: Always
-      imagePullSecrets:
-        - name: cap-regcred
+{{- end }}

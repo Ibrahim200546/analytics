@@ -3,7 +3,6 @@
 import React, {useState} from "react";
 import styles from "./ArticleAnnounce.module.scss";
 import Reaction, {ReactionTypeEnum} from "../Reaction/Reaction";
-import Link from "next/link";
 import {AiFillStar, AiOutlineStar} from "react-icons/ai";
 import {BiDotsHorizontalRounded} from "react-icons/bi";
 import Article from "@/apiTypes/Dexodus/SmiParserBundle/Entity/Article";
@@ -34,7 +33,10 @@ const ArticleAnnounce: React.FC<ArticleAnnounceProps> = ({projectArticle, articl
     const [articleFavorite, setArticleFavorite] = useState(projectArticle.favorite);
     const apiFetch = useApiFetch();
 
-    const tones: Tones = article.comments.reduce((acc: Tones, comment: ArticleComment) => ({...acc, [comment.tone]: acc[comment.tone] + 1}), {positive: 0, neutral: 0, negative: 0, unknown: 0}) as Tones;
+    const tones: Tones = (article.comments as ArticleComment[]).reduce<Tones>(
+        (acc, comment) => ({...acc, [comment.tone]: acc[comment.tone] + 1}),
+        {positive: 0, neutral: 0, negative: 0, unknown: 0},
+    );
     const toggleFavorite = async () => {
         if (favoriteChangeLoading) {
             return;

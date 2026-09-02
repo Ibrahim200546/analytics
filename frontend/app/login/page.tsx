@@ -1,6 +1,6 @@
 import styles from "./page.module.scss";
-import Button, {ButtonStyle} from "@dexodus/bootstrap/src/UserInterface/Button";
 import LinkButton from "@dexodus/bootstrap/src/UserInterface/LinkButton";
+import {ButtonStyle} from "@dexodus/bootstrap/src/UserInterface/Button";
 
 const Page = () => {
     return (

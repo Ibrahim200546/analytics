@@ -4,7 +4,7 @@ import React, {useState} from "react";
 import styles from "./SupervisorCard.module.scss";
 import Organization from "@/apiTypes/App/Entity/Organization";
 import Card from "@dexodus/bootstrap/src/UserInterface/Card";
-import Button, {ButtonSizes, ButtonStyle} from "@dexodus/bootstrap/src/UserInterface/Button";
+import Button, {ButtonStyle} from "@dexodus/bootstrap/src/UserInterface/Button";
 import useModal from "@dexodus/bootstrap/src/UserInterface/Modal/useModal";
 import {ModalSize} from "@dexodus/bootstrap/src/UserInterface/Modal/Modal";
 import useForm from "@dexodus/react-form/src/hooks/useForm";
@@ -30,15 +30,15 @@ const SupervisorCard: React.FC<SupervisorCardProps> = ({organization}) => {
     const apiFetch = useApiFetch();
     const router = useRouter();
     const supervisor = organization.supervisor;
-    const {form: userForm, show: showUserForm, hide: hideUserForm, loading: loadingUserForm, jselRef: userFormJselRef} = useUserForm(mode, {
+    const {form: userForm, show: showUserForm, loading: loadingUserForm, jselRef: userFormJselRef} = useUserForm(mode, {
         saveUrl: mode === "create" ? `/api/users/create-supervisor?organizationId=${organization.id}` : `/api/users/edit-supervisor/${supervisor?.id}`,
         toastWhenSaved: mode === "create" ? "Руководитель был успешно создан" : "Данные руководителя были успешно изменены",
         toastWhenSaveFailed: `Не удалось ${mode === "create" ? "создать" : "изменить данные"} руководителя`,
         modalHeader: (
             <>
-                <span>{mode === "create" ? "Создание" : "Изменение данных"} руководителя {mode === "create" ? "для " : ""}организации "</span>
+                <span>{mode === "create" ? "Создание" : "Изменение данных"} руководителя {mode === "create" ? "для " : ""}организации &quot;</span>
                 <span className="brand-color">{organization.name}</span>
-                <span>"</span>
+                <span>&quot;</span>
             </>
         ),
         actionAfterSaving: () => router.refresh(),
@@ -65,9 +65,9 @@ const SupervisorCard: React.FC<SupervisorCardProps> = ({organization}) => {
         </div>
     ), (
         <h2>
-            <span>Выбор руководителя для организации "</span>
+            <span>Выбор руководителя для организации &quot;</span>
             <span className="brand-color">{organization.name}</span>
-            <span>"</span>
+            <span>&quot;</span>
         </h2>
     ), ({close}) => (
         <div className={styles.controls}>
@@ -102,9 +102,9 @@ const SupervisorCard: React.FC<SupervisorCardProps> = ({organization}) => {
     const {form: deleteForm, show: showDeleteForm, loading: loadingDeleteForm} = useConfirmForm({
         modalHeader: (
             <>
-                <span>Удаление руководителя из этой организации "</span>
+                <span>Удаление руководителя из этой организации &quot;</span>
                 <span className="brand-color">{organization.name}</span>
-                <span>"</span>
+                <span>&quot;</span>
             </>
         ),
         modalContent: 'Вы уверены что хотите убрать руководителя в этой организации?',

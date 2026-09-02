@@ -6,7 +6,7 @@ metadata:
         env: {{ .Values.env }}
         type: exchange-rates-{{ .Values.env }}-backend-deployment
 spec:
-    replicas: 1
+    replicas: {{ .Values.backend.replicas }}
     selector:
         matchLabels:
             env: {{ .Values.env }}
@@ -17,27 +17,62 @@ spec:
                 env: {{ .Values.env }}
                 type: exchange-rates-{{ .Values.env }}-backend
         spec:
+            automountServiceAccountToken: false
             imagePullSecrets:
-                -   name: cap-regcred
-            dnsPolicy: ClusterFirstWithHostNet
+                - name: {{ .Values.imagePullSecret }}
             securityContext:
+                runAsNonRoot: true
+                runAsUser: 1000
+                runAsGroup: 1000
                 fsGroup: 1000
+                seccompProfile:
+                    type: RuntimeDefault
             containers:
-                -   name: php
-                    resources:
-                        limits:
-                            ephemeral-storage: 4Gi
-                    image: "registry.gitlab.com/dexodus-group/exchange-rates/backend-php-{{ .Values.env }}:{{ .Values.image.tag }}"
-                    ports:
-                        -   containerPort: 9000
-                    lifecycle:
-                        postStart:
-                            exec:
-                                command: ['phing', '-f', './build/build.deploy.xml']
-                -   name: nginx
-                    image: "registry.gitlab.com/dexodus-group/exchange-rates/backend-nginx:{{ .Values.image.tag }}"
-                    resources:
-                        limits:
-                            ephemeral-storage: 1Gi
-                    ports:
-                        -   containerPort: 80
+                - name: php
+                  image: "registry.gitlab.com/dexodus-group/exchange-rates/backend-php-{{ .Values.env }}:{{ .Values.image.tag }}"
+                  imagePullPolicy: IfNotPresent
+                  securityContext:
+                      allowPrivilegeEscalation: false
+                      capabilities:
+                          drop: ["ALL"]
+                  resources:
+                      {{- toYaml .Values.backend.resources | nindent 22 }}
+                  {{- if .Values.existingSecret }}
+                  envFrom:
+                      - secretRef:
+                            name: {{ .Values.existingSecret }}
+                  {{- end }}
+                  ports:
+                      - containerPort: 9000
+                - name: nginx
+                  image: "registry.gitlab.com/dexodus-group/exchange-rates/backend-nginx:{{ .Values.image.tag }}"
+                  imagePullPolicy: IfNotPresent
+                  securityContext:
+                      allowPrivilegeEscalation: false
+                      capabilities:
+                          drop: ["ALL"]
+                  resources:
+                      requests:
+                          cpu: "50m"
+                          memory: "64Mi"
+                      limits:
+                          cpu: "250m"
+                          memory: "256Mi"
+                  ports:
+                      - containerPort: 8080
+                  readinessProbe:
+                      httpGet:
+                          path: /healthz
+                          port: 8080
+                      initialDelaySeconds: 10
+                      periodSeconds: 10
+                      timeoutSeconds: 3
+                      failureThreshold: 6
+                  livenessProbe:
+                      httpGet:
+                          path: /healthz
+                          port: 8080
+                      initialDelaySeconds: 30
+                      periodSeconds: 20
+                      timeoutSeconds: 3
+                      failureThreshold: 3

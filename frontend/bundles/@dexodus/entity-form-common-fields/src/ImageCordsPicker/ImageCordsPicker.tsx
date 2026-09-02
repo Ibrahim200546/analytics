@@ -5,7 +5,7 @@ import styles from "./ImageCordsPicker.module.scss";
 import {FieldComponentProps} from "@dexodus/react-form";
 import FieldComponent from "@dexodus/react-form/src/fields/FieldComponent";
 import {FormContext, FormContextValue} from "@dexodus/react-form/src/Form";
-import {EventType} from "@dexodus/jsel/src/Event/Event";
+import {EventType} from "@dexodus/jsel";
 import {File} from "../types/file";
 import ReactCrop, {Crop} from "react-image-crop";
 import "react-image-crop/src/ReactCrop.scss";
@@ -89,7 +89,7 @@ const ImageCordsPicker: FieldComponent<ImageCordsPickerProps> = ({lookAtFile, ba
                 </ul>
             )}
             {fileData && (
-                <ReactCrop crop={crop} onChange={(crop, percentageCrop) => {
+                <ReactCrop crop={crop} onChange={(crop: Crop, percentageCrop: Crop) => {
                     if (!imageRef.current) {
                         return;
                     }

@@ -3,7 +3,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import styles from "./TableCard.module.scss";
 import TextTranslation from "@/libs/@dexodus/translation/src/client/TextTranslation";
-import LinkButton from "@dexodus/bootstrap/src/UserInterface/LinkButton";
 import {VscDesktopDownload, VscSettings} from "react-icons/vsc";
 import Button, {ButtonSizes, ButtonStyle} from "@dexodus/bootstrap/src/UserInterface/Button";
 import {getApiDomain} from "@dexodus/api-fetch/src/apiFetch";
@@ -33,9 +32,9 @@ const TableCard: React.FC<TableCardProps> = ({cardTitle, entityTableStructure, e
     const {data: session} = useSession();
     const userName = session?.user?.email;
     const apiFetch = useApiFetch();
-    const adapter = useRef(new EntityTableAdapter(getApiDomain(), `entity-table/structure/${entityTableName}`, entityTableStructure, apiFetch, entitiesPath && `/api/${entitiesPath}`, additionalSearchParams));
+    const adapter = useRef(new EntityTableAdapter(getApiDomain(), "entity-table/structure/" + entityTableName, entityTableStructure, apiFetch, entitiesPath && "/api/" + entitiesPath, additionalSearchParams));
     const [showSettings, setShowSettings] = useState<() => void>(() => {});
-    const tableName = `${userName}_${entitiesPath ? `/api/${entitiesPath}` : `entity-table/structure/${entityTableName}`}`;
+    const tableName = userName + "_" + (entitiesPath ? "/api/" + entitiesPath : "entity-table/structure/" + entityTableName);
     const [renderTable, setRenderTable] = useState<boolean>(true);
 
     useEffect(() => {
@@ -44,24 +43,42 @@ const TableCard: React.FC<TableCardProps> = ({cardTitle, entityTableStructure, e
         }
     }, [renderTable]);
 
-    useEffect(() => {
-    }, []);
+    const downloadExport = async () => {
+        if (!session?.user?.token) {
+            return;
+        }
+
+        const response = await apiFetch("/entity-table/export/" + entityTableName);
+        if (!response.ok) {
+            console.error("Table export failed", response.status);
+            return;
+        }
+
+        const downloadUrl = window.URL.createObjectURL(await response.blob());
+        const anchor = document.createElement("a");
+        anchor.href = downloadUrl;
+        anchor.download = entityTableName.replace(/[^a-zA-Z0-9._-]/g, "_") + ".xlsx";
+        document.body.appendChild(anchor);
+        anchor.click();
+        anchor.remove();
+        window.setTimeout(() => window.URL.revokeObjectURL(downloadUrl), 1000);
+    };
 
     return (
         <Card
             fullWidth={true}
             title={cardTitle && <TextTranslation label={cardTitle} defaultValue={cardTitle}/>}
             titleActions={(
-                <div style={{display: "grid", gridTemplateColumns: `auto auto ${isDev ? 'auto' : ''} ${customControls.map(() => ' auto')}`, gridColumnGap: "8px"}}>
+                <div style={{display: "grid", gridTemplateColumns: "auto auto " + (isDev ? "auto" : "") + customControls.map(() => " auto").join(""), gridColumnGap: "8px"}}>
                     {customControls}
                     {isDev && (
                         <Button
                             onClick={async () => {
-                                window.localStorage.removeItem(`${tableName}_options`);
-                                window.sessionStorage.removeItem(`${tableName}_options`);
-                                const fetchResult = await apiFetch(`/entity-table/structure/${entityTableName}`, {cache: 'no-store'} );
+                                window.localStorage.removeItem(tableName + "_options");
+                                window.sessionStorage.removeItem(tableName + "_options");
+                                const fetchResult = await apiFetch("/entity-table/structure/" + entityTableName, {cache: "no-store"} );
                                 const loadedStructure = await fetchResult.json();
-                                adapter.current = new EntityTableAdapter(getApiDomain(), `entity-table/structure/${entityTableName}`, loadedStructure, apiFetch, entitiesPath && `/api/${entitiesPath}`, additionalSearchParams);
+                                adapter.current = new EntityTableAdapter(getApiDomain(), "entity-table/structure/" + entityTableName, loadedStructure, apiFetch, entitiesPath && "/api/" + entitiesPath, additionalSearchParams);
                                 setRenderTable(false);
                             }}
                             style={ButtonStyle.Danger}
@@ -83,10 +100,9 @@ const TableCard: React.FC<TableCardProps> = ({cardTitle, entityTableStructure, e
                     >
                         <TextTranslation label="tableOptions" defaultValue="Настройки таблицы"/>
                     </Button>
-                    <LinkButton
+                    <Button
                         icon={<VscDesktopDownload/>}
-                        target="_blank"
-                        href={`${process.env.NEXT_PUBLIC_API_URL}/entity-table/export/${entityTableName}?access_token=${session?.user.token}`}
+                        onClick={() => downloadExport()}
                         className={styles.download}
                         style={ButtonStyle.Info}
                         size={ButtonSizes.Small}
@@ -94,7 +110,7 @@ const TableCard: React.FC<TableCardProps> = ({cardTitle, entityTableStructure, e
                         bordered={true}
                     >
                         <TextTranslation label="download" defaultValue="Скачать"/>
-                    </LinkButton>
+                    </Button>
                 </div>
             )}
             className={styles.entityTablePage}
@@ -105,7 +121,6 @@ const TableCard: React.FC<TableCardProps> = ({cardTitle, entityTableStructure, e
                         adapter={adapter.current}
                         name={tableName}
                         setShowSettings={showSettings => setShowSettings(() => showSettings)}
-                        isDev={isDev}
                         setJselRef={setJselRef}
                         setRefresh={setRerender}
                         max={max}

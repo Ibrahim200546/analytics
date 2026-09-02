@@ -2,7 +2,7 @@ import React, {useRef, useState} from "react";
 import Form, {FormData, ValidateCallback} from "../Form";
 import {Jsel} from "@dexodus/jsel";
 
-interface UseFormReturn<T = FormData> {
+interface UseFormReturn<T extends FormData = FormData> {
     component: React.ReactNode,
     data: T,
     jselRef: React.RefObject<Jsel>,
@@ -11,15 +11,21 @@ interface UseFormReturn<T = FormData> {
 
 type UseFormChildren = React.ReactNode | ((jselRef: React.RefObject<Jsel>, validate: ValidateCallback) => React.ReactNode);
 
-type UseFormFunction = <T = FormData>(
+type UseFormFunction = <T extends FormData = FormData>(
     children: UseFormChildren,
     defaultFormData?: T,
     onJselInit?: (jselRef: React.RefObject<Jsel>) => void,
     editable?: boolean
 ) => UseFormReturn<T>;
 
-const useForm: UseFormFunction = (children, defaultFormData = {}, onJselInit = () => {}, editable = true) => {
-    const [data, setData] = useState<FormData>(defaultFormData);
+const useForm = <T extends FormData = FormData>(
+    children: UseFormChildren,
+    defaultFormData?: T,
+    onJselInit: (jselRef: React.RefObject<Jsel>) => void = () => {},
+    editable = true,
+): UseFormReturn<T> => {
+    const initialFormData = (defaultFormData ?? {}) as FormData;
+    const [data, setData] = useState<FormData>(initialFormData);
     const formJselRef = useRef<Jsel>(null);
     const [validateCb, setValidateCb] = useState<ValidateCallback>(() => {});
 
@@ -40,7 +46,7 @@ const useForm: UseFormFunction = (children, defaultFormData = {}, onJselInit = (
 
     return {
         component: FormComponent,
-        data: data,
+        data: data as T,
         jselRef: formJselRef,
         validate: validateCb,
     }

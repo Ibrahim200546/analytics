@@ -14,20 +14,20 @@ const PriceField: FieldComponent<PriceFieldProps> = ({value, onChange, currency}
 
     const correctCursorPosition = (target: HTMLInputElement) => {
         setTimeout(() => {
-            if ('selectionStart' in inputRef.current && inputRef.current.selectionStart) {
+            if (inputRef.current?.selectionStart) {
                 target.selectionStart = Math.min(inputRef.current.selectionStart, target.value.length - currency.length - 1);
             }
 
-            if ('selectionEnd' in inputRef.current && inputRef.current.selectionEnd) {
+            if (inputRef.current?.selectionEnd) {
                 target.selectionEnd = Math.min(inputRef.current.selectionEnd, target.value.length - currency.length - 1);
             }
         })
     }
 
     useEffect(() => {
-        const onEvent = (event) => correctCursorPosition(event.target);
+        const onEvent = (event: Event) => correctCursorPosition(event.target as HTMLInputElement);
 
-        if ("addEventListener" in inputRef.current) {
+        if (inputRef.current) {
             inputRef.current.addEventListener("keydown", onEvent);
             inputRef.current.addEventListener("mousedown", onEvent);
             inputRef.current.addEventListener("mouseup", onEvent);

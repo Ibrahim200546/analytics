@@ -92,7 +92,7 @@ const ArticleList: React.FC<ArticleListProps> = ({project, projectArticlesHydraC
     }, [filters]);
 
     const update = async (page: number = 1): Promise<HydraCollection<ProjectArticle>> => {
-        const queryParameters: any = {page};
+        const queryParameters: Record<string, string | number> = {page};
 
         if (filters.favorite) {
             queryParameters.favorite = '1';

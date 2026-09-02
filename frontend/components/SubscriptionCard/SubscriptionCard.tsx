@@ -9,7 +9,7 @@ import useModal from "@dexodus/bootstrap/src/UserInterface/Modal/useModal";
 import Organization from "@/apiTypes/App/Entity/Organization";
 import {ModalSize} from "@dexodus/bootstrap/src/UserInterface/Modal/Modal";
 import Field from "@dexodus/react-form/src/fields/Field";
-import Form from "@dexodus/react-form/src/Form";
+import Form, {FormData} from "@dexodus/react-form/src/Form";
 import JsValidator from "@dexodus/react-form/src/validators/JsValidator";
 import DateIntervalField from "@dexodus/bootstrap/src/UserInterface/Fields/DateIntervalField";
 import {DateInterval} from "@dexodus/bootstrap/src/helpers/DateIntervalHelper";
@@ -38,7 +38,7 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({subscription, organi
     const router = useRouter();
     const [loading, setLoading] = useState<boolean>(false);
     const jselRef = useRef<Jsel | null>();
-    const [subscriptionEntity, setSubscriptionEntity] = useState(subscription ? {
+    const [subscriptionEntity, setSubscriptionEntity] = useState<FormData>(subscription ? {
         interval: {start: new Date(subscription.start), end: new Date(subscription.end)} as DateInterval,
         type: {key: subscription.type, value: subscription.type === "demo" ? "Демо подписка" : "Основная подписка"},
         price: subscription.price ?? 0,
@@ -122,9 +122,9 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({subscription, organi
     ), (
         <h2>
             <span>{subscription ? "Корректировка" : "Оформление"}</span>
-            <span> подписки для организации "</span>
+            <span> подписки для организации &quot;</span>
             <span className={styles.date}>{organization.name}</span>
-            <span>"</span>
+            <span>&quot;</span>
         </h2>
     ), ({close}) => (
         <div className={styles.modalControls}>
@@ -169,9 +169,9 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({subscription, organi
         </div>
     ), (
         <h2>
-            <span>Удаление подписки для организации "</span>
+            <span>Удаление подписки для организации &quot;</span>
             <span className={styles.date}>{organization.name}</span>
-            <span>"</span>
+            <span>&quot;</span>
         </h2>
     ), ({close}) => (
         <div className={styles.modalControls}>

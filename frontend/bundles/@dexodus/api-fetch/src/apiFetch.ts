@@ -1,10 +1,10 @@
 import * as dotenv from "dotenv";
 
-const env = dotenv.config({path: '.env.local'}).parsed;
+const env = dotenv.config({path: '.env.local'}).parsed || {};
 const BACKEND_DOMAIN_FROM_CLIENT_FROM_PROCESS_ENV = process.env.NEXT_PUBLIC_API_URL;
 const BACKEND_DOMAIN_FROM_SERVER_FROM_PROCESS_ENV = process.env.NEXT_PUBLIC_API_URL_FROM_SERVER;
-const BACKEND_DOMAIN_FROM_CLIENT = BACKEND_DOMAIN_FROM_CLIENT_FROM_PROCESS_ENV ?? env.NEXT_PUBLIC_API_URL;
-const BACKEND_DOMAIN_FROM_SERVER = BACKEND_DOMAIN_FROM_SERVER_FROM_PROCESS_ENV ?? env.NEXT_PUBLIC_API_URL_FROM_SERVER;
+const BACKEND_DOMAIN_FROM_CLIENT = BACKEND_DOMAIN_FROM_CLIENT_FROM_PROCESS_ENV ?? env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
+const BACKEND_DOMAIN_FROM_SERVER = BACKEND_DOMAIN_FROM_SERVER_FROM_PROCESS_ENV ?? env.NEXT_PUBLIC_API_URL_FROM_SERVER ?? BACKEND_DOMAIN_FROM_CLIENT;
 
 export type ApiFetchFunction = (input: RequestInfo, init?: RequestInit) => Promise<Response>;
 

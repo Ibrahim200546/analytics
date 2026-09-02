@@ -7,7 +7,15 @@ COPY ./frontend /srv/app
 
 WORKDIR /srv/app
 
+ARG NEXT_PUBLIC_API_URL=http://localhost:8000
+ARG NEXT_PUBLIC_API_URL_FROM_SERVER=http://localhost:8000
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL_FROM_SERVER=$NEXT_PUBLIC_API_URL_FROM_SERVER
+
 RUN yarn --cwd /srv/app --frozen-lockfile
 RUN yarn --cwd /srv/app run build
+
+RUN chown -R node:node /srv/app
+USER node
 
 CMD yarn run start

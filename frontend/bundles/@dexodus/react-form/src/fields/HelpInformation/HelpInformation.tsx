@@ -27,7 +27,7 @@ const HelpInformation: React.FC<HelpInformationProps> = ({children}) => {
         placement: 'top',
         open: isOpen,
         onOpenChange: setIsOpen,
-        middleware: [offset(10), flip(), shift({rootBoundary: rootBoundary.current ?? 'document'})],
+        middleware: [offset(10), flip(), shift({rootBoundary: (rootBoundary.current ?? 'document') as any})],
         whileElementsMounted: autoUpdate,
     } as any);
 

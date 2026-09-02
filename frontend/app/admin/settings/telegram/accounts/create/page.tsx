@@ -7,8 +7,7 @@ import Button, {ButtonStyle} from "@dexodus/bootstrap/src/UserInterface/Button";
 import {useRouter} from "next/navigation";
 import CreateTelegramAccountForm from "@/components/CreateTelegramAccountForm";
 
-interface PageProps {
-}
+type PageProps = Record<string, never>;
 
 const Page: React.FC<PageProps> = ({}) => {
     const [showQRCode, setShowQRCode] = useState<() => void>(() => {});

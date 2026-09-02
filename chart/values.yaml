@@ -3,9 +3,41 @@ crontab:
   - articles:distribute
   - subscription:status:update
 
+imagePullSecret: cap-regcred
+existingSecret: ""
+
+backend:
+  replicas: 1
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "256Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+
+frontend:
+  replicas: 1
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+
+cron:
+  resources:
+    requests:
+      cpu: "50m"
+      memory: "64Mi"
+    limits:
+      cpu: "250m"
+      memory: "256Mi"
+
 worker:
   enabled: true
-  replicas: 64
+  replicas: 4
   resources:
     requests:
       cpu: "50m"

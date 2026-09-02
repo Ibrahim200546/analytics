@@ -22,7 +22,7 @@ interface AdminLayoutProps {
     };
 }
 
-const AdminLayout = async ({children, params}) => {
+const AdminLayout = async ({children, params}: AdminLayoutProps) => {
     const headersList = await headers();
     const headerUrl = headersList.get('x-current-url') || "";
     let slug = headerUrl.startsWith('/admin/') ? headerUrl.slice(7).split('/') : [];
@@ -41,6 +41,7 @@ const AdminLayout = async ({children, params}) => {
     }
 
     const json = await data.json();
+
     slug = params?.slug ?? slug;
 
     return (

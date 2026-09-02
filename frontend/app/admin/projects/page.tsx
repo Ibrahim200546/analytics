@@ -1,15 +1,14 @@
 import React from "react";
-import styles from "./page.module.scss";
 import ProjectListCard from "@/components/ProjectListCard";
 import getApiFetch from "@dexodus/api-fetch/src/server/getApiFetch";
 import HtmlView from "@dexodus/bootstrap/src/UserInterface/HtmlView";
 import {auth} from "@/auth";
 
-interface PageProps {
-}
+type PageProps = Record<string, never>;
 
 const Page: NextJS.SFC<PageProps> = async ({}) => {
-    const {user} = await auth();
+    const session = await auth();
+    const user = session?.user;
 
     if (!user) {
         return <></>

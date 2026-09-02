@@ -6,7 +6,17 @@ import Button from "@dexodus/bootstrap/src/UserInterface/Button";
 import {ButtonProps} from "@dexodus/bootstrap/src/UserInterface/Button/Button";
 // @ts-ignore
 import {NCALayerClient} from "ncalayer-js-client/ncalayer-client";
-import {encodeToBase64} from "next/dist/build/webpack/loaders/utils";
+
+const encodeUtf8ToBase64 = (value: string): string => {
+    const bytes = new TextEncoder().encode(value);
+    let binary = "";
+
+    for (const byte of bytes) {
+        binary += String.fromCharCode(byte);
+    }
+
+    return btoa(binary);
+};
 
 export interface SignButtonProps extends ButtonProps {
     signContent: string;
@@ -36,7 +46,7 @@ const SignButton: React.FC<SignButtonProps> = ({children, onSign, signContent, o
 
             let base64EncodedSignature;
             try {
-                base64EncodedSignature = await ncalayerClient.createCAdESFromBase64(storageType, encodeToBase64((signContent)));
+                base64EncodedSignature = await ncalayerClient.createCAdESFromBase64(storageType, encodeUtf8ToBase64(signContent));
             } catch (error) {
                 return;
             }

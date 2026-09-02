@@ -1,5 +1,4 @@
 import React from "react";
-import styles from "./page.module.scss";
 import getApiFetch from "@dexodus/api-fetch/src/server/getApiFetch";
 import {redirect} from "next/navigation";
 import OrganizationPage from "@/components/OrganizationPage";

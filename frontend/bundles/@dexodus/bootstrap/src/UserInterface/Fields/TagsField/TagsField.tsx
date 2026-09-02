@@ -14,7 +14,7 @@ const TagsField: FieldComponent<TagsFieldProps> = ({value, onChange}) => {
     const inputRef = useRef<HTMLInputElement | null>(null);
 
     const deleteTag = (tag: string) => {
-        onChange(value.filter(valueTag => valueTag !== tag));
+        onChange(value.filter((valueTag: string) => valueTag !== tag));
     }
 
     const addTagAndClearInput = () => {
@@ -52,7 +52,7 @@ const TagsField: FieldComponent<TagsFieldProps> = ({value, onChange}) => {
             <div className={styles.underField}>
                 <p className={styles.tagsTitle}>Добавленные тэги:</p>
                 <div className={styles.tags}>
-                    {value.map(tag => (
+                    {value.map((tag: string) => (
                         <span className={styles.tag}>
                             <span>{tag}</span>
                             <span onClick={() => deleteTag(tag)} className={styles.deleteTag}>

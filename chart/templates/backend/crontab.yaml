@@ -1,25 +1,56 @@
+{{- range .Values.crontab }}
+---
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-    name: exchange-rates-cronjob-{{ $.Values.env }}
+  name: exchange-rates-cronjob-{{ $.Values.env }}-{{ . | replace ":" "-" }}
+  labels:
+    env: {{ $.Values.env }}
+    app: exchange-rates-cronjob
 spec:
-    schedule: "*/5 * * * *"
-    jobTemplate:
+  schedule: "*/5 * * * *"
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 120
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      ttlSecondsAfterFinished: 3600
+      template:
+        metadata:
+          labels:
+            env: {{ $.Values.env }}
+            app: exchange-rates-cronjob
         spec:
-            template:
-                spec:
-                    imagePullSecrets:
-                        -   name: cap-regcred
-                    dnsPolicy: ClusterFirstWithHostNet
-                    containers:
-                        {{- range $.Values.crontab }}
-                        -   name: {{ . | replace ":" "-" }}
-                            image: "registry.gitlab.com/dexodus-group/exchange-rates/backend-php-{{ $.Values.env }}:{{ $.Values.image.tag }}"
-                            imagePullPolicy: IfNotPresent
-                            command:
-                                - php
-                                - /srv/app/bin/console
-                                - {{ . }}
-                        {{- end }}
-                    restartPolicy: Never
-    concurrencyPolicy: Forbid
+          automountServiceAccountToken: false
+          restartPolicy: Never
+          imagePullSecrets:
+            - name: {{ $.Values.imagePullSecret }}
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            seccompProfile:
+              type: RuntimeDefault
+          containers:
+            - name: task
+              image: "registry.gitlab.com/dexodus-group/exchange-rates/backend-php-{{ $.Values.env }}:{{ $.Values.image.tag }}"
+              imagePullPolicy: IfNotPresent
+              command:
+                - php
+                - /srv/app/bin/console
+                - {{ . }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: ["ALL"]
+              resources:
+                {{- toYaml $.Values.cron.resources | nindent 16 }}
+              {{- if $.Values.existingSecret }}
+              envFrom:
+                - secretRef:
+                    name: {{ $.Values.existingSecret }}
+              {{- end }}
+{{- end }}

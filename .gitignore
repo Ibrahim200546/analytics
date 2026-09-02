@@ -1,2 +1,11 @@
 /.env
 /.idea/
+/log.txt
+/python/venv/
+/python/data.json
+/python/chromedriver
+/backend/.env
+/backend/config/jwt/*.pem
+/frontend/public/images/*.tar.xz
+/frontend/public/images/*.zip
+/frontend/public/images/node-v22.12.0-linux-x64/

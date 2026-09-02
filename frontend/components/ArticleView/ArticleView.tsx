@@ -70,7 +70,7 @@ const ArticleView: React.FC<ArticleViewProps> = ({projectArticle, onHide, visibl
                     <div>
                         <p className={styles.commentsTitle}>{projectArticleView.projectArticle.article?.comments?.length ? 'Комментарии:' : 'Никто еще не оставил комментариев'}</p>
                         {(projectArticleView.projectArticle.article?.comments ?? []).filter(comment => comment.isRoot).map(comment => (
-                            <ArticleComment articleComment={comment} organizationId={organizationId} reloadProjectArticle={() => projectArticle && loadProjectArticle(projectArticle, false)}/>
+                            <ArticleComment key={comment.id} articleComment={comment} organizationId={organizationId} reloadProjectArticle={() => projectArticle && loadProjectArticle(projectArticle, false)}/>
                         ))}
                     </div>
                 </div>

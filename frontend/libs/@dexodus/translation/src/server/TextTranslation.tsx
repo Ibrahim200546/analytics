@@ -17,7 +17,9 @@ const TextTranslation = async (
     }: TextTranslationProps,
 ) => {
     const {t} = await useTranslation();
-    return <>{t(label, defaultValue as string, params)}</>;
+    const translation = t(label, defaultValue as string, params);
+
+    return <>{typeof translation === "string" ? translation : defaultValue ?? label}</>;
 };
 
 export default TextTranslation;

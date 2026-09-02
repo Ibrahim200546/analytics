@@ -1,7 +1,5 @@
 import React from "react";
-import styles from "./page.module.scss";
 import getApiFetch from "@dexodus/api-fetch/src/server/getApiFetch";
-import {redirect} from "next/navigation";
 import OrganizationPage from "@/components/OrganizationPage";
 import PageGasket from "@dexodus/admin-constructor/src/pages/PageGasket";
 import {cookies} from "next/headers";
@@ -15,8 +13,9 @@ interface PageProps {
     };
 }
 
-const Page: NextJS.SFC<PageProps> = async ({params}) => {
-    const {user} = await auth();
+const Page: NextJS.SFC<PageProps> = async () => {
+    const session = await auth();
+    const user = session?.user;
     const cookiesStore = await cookies();
 
     if (!user) {
@@ -31,7 +30,7 @@ const Page: NextJS.SFC<PageProps> = async ({params}) => {
         )
     }
 
-    const organizationId = cookiesStore.get(`supervisor-${user?.id}-organization-id` as any)?.value;
+    const organizationId = cookiesStore.get(`supervisor-${user?.id}-organization-id`)?.value;
     const apiFetch = await getApiFetch();
     const responses = await Promise.all([
         apiFetch(`/api/organizations/${organizationId}.jsonld`),

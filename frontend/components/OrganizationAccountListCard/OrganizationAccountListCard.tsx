@@ -30,7 +30,7 @@ interface CreateAccountData {
 const OrganizationAccountListCard: React.FC<OrganizationAccountListCardProps> = ({organization, organizationAccountStructure, telegramAccountStructure}) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [showQRCode, setShowQRCode] = useState<() => void>(() => {});
-    const [rerenderTable, setRerenderTable] = useState<() => void>(() => {});
+    const [, setRerenderTable] = useState<() => void>(() => {});
     const apiFetch = useApiFetch();
     const {component: createAccountForm, data: createAccountData, validate: validateCreateAccountData} = useForm<CreateAccountData>((
         <div>
@@ -103,6 +103,7 @@ const OrganizationAccountListCard: React.FC<OrganizationAccountListCardProps> = 
                 additionalSearchParams={{organization: organization.id}}
                 customControls={[
                     <Button
+                        key="add-account"
                         onClick={showCreateAccountModal}
                         icon={<AiOutlineUser/>}
                         style={ButtonStyle.Success}

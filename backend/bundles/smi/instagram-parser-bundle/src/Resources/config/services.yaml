@@ -1,0 +1,6 @@
+services:
+  Dexodus\InstagramParserBundle\:
+    resource: '../..'
+    public: true
+    autowire: true
+    autoconfigure: true

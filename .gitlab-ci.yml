@@ -1,86 +1,88 @@
-image: docker:20.10.16
+stages:
+    - validate
+    - security
+    - build
+    - deploy
+
+image: docker:27.3.1
 
 variables:
-    IMAGE_TAG: ${CI_COMMIT_SHORT_SHA}
+    IMAGE_TAG: "$CI_COMMIT_SHORT_SHA"
+    DOCKER_BUILDKIT: "1"
+    DOCKER_TLS_CERTDIR: "/certs"
+
+Validate Helm:
+    stage: validate
+    image: alpine/helm:3.16.3
+    rules:
+        - if: '$CI_COMMIT_BRANCH'
+    script:
+        - helm lint ./chart --strict
+
+Secret scan:
+    stage: security
+    image:
+        name: zricethezav/gitleaks:8.18.4
+        entrypoint: [""]
+    rules:
+        - if: '$CI_COMMIT_BRANCH'
+    script:
+        - gitleaks dir --redact --no-banner .
 
 Build Backend PHP:
     services:
-        - docker:dind
-    cache:
-        paths:
-            - backend/vendor/
+        - name: docker:27.3.1-dind
+          command: ["--tls=true"]
     stage: build
-    parallel:
-        matrix:
-            - ENVIRONMENT: 'prod'
-              PROJECT_ENVIRONMENT: $PROJECT_ENVIRONMENT_PROD
     rules:
-        -   if: $CI_COMMIT_BRANCH == "main"
+        - if: '$CI_COMMIT_BRANCH == "main"'
     script:
-        - echo "$PROJECT_ENVIRONMENT" > .env
-        - docker login $REGISTRY_URL -u $REGISTRY_USER -p $REGISTRY_PASSWORD
-        - docker build -f docker/php/prod.Dockerfile -t $REGISTRY_IMAGE_PREFIX/backend-php-${ENVIRONMENT}:${IMAGE_TAG} --build-arg ENVIRONMENT=${ENVIRONMENT} .
-        - docker push $REGISTRY_IMAGE_PREFIX/backend-php-${ENVIRONMENT}:${IMAGE_TAG}
+        - echo "$REGISTRY_PASSWORD" | docker login "$REGISTRY_URL" --username "$REGISTRY_USER" --password-stdin
+        - docker build --pull -f docker/php/prod.Dockerfile -t "$REGISTRY_IMAGE_PREFIX/backend-php-prod:$IMAGE_TAG" --build-arg ENVIRONMENT=prod .
+        - docker push "$REGISTRY_IMAGE_PREFIX/backend-php-prod:$IMAGE_TAG"
 
 Build Worker PHP:
     services:
-        - docker:dind
-    cache:
-        paths:
-            - backend/vendor/
+        - name: docker:27.3.1-dind
+          command: ["--tls=true"]
     stage: build
-    parallel:
-        matrix:
-            - ENVIRONMENT: 'prod'
-              PROJECT_ENVIRONMENT: $PROJECT_ENVIRONMENT_PROD
     rules:
-        -   if: $CI_COMMIT_BRANCH == "main"
+        - if: '$CI_COMMIT_BRANCH == "main"'
     script:
-        - echo "$PROJECT_ENVIRONMENT" > .env
-        - docker login $REGISTRY_URL -u $REGISTRY_USER -p $REGISTRY_PASSWORD
-        - docker build -f docker/php/worker.Dockerfile -t $REGISTRY_IMAGE_PREFIX/worker-php-${ENVIRONMENT}:${IMAGE_TAG} --build-arg ENVIRONMENT=${ENVIRONMENT} .
-        - docker push $REGISTRY_IMAGE_PREFIX/worker-php-${ENVIRONMENT}:${IMAGE_TAG}
+        - echo "$REGISTRY_PASSWORD" | docker login "$REGISTRY_URL" --username "$REGISTRY_USER" --password-stdin
+        - docker build --pull -f docker/php/worker.Dockerfile -t "$REGISTRY_IMAGE_PREFIX/worker-php-prod:$IMAGE_TAG" --build-arg ENVIRONMENT=prod .
+        - docker push "$REGISTRY_IMAGE_PREFIX/worker-php-prod:$IMAGE_TAG"
 
 Build Backend Nginx:
     services:
-        - docker:dind
+        - name: docker:27.3.1-dind
+          command: ["--tls=true"]
     stage: build
     rules:
-        -   if: $CI_COMMIT_BRANCH == "main"
+        - if: '$CI_COMMIT_BRANCH == "main"'
     script:
-        - docker login $REGISTRY_URL -u $REGISTRY_USER -p $REGISTRY_PASSWORD
-        - docker build -f docker/nginx/prod.Dockerfile -t $REGISTRY_IMAGE_PREFIX/backend-nginx:${IMAGE_TAG} --build-arg NGINX_PORT=80 .
-        - docker push $REGISTRY_IMAGE_PREFIX/backend-nginx:${IMAGE_TAG}
-        - 'echo "Docker image: ${REGISTRY_IMAGE_PREFIX}/backend-nginx:${IMAGE_TAG}"'
+        - echo "$REGISTRY_PASSWORD" | docker login "$REGISTRY_URL" --username "$REGISTRY_USER" --password-stdin
+        - docker build --pull -f docker/nginx/prod.Dockerfile -t "$REGISTRY_IMAGE_PREFIX/backend-nginx:$IMAGE_TAG" .
+        - docker push "$REGISTRY_IMAGE_PREFIX/backend-nginx:$IMAGE_TAG"
 
 Build and push Frontend:
-    stage: 'build'
     services:
-        - docker:dind
-    parallel:
-        matrix:
-            - ENVIRONMENT: 'prod'
-              PROJECT_ENVIRONMENT: $PROJECT_ENVIRONMENT_PROD
+        - name: docker:27.3.1-dind
+          command: ["--tls=true"]
+    stage: build
     rules:
-        -   if: $CI_COMMIT_BRANCH == "main"
-
-    cache:
-        paths:
-            - frontend/node_modules/
-            - frontend/.next/
+        - if: '$CI_COMMIT_BRANCH == "main"'
     script:
-        - echo "$PROJECT_ENVIRONMENT" > frontend/.env
-        - docker login $REGISTRY_URL -u $REGISTRY_USER -p $REGISTRY_PASSWORD
-        - docker build -f docker/frontend/prod.Dockerfile -t $REGISTRY_IMAGE_PREFIX/frontend-${ENVIRONMENT}:${IMAGE_TAG} .
-        - docker push ${REGISTRY_IMAGE_PREFIX}/frontend-${ENVIRONMENT}:${IMAGE_TAG}
-        - 'echo "Docker image: $REGISTRY_IMAGE_PREFIX/frontend-${ENVIRONMENT}:${IMAGE_TAG}"'
+        - echo "$REGISTRY_PASSWORD" | docker login "$REGISTRY_URL" --username "$REGISTRY_USER" --password-stdin
+        - docker build --pull -f docker/frontend/prod.Dockerfile -t "$REGISTRY_IMAGE_PREFIX/frontend-prod:$IMAGE_TAG" --build-arg NEXT_PUBLIC_API_URL="$NEXT_PUBLIC_API_URL_PROD" --build-arg NEXT_PUBLIC_API_URL_FROM_SERVER="$NEXT_PUBLIC_API_URL_FROM_SERVER_PROD" .
+        - docker push "$REGISTRY_IMAGE_PREFIX/frontend-prod:$IMAGE_TAG"
 
 Deploy In Production Environment:
     stage: deploy
+    image: dtzar/helm-kubectl:3.16.3
     rules:
-        -   if: $CI_COMMIT_BRANCH == "main"
-            when: manual
-    image: dtzar/helm-kubectl:3.9.4
+        - if: '$CI_COMMIT_BRANCH == "main"'
+          when: manual
     script:
         - kubectl config use-context dexodus-group/exchange-rates:exchange-rates
-        - helm upgrade exchange-rates -n default ./chart/ -f ./chart/prod_values.yaml --set image.tag=${IMAGE_TAG} --install
+        - helm upgrade exchange-rates -n default ./chart/ -f ./chart/prod_values.yaml --set-string image.tag="$IMAGE_TAG" --install --atomic --wait --timeout 10m

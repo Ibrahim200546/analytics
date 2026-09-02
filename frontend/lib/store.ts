@@ -1,17 +1,20 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { createWrapper } from 'next-redux-wrapper';
 
-// @ts-ignore
 const reducers: {[sliceName: string]: string} = {"translation":"@dexodus/native-translation-bundle/src/store/slices/translationSlice"};
 
 export const makeStore = () => {
     return configureStore({
         reducer: Object.entries(reducers).reduce((acc, [sliceName, slicePath]) => ({
             ...acc,
+            // This legacy bundle loader resolves generated reducer paths at runtime.
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
             [sliceName]: require(slicePath),
         }), {}),
     })
 }
+
+export const store = makeStore();
 
 // Infer the type of makeStore
 export type AppStore = ReturnType<typeof makeStore>

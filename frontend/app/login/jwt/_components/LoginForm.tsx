@@ -2,7 +2,7 @@
 
 import React, {useState} from "react";
 import Field from "@dexodus/react-form/src/fields/Field";
-import Form from "@dexodus/react-form/src/Form";
+import Form, {FormData as FormState} from "@dexodus/react-form/src/Form";
 import StringField from "@/bundles/@dexodus/bootstrap/src/UserInterface/Fields/StringField";
 import PasswordField from "@/bundles/@dexodus/bootstrap/src/UserInterface/Fields/PasswordField";
 import Button, {ButtonStyle} from "@/bundles/@dexodus/bootstrap/src/UserInterface/Button";
@@ -16,10 +16,13 @@ const LoginForm: React.FC<LoginFormProps> = ({sign}) => {
     const [data, setData] = useState({login: '', password: ''});
     const [haveError, setHaveError] = useState<boolean>(false);
 
-    const changeData = (data: any) => {
+    const changeData = (nextData: FormState) => {
         setHaveError(false);
 
-        return setData(data);
+        return setData({
+            login: typeof nextData.login === "string" ? nextData.login : "",
+            password: typeof nextData.password === "string" ? nextData.password : "",
+        });
     }
 
     const signIn = async () => {

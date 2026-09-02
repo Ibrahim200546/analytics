@@ -1,5 +1,5 @@
 import React from "react";
-import {EntityFormField} from "@dexodus/entity-form/src/EntityFormStructure";
+import type {EntityFormField} from "@dexodus/entity-form/src/EntityFormStructure";
 import {EntityFormFieldComponents, EntityFormGeneralFieldComponents} from "@dexodus/entity-form/src/EntityForm";
 import SectionArranger from "@dexodus/section/src/SectionArranger";
 import {Section} from "@dexodus/section/src/types";

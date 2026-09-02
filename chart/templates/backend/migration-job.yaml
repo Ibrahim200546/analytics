@@ -1,0 +1,53 @@
+{{- if .Values.existingSecret }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+    name: exchange-rates-{{ .Values.env }}-migration
+    labels:
+        env: {{ .Values.env }}
+        type: exchange-rates-{{ .Values.env }}-migration
+    annotations:
+        helm.sh/hook: pre-install,pre-upgrade
+        helm.sh/hook-weight: "-5"
+        helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+    backoffLimit: 3
+    activeDeadlineSeconds: 600
+    ttlSecondsAfterFinished: 900
+    template:
+        metadata:
+            labels:
+                env: {{ .Values.env }}
+                type: exchange-rates-{{ .Values.env }}-migration
+        spec:
+            restartPolicy: OnFailure
+            automountServiceAccountToken: false
+            imagePullSecrets:
+                - name: {{ .Values.imagePullSecret }}
+            securityContext:
+                runAsNonRoot: true
+                runAsUser: 1000
+                runAsGroup: 1000
+                fsGroup: 1000
+                seccompProfile:
+                    type: RuntimeDefault
+            containers:
+                - name: migration
+                  image: "registry.gitlab.com/dexodus-group/exchange-rates/backend-php-{{ .Values.env }}:{{ .Values.image.tag }}"
+                  imagePullPolicy: IfNotPresent
+                  command:
+                      - php
+                      - /srv/app/bin/console
+                      - doctrine:migrations:migrate
+                      - --no-interaction
+                      - --allow-no-migration
+                  securityContext:
+                      allowPrivilegeEscalation: false
+                      capabilities:
+                          drop: ["ALL"]
+                  resources:
+                      {{- toYaml .Values.backend.resources | nindent 22 }}
+                  envFrom:
+                      - secretRef:
+                            name: {{ .Values.existingSecret }}
+{{- end }}

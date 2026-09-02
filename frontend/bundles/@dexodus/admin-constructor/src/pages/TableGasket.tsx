@@ -16,7 +16,7 @@ interface TableGasketProps {
 
 const TableGasket: React.FC<TableGasketProps> = ({apiUrl, structureUrl, structure, additionalSearchParams = {}, entitiesPath}) => {
     const {data: session} = useSession();
-    const userName = session?.user.profile.email;
+    const userName = session?.user?.email;
     const apiFetch = useApiFetch();
     const adapter = useRef(new EntityTableAdapter(apiUrl, structureUrl, structure, apiFetch, entitiesPath, additionalSearchParams));
 

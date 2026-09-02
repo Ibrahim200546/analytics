@@ -31,8 +31,6 @@ const jwtProvider = Credentials({
 
         const user = await myUserResponse.json();
 
-        console.log('Login as', {...user, token: token})
-
         return {...user, token: token};
     },
 });
