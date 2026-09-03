@@ -4,6 +4,7 @@
 
 # Local Vercel metadata is not part of the deployment.
 .vercel
+package-lock.json
 
 # Development-only binaries stored in the local public directory.
 public/images/node-v22.12.0-linux-x64/
