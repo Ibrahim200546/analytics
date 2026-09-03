@@ -35,14 +35,14 @@ const findBundles = (): FoundedBundles => {
             continue;
         }
 
-        fs.readdirSync(availableAbsolutePath).map(bundleOwner => {
+        fs.readdirSync(availableAbsolutePath).map((bundleOwner: string) => {
             if (!(bundleOwner in bundles)) {
                 bundles[bundleOwner] = {};
             }
 
             const bundleOwnerAbsolutePath = path.join(availableAbsolutePath, bundleOwner);
 
-            fs.readdirSync(bundleOwnerAbsolutePath).map(bundleSubName => {
+            fs.readdirSync(bundleOwnerAbsolutePath).map((bundleSubName: string) => {
                 const formattedBundleSubName = formatBundleSubName(bundleSubName);
 
                 if (formattedBundleSubName in bundles[bundleOwner]) {
@@ -167,7 +167,7 @@ const installBundleResourcesFiles = (bundleInfo: BundleInfo, container: Containe
         }
 
         if (resourcesFileStats.isDirectory()) {
-            const newFilesInQueue = fs.readdirSync(resourcesFileAbsolutePath).map(childResourcesFileRelativePath => path.join(resourcesFileRelativePath, childResourcesFileRelativePath));
+            const newFilesInQueue = fs.readdirSync(resourcesFileAbsolutePath).map((childResourcesFileRelativePath: string) => path.join(resourcesFileRelativePath, childResourcesFileRelativePath));
             resourcesFilesQueue = [...resourcesFilesQueue, ...newFilesInQueue];
         }
     }
@@ -194,7 +194,7 @@ const installBundleResourcesFiles = (bundleInfo: BundleInfo, container: Containe
         const resourceFileBuffer = fs.readFileSync(absoluteBundleResourceFile);
         const resourceFileContent = resourceFileBuffer.toString()
 
-        const resourceFileUpdatedContent = resourceFileContent.replace(/'\/\/(.*?)\/\/'/, (_, key) => {
+        const resourceFileUpdatedContent = resourceFileContent.replace(/'\/\/(.*?)\/\/'/, (_match: string, key: string) => {
             const replacement = container.parameters[key];
             if (replacement === undefined) {
                 throw new Error(`Placeholder ${key} not found in container.parameters`);
@@ -228,7 +228,9 @@ function processJselBlocks(content: string, container: Container): string {
         return newContent;
     }
 
-    return content.replace(jselRegex, (_, codeBlock) => jselReplace(codeBlock)).replace(jselRegexForTsx, (_, codeBlock) => jselReplace(codeBlock));
+    return content
+        .replace(jselRegex, (_match: string, codeBlock: string) => jselReplace(codeBlock))
+        .replace(jselRegexForTsx, (_match: string, codeBlock: string) => jselReplace(codeBlock));
 }
 
 const initContainer = (): Container => {
