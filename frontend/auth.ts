@@ -18,7 +18,7 @@ if (!authSecret) {
 
 export const {handlers, signIn, signOut, auth} = NextAuth({
     secret: authSecret,
-    trustHost: process.env.AUTH_TRUST_HOST === "true" || process.env.VERCEL === "1",
+    trustHost: process.env.NODE_ENV !== "production" || process.env.AUTH_TRUST_HOST === "true" || process.env.VERCEL === "1",
     session: {
         strategy: "jwt",
         maxAge: 2678400,
