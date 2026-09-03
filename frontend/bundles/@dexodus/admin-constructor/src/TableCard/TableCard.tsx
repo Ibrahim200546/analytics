@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import styles from "./TableCard.module.scss";
 import TextTranslation from "@/libs/@dexodus/translation/src/client/TextTranslation";
 import {VscDesktopDownload, VscSettings} from "react-icons/vsc";
@@ -14,6 +14,9 @@ import Table from "@dexodus/table/src/Table";
 import {Jsel} from "@dexodus/jsel";
 import useAdminConstructorDispatch from "@dexodus/admin-constructor/src/hooks/redux/useAdminConstructorDispatch";
 import {AdminConstructorSlice} from "@dexodus/admin-constructor/src/redux/adminConstructorReducer";
+import {BallTriangle} from "react-loader-spinner";
+
+const EMPTY_SEARCH_PARAMS = {};
 
 interface TableCardProps {
     cardTitle?: string;
@@ -28,11 +31,20 @@ interface TableCardProps {
     max?: number;
 }
 
-const TableCard: React.FC<TableCardProps> = ({cardTitle, entityTableStructure, entityTableName, entitiesPath, additionalSearchParams = {}, isDev = false, customControls= [], setRerender = () => {}, setJselRef = () => {}, max}) => {
-    const {data: session} = useSession();
+const TableCard: React.FC<TableCardProps> = ({cardTitle, entityTableStructure, entityTableName, entitiesPath, additionalSearchParams = EMPTY_SEARCH_PARAMS, isDev = false, customControls= [], setRerender = () => {}, setJselRef = () => {}, max}) => {
+    const {data: session, status: sessionStatus} = useSession();
     const userName = session?.user?.email;
+    const sessionToken = session?.user?.token;
     const apiFetch = useApiFetch();
-    const adapter = useRef(new EntityTableAdapter(getApiDomain(), "entity-table/structure/" + entityTableName, entityTableStructure, apiFetch, entitiesPath && "/api/" + entitiesPath, additionalSearchParams));
+    const [loadedStructure, setLoadedStructure] = useState(entityTableStructure);
+    const adapter = useMemo(() => new EntityTableAdapter(
+        getApiDomain(),
+        "entity-table/structure/" + entityTableName,
+        loadedStructure,
+        apiFetch,
+        entitiesPath && "/api/" + entitiesPath,
+        additionalSearchParams,
+    ), [apiFetch, additionalSearchParams, entityTableName, entitiesPath, loadedStructure]);
     const [showSettings, setShowSettings] = useState<() => void>(() => {});
     const tableName = userName + "_" + (entitiesPath ? "/api/" + entitiesPath : "entity-table/structure/" + entityTableName);
     const [renderTable, setRenderTable] = useState<boolean>(true);
@@ -78,7 +90,7 @@ const TableCard: React.FC<TableCardProps> = ({cardTitle, entityTableStructure, e
                                 window.sessionStorage.removeItem(tableName + "_options");
                                 const fetchResult = await apiFetch("/entity-table/structure/" + entityTableName, {cache: "no-store"} );
                                 const loadedStructure = await fetchResult.json();
-                                adapter.current = new EntityTableAdapter(getApiDomain(), "entity-table/structure/" + entityTableName, loadedStructure, apiFetch, entitiesPath && "/api/" + entitiesPath, additionalSearchParams);
+                                setLoadedStructure(loadedStructure);
                                 setRenderTable(false);
                             }}
                             style={ButtonStyle.Danger}
@@ -116,16 +128,17 @@ const TableCard: React.FC<TableCardProps> = ({cardTitle, entityTableStructure, e
             className={styles.entityTablePage}
         >
             <div className={styles.cardContent}>
-                {renderTable && (
+                {renderTable && sessionStatus === "authenticated" && sessionToken ? (
                     <Table
-                        adapter={adapter.current}
+                        key={sessionToken}
+                        adapter={adapter}
                         name={tableName}
                         setShowSettings={showSettings => setShowSettings(() => showSettings)}
                         setJselRef={setJselRef}
                         setRefresh={setRerender}
                         max={max}
                     />
-                )}
+                ) : <BallTriangle height={32}/>}
             </div>
         </Card>
     );

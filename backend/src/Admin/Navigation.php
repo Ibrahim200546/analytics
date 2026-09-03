@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use App\Entity\User;
 use App\Entity\Organization;
 use App\Enum\Entity\UserRoleEnum;
 use Dexodus\AdminConstructorBundle\Attribute\CrudNavigation;
@@ -11,9 +12,11 @@ use Dexodus\AdminConstructorBundle\Attribute\FrontendPage;
 use Dexodus\AdminConstructorBundle\Attribute\IsGranted;
 use Dexodus\AdminConstructorBundle\Dto\NavigationInterface;
 use Dexodus\AdminConstructorBundle\Dto\PageInterface;
+use Dexodus\AdminConstructorBundle\Dto\RootNavigationInterface;
 use Dexodus\TitleBundle\Attribute\Title;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-class Navigation implements NavigationInterface
+class Navigation implements NavigationInterface, RootNavigationInterface
 {
     #[FrontendPage('organizations/my')]
     #[Title('Моя организация')]
@@ -38,4 +41,21 @@ class Navigation implements NavigationInterface
     #[Title('Настройки')]
     #[IsGranted([UserRoleEnum::ROLE_ADMIN])]
     public Settings $settings;
+
+    public function getRedirectAfterLogin(UserInterface $user): ?string
+    {
+        if ($user instanceof User && $user->hasRole(UserRoleEnum::ROLE_ADMIN->value)) {
+            return '/admin/organizations/list';
+        }
+
+        if ($user instanceof User && $user->hasRole(UserRoleEnum::ROLE_SUPERVISOR->value)) {
+            return '/admin/organizations/my';
+        }
+
+        if ($user instanceof User && $user->hasRole(UserRoleEnum::ROLE_EMPLOYEE->value)) {
+            return '/admin/news';
+        }
+
+        return null;
+    }
 }

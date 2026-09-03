@@ -9,7 +9,7 @@ import ClientTextTranslation from "@/libs/@dexodus/translation/src/client/TextTr
 import Link from "next/link";
 import {IoLogOutOutline} from "react-icons/io5";
 import {useRouter} from "next/navigation";
-import {signOut as logout} from "@/auth";
+import {signOut as logout} from "next-auth/react";
 
 interface SideBarProps {
     navigation: any;

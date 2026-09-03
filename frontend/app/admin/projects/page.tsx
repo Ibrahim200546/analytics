@@ -2,6 +2,7 @@ import React from "react";
 import ProjectListCard from "@/components/ProjectListCard";
 import getApiFetch from "@dexodus/api-fetch/src/server/getApiFetch";
 import HtmlView from "@dexodus/bootstrap/src/UserInterface/HtmlView";
+import Card from "@dexodus/bootstrap/src/UserInterface/Card";
 import {auth} from "@/auth";
 
 type PageProps = Record<string, never>;
@@ -12,6 +13,14 @@ const Page: NextJS.SFC<PageProps> = async ({}) => {
 
     if (!user) {
         return <></>
+    }
+
+    if (!user.roles.includes('ROLE_EMPLOYEE') && !user.roles.includes('ROLE_SUPERVISOR')) {
+        return (
+            <Card title="Нет доступа">
+                Для просмотра проектов необходима роль сотрудника или руководителя.
+            </Card>
+        );
     }
 
     const apiFetch = await getApiFetch();

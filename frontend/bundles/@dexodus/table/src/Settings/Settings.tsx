@@ -23,21 +23,26 @@ const Settings: React.FC<SettingsProps> = ({columns, setColumns, refreshData}) =
                         <div onMouseDown={dragStart} className={classnames(styles.columnsOrderItem__icon, !isDragging && styles.columnsOrderItem__icon_canDrag)}>
                             <MdOutlineDragIndicator/>
                         </div>
-                        <input type="checkbox" checked={item.show} onClick={() => {
-                            setColumns(columns.map(column => {
-                                if (column.dataKey === item.dataKey) {
-                                    column.show = !column.show;
+                        <input type="checkbox" checked={item.show} onChange={event => {
+                            const show = event.target.checked;
 
-                                    if (!column.show) {
-                                        for (const filter of column.filters) {
-                                            filter.data = undefined;
-                                            refreshData();
-                                        }
-                                    }
+                            setColumns(currentColumns => currentColumns.map(column => {
+                                if (column.dataKey !== item.dataKey) {
+                                    return column;
                                 }
 
-                                return column;
+                                return {
+                                    ...column,
+                                    show,
+                                    filters: show
+                                        ? column.filters
+                                        : column.filters.map(filter => ({...filter, data: undefined})),
+                                };
                             }));
+
+                            if (!show) {
+                                refreshData();
+                            }
                         }}/>
                         {item.title}
                     </div>
