@@ -1,0 +1,13 @@
+# Local build caches and stale Turbopack output.
+.next
+.next-*
+
+# Local Vercel metadata is not part of the deployment.
+.vercel
+
+# Development-only binaries stored in the local public directory.
+public/images/node-v22.12.0-linux-x64/
+public/images/node-v22.12.0-linux-x64.tar.xz
+
+# Large local archive that is not referenced by the web application.
+public/images/DDNet-18.8.2-linux_x86_64.tar.xz
