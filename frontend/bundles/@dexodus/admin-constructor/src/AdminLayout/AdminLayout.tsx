@@ -16,24 +16,26 @@ import {ToastContainer} from "react-toastify";
 import FloatingContainer from "@dexodus/bootstrap/src/UserInterface/FloatingContainer";
 
 interface AdminLayoutProps {
-    children: React.ReactNode;
-    params: {
-        slug: string[];
-    };
+    children?: React.ReactNode;
+    params?: Promise<{
+        slug?: string[];
+    }>;
 }
 
 const AdminLayout = async ({children, params}: AdminLayoutProps) => {
     const headersList = await headers();
     const headerUrl = headersList.get('x-current-url') || "";
     let slug = headerUrl.startsWith('/admin/') ? headerUrl.slice(7).split('/') : [];
+    const resolvedParams = params ? await params : undefined;
 
     const session = await auth();
-    const apiFetch = await getApiFetch();
-    const data = await apiFetch(`/admin-constructor/navigation`);
 
     if (session === null) {
         return redirect('/login');
     }
+
+    const apiFetch = await getApiFetch();
+    const data = await apiFetch(`/admin-constructor/navigation`);
 
     if (!data.ok) {
         console.log('error with loading navigation: ', await data.text());
@@ -42,7 +44,7 @@ const AdminLayout = async ({children, params}: AdminLayoutProps) => {
 
     const json = await data.json();
 
-    slug = params?.slug ?? slug;
+    slug = resolvedParams?.slug ?? slug;
 
     return (
         <div className={classnames(styles.adminLayout)}>
