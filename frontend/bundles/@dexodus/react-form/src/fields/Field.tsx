@@ -71,7 +71,7 @@ const Field: GeneralField<FieldProps> = ({className, property, component, label,
         <>
             {value !== undefined && visible && (
                 <div className={classnames(formGroupStyles.formGroup, className?.formGroup)}>
-                    <div className={classnames(formGroupStyles.title, className?.label)} style={{color: componentProps?.color ?? 'black'}}>{renderLabel(label ?? property)}</div>
+                    <div className={classnames(formGroupStyles.title, className?.label)} style={{color: componentProps?.color ?? 'var(--foreground)'}}>{renderLabel(label ?? property)}</div>
                     <Component
                         {...componentProps}
                         value={value}

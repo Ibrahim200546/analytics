@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { SessionProvider } from "next-auth/react"
+import Script from "next/script";
+import ThemeProvider from "@/components/ThemeProvider/ThemeProvider";
+import ThemeToggle from "@/components/ThemeToggle/ThemeToggle";
 import "./globals.css";
 import React from "react";
 
@@ -9,6 +12,8 @@ const regularRoboto = localFont({
   variable: "--font-regular-roboto",
   weight: "100 900",
 });
+
+const themeScript = `(() => { try { const savedTheme = localStorage.getItem("ismi-theme"); const theme = savedTheme === "dark" || savedTheme === "light" ? savedTheme : window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; document.documentElement.dataset.theme = theme; } catch {} })();`;
 
 export const metadata: Metadata = {
   title: "ISMI",
@@ -21,13 +26,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ru">
+    <html lang="ru" suppressHydrationWarning>
+      <head>
+        <Script id="theme-init" strategy="beforeInteractive">{themeScript}</Script>
+      </head>
       <body
         className={`${regularRoboto.variable} antialiased`}
       >
-      <SessionProvider>
-        {children}
-      </SessionProvider>
+      <ThemeProvider>
+        <SessionProvider>
+          {children}
+        </SessionProvider>
+        <ThemeToggle/>
+      </ThemeProvider>
       </body>
     </html>
   );

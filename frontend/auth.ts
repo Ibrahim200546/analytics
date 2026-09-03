@@ -19,6 +19,18 @@ if (!authSecret) {
 export const {handlers, signIn, signOut, auth} = NextAuth({
     secret: authSecret,
     trustHost: process.env.NODE_ENV !== "production" || process.env.AUTH_TRUST_HOST === "true" || process.env.VERCEL === "1",
+    cookies: {
+        // A new name avoids trying to decrypt sessions issued before the secret was rotated.
+        sessionToken: {
+            name: `${process.env.NODE_ENV === "production" ? "__Secure-" : ""}authjs.session-token.v2`,
+            options: {
+                httpOnly: true,
+                sameSite: "lax",
+                path: "/",
+                secure: process.env.NODE_ENV === "production",
+            },
+        },
+    },
     session: {
         strategy: "jwt",
         maxAge: 2678400,

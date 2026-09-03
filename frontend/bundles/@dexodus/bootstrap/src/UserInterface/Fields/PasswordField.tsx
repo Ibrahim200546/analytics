@@ -11,15 +11,19 @@ interface PasswordFieldProps extends FieldComponentProps {
     onClick?: MouseEventHandler<HTMLInputElement>;
     onFocus?: FocusEventHandler<HTMLInputElement>;
     onBlur?: FocusEventHandler<HTMLInputElement>;
+    name?: string;
+    autoComplete?: string;
 }
 
-const PasswordField: FieldComponent<PasswordFieldProps> = ({value, onChange, icon, placeholder}) => {
+const PasswordField: FieldComponent<PasswordFieldProps> = ({value, onChange, icon, placeholder, name, autoComplete}) => {
     return (
         <PasswordInput
             value={value}
             setValue={onChange}
             icon={icon}
             placeholder={placeholder}
+            name={name}
+            autoComplete={autoComplete}
         />
     )
 }

@@ -25,6 +25,8 @@ const BasicInput: React.FC<BasicInputProps> = (
         iconRef,
         children = (icon, input) => <>{icon}{input}</>,
         placeholder,
+        name,
+        autoComplete,
     }
 ) => {
     const [focused, setFocused] = useState<boolean>(false);
@@ -61,6 +63,8 @@ const BasicInput: React.FC<BasicInputProps> = (
                     type={type}
                     ref={basicInputRef}
                     placeholder={placeholder}
+                    name={name}
+                    autoComplete={autoComplete}
                     onFocus={() => setFocused(true)}
                     onBlur={() => setFocused(false)}
                 />

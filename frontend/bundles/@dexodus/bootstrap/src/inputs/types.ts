@@ -11,6 +11,8 @@ export interface InputProps {
     containerRef?: RefObject<HTMLDivElement>;
     inputRef?: RefObject<HTMLInputElement>;
     iconRef?: RefObject<HTMLDivElement>;
+    name?: string;
+    autoComplete?: string;
 }
 
 export type Input<PropsT extends InputProps> = React.FC<PropsT>;

@@ -1,11 +1,34 @@
+.formShell {
+  width: 100%;
+}
+
 .loginForm {
+  display: grid;
+  gap: 18px;
+
   .buttons {
     display: flex;
     flex-direction: column;
     text-align: center;
+
+    button {
+      width: 100%;
+      min-height: 48px;
+      border-radius: 6px;
+      background: var(--accent);
+      box-shadow: 0 10px 24px rgba(8, 127, 91, 0.2);
+
+      &:hover,
+      &:focus-visible {
+        background: var(--accent-strong);
+      }
+    }
   }
 
   .error {
-    color: red;
+    margin: -2px 0 0;
+    color: var(--danger);
+    font-size: 14px;
+    line-height: 1.4;
   }
 }

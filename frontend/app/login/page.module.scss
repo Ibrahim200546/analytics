@@ -1,29 +1,188 @@
 .page {
+  display: grid;
+  min-height: 100dvh;
+  padding: 28px;
+  place-items: center;
+  background:
+    linear-gradient(90deg, var(--surface-soft) 0 50%, var(--background) 50% 100%);
+}
+
+.shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1.18fr) minmax(320px, 0.82fr);
+  width: min(100%, 1060px);
+  min-height: 600px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 30px 70px rgba(16, 42, 34, 0.14);
+}
+
+.introduction {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  padding: clamp(40px, 7vw, 88px);
+  background: var(--surface-soft);
+}
+
+.brand {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+
+  span {
+    color: var(--accent);
+    font-weight: 500;
+  }
+}
+
+.eyebrow,
+.panelEyebrow {
+  margin: 46px 0 14px;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.introduction h1,
+.accessPanel h2 {
+  margin: 0;
+  font-size: clamp(32px, 4vw, 52px);
+  line-height: 1.04;
+  letter-spacing: 0;
+}
+
+.description {
+  max-width: 520px;
+  margin: 22px 0 0;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.status {
+  display: flex;
   align-items: center;
-  height: 100vh;
-  width: 100vw;
+  gap: 10px;
+  margin-top: 48px;
+  color: var(--muted);
+  font-size: 14px;
 
-  .loginWindow {
-    max-width: 400px;
-    width: 100%;
+  svg {
+    flex: 0 0 auto;
+    color: var(--accent);
+  }
+}
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.accessPanel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(40px, 6vw, 72px);
+}
 
-    .loginButtons {
-      display: flex;
-      flex-direction: column;
+.panelIcon {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--accent);
+  background: var(--surface-soft);
 
-      > * {
-        margin-bottom: 8px;
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
 
-        &:last-child {
-          margin-bottom: 0;
-        }
-      }
-    }
+.accessPanel .panelEyebrow {
+  margin-top: 28px;
+}
+
+.accessPanel h2 {
+  font-size: 30px;
+}
+
+.panelDescription {
+  margin: 14px 0 30px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.loginLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 54px;
+  padding: 14px 16px;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  color: #ffffff;
+  background: var(--accent);
+  font-weight: 700;
+  text-decoration: none;
+  transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease;
+
+  svg {
+    flex: 0 0 auto;
+    width: 19px;
+    height: 19px;
+  }
+
+  &:hover {
+    border-color: var(--accent-strong);
+    background: var(--accent-strong);
+    transform: translateY(-1px);
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 3px;
+  }
+}
+
+.notice {
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+@media (max-width: 760px) {
+  .page {
+    padding: 0;
+    background: var(--background);
+  }
+
+  .shell {
+    grid-template-columns: 1fr;
+    min-height: 100dvh;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .introduction,
+  .accessPanel {
+    padding: 52px 28px;
+  }
+
+  .introduction {
+    min-height: 46dvh;
+  }
+
+  .eyebrow {
+    margin-top: 34px;
+  }
+
+  .status {
+    margin-top: 32px;
   }
 }

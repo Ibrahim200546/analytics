@@ -19,6 +19,7 @@ export interface ButtonProps {
     className?: string;
     customStyle?: string;
     isLoading?: boolean;
+    type?: "button" | "submit" | "reset";
 }
 
 const Button: React.FC<ButtonProps> = (
@@ -34,6 +35,7 @@ const Button: React.FC<ButtonProps> = (
         className,
         customStyle,
         isLoading = false,
+        type = "button",
     },
 ) => {
     const customStyles: any = {};
@@ -61,7 +63,7 @@ const Button: React.FC<ButtonProps> = (
     ].filter((className): className is string => typeof className === "string");
 
     return (
-        <button onClick={(event) => {
+        <button type={type} onClick={(event) => {
             if (isLoading) {
                 return
             }

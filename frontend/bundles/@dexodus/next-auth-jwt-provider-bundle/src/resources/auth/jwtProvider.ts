@@ -14,7 +14,10 @@ const jwtProvider = Credentials({
         })
 
         if (!authenticationTokenResponse.ok) {
-            throw new Error(`Authentication token is failed. Error: ${await authenticationTokenResponse.text()}`)
+            console.error("Authentication token request failed", {
+                status: authenticationTokenResponse.status,
+            });
+            return null;
         }
 
         const token = (await authenticationTokenResponse.json()).token;
@@ -26,7 +29,10 @@ const jwtProvider = Credentials({
         })
 
         if (!myUserResponse.ok) {
-            throw new Error('Failed to load user')
+            console.error("Authenticated user request failed", {
+                status: myUserResponse.status,
+            });
+            return null;
         }
 
         const user = await myUserResponse.json();

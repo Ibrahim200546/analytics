@@ -13,9 +13,11 @@ interface StringFieldProps extends FieldComponentProps {
     onFocus?: FocusEventHandler<HTMLInputElement>;
     onBlur?: FocusEventHandler<HTMLInputElement>;
     inputRef?: RefObject<HTMLInputElement>;
+    name?: string;
+    autoComplete?: string;
 }
 
-const StringField: FieldComponent<StringFieldProps> = ({inputRef, value, onChange, icon, placeholder, mask}) => {
+const StringField: FieldComponent<StringFieldProps> = ({inputRef, value, onChange, icon, placeholder, mask, name, autoComplete}) => {
     return (
         <TextInput
             inputRef={inputRef}
@@ -24,6 +26,8 @@ const StringField: FieldComponent<StringFieldProps> = ({inputRef, value, onChang
             icon={icon}
             placeholder={placeholder}
             mask={mask}
+            name={name}
+            autoComplete={autoComplete}
         />
     )
 }
