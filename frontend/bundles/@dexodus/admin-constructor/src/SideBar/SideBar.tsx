@@ -30,17 +30,18 @@ const SideBar: React.FC<SideBarProps> = ({navigation, slug}) => {
 
     return (
         <div className={classNames(styles.sideBar, sideBarClosed && styles.closed)}>
-            <Link href="/main" className={styles.projectName}>
+            <Link href="/admin" className={styles.projectName}>
                 <ClientTextTranslation label={'project.name'} defaultValue={'ISMI'}/>
             </Link>
             <Navigation rootItem={navigation} autoOpenPath={slug.join('.')}/>
-            <Link href="/logout" className={styles.logout} onClick={event => {
-                event.preventDefault();
-                signOut();
-            }}>
+            <button
+                type="button"
+                className={styles.logout}
+                onClick={signOut}
+            >
                 <IoLogOutOutline/>
                 <ClientTextTranslation label={'logout'} defaultValue={'Выйти'}/>
-            </Link>
+            </button>
         </div>
     )
 }

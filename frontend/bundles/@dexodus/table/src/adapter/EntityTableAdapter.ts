@@ -262,20 +262,45 @@ export class EntityTableAdapter implements AdapterInterface {
         }
 
         const url = `${this.apiUrl}${this.entitiesPath}?page=${this.currentPage}${sortQuery}${filterQuery}${additional}`;
-        const result = await this.fetch(url);
-        const hydraCollection = await result.json() as HydraCollection;
+        let hydraCollection: HydraCollection = {
+            "@context": "",
+            "@id": "",
+            "@type": "hydra:Collection",
+            "hydra:totalItems": 0,
+            "hydra:member": [],
+            "hydra:view": {
+                "@id": "",
+                "@type": "",
+                "hydra:first": "",
+                "hydra:last": "",
+                "hydra:previous": ""
+            }
+        };
 
-        this.total = hydraCollection["hydra:totalItems"];
+        try {
+            const result = await this.fetch(url);
+            if (result && result.ok) {
+                const parsed = await result.json();
+                if (parsed && typeof parsed === "object") {
+                    hydraCollection = parsed as HydraCollection;
+                }
+            }
+        } catch (e) {
+            console.warn("Failed to fetch or parse hydra collection:", e);
+        }
 
-        if (hydraCollection["hydra:totalItems"] > 0) {
+        const members = Array.isArray(hydraCollection["hydra:member"]) ? hydraCollection["hydra:member"] : [];
+        this.total = typeof hydraCollection["hydra:totalItems"] === "number" ? hydraCollection["hydra:totalItems"] : members.length;
+
+        if (this.total > 0) {
             this.countPages = 1;
         }
 
         if (hydraCollection["hydra:view"] && hydraCollection["hydra:view"]["hydra:last"]) {
-            this.countPages = parseInt(hydraCollection["hydra:view"]["hydra:last"].split("=").pop() ?? "");
+            this.countPages = parseInt(hydraCollection["hydra:view"]["hydra:last"].split("=").pop() ?? "1") || 1;
         }
 
-        return hydraCollection["hydra:member"].map(member => {
+        return members.map(member => {
             const jsel = new Jsel(new JselContext({
                 entity: member,
                 momentFormat: (timeString: string, format: string) => {

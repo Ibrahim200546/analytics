@@ -1,0 +1,137 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { auth } from '@/auth';
+
+export async function GET(request: NextRequest) {
+    try {
+        const session = await auth();
+        const token = session?.user?.token;
+        const supabase = createSupabaseServerClient(token);
+        const { searchParams } = new URL(request.url);
+        const page = parseInt(searchParams.get('page') || '1') || 1;
+        const limit = 10;
+        const from = (page - 1) * limit;
+        const to = from + limit - 1;
+
+        const { data, count, error } = await supabase
+            .from('organizations')
+            .select('*', { count: 'exact' })
+            .order('created_at', { ascending: false })
+            .range(from, to);
+
+        if (error) {
+            console.error('Supabase error fetching organizations:', error);
+            return NextResponse.json({
+                '@context': '/api/contexts/Organization',
+                '@id': '/api/organizations',
+                '@type': 'hydra:Collection',
+                'hydra:totalItems': 0,
+                'hydra:member': [],
+                'hydra:view': {
+                    '@id': `/api/organizations?page=${page}`,
+                    '@type': 'hydra:PartialCollectionView',
+                    'hydra:first': '/api/organizations?page=1',
+                    'hydra:last': '/api/organizations?page=1'
+                }
+            });
+        }
+
+        const members = (data || []).map(row => ({
+            '@id': `/api/organizations/${row.id}`,
+            '@type': 'Organization',
+            id: row.id,
+            name: row.name,
+            bin: row.bin,
+            city: row.city ? { name: row.city } : null,
+            employeeLimit: row.employee_limit ?? 10,
+            projectLimit: row.project_limit ?? 5,
+            limitEmployees: row.employee_limit ?? 10,
+            limitProjects: row.project_limit ?? 5,
+            createdAt: row.created_at,
+            created_at: row.created_at,
+            subscription: null,
+            supervisor: null
+        }));
+
+        const total = count || members.length;
+        const lastPage = Math.max(1, Math.ceil(total / limit));
+
+        return NextResponse.json({
+            '@context': '/api/contexts/Organization',
+            '@id': '/api/organizations',
+            '@type': 'hydra:Collection',
+            'hydra:totalItems': total,
+            'hydra:member': members,
+            'hydra:view': {
+                '@id': `/api/organizations?page=${page}`,
+                '@type': 'hydra:PartialCollectionView',
+                'hydra:first': '/api/organizations?page=1',
+                'hydra:last': `/api/organizations?page=${lastPage}`
+            }
+        }, {
+            headers: {
+                'Content-Type': 'application/ld+json',
+                'Access-Control-Allow-Origin': '*',
+            }
+        });
+    } catch (e: unknown) {
+        console.error('Error in /api/organizations:', e);
+        return NextResponse.json({
+            '@context': '/api/contexts/Organization',
+            '@id': '/api/organizations',
+            '@type': 'hydra:Collection',
+            'hydra:totalItems': 0,
+            'hydra:member': []
+        });
+    }
+}
+
+export async function POST(request: NextRequest) {
+    try {
+        const session = await auth();
+        const token = session?.user?.token;
+        const supabase = createSupabaseServerClient(token);
+        const body = await request.json();
+
+        const insertData = {
+            name: body.name || 'Новая организация',
+            bin: String(body.bin || Math.floor(100000000000 + Math.random() * 900000000000)),
+            city: body.city || null,
+            employee_limit: parseInt(body.employeeLimit || body.limitEmployees || '10') || 10,
+            project_limit: parseInt(body.projectLimit || body.limitProjects || '5') || 5,
+        };
+
+        const { data, error } = await supabase
+            .from('organizations')
+            .insert(insertData)
+            .select()
+            .single();
+
+        if (error) {
+            console.error('Supabase error inserting organization:', error);
+            return NextResponse.json({ error: error.message }, { status: 400 });
+        }
+
+        const org = {
+            '@id': `/api/organizations/${data.id}`,
+            '@type': 'Organization',
+            id: data.id,
+            name: data.name,
+            bin: data.bin,
+            city: data.city ? { name: data.city } : null,
+            employeeLimit: data.employee_limit,
+            projectLimit: data.project_limit,
+            limitEmployees: data.employee_limit,
+            limitProjects: data.project_limit,
+            createdAt: data.created_at,
+            subscription: null,
+            supervisor: null
+        };
+
+        return NextResponse.json(org, { status: 201 });
+    } catch (e: unknown) {
+        const message = e instanceof Error ? e.message : String(e);
+        console.error('Error in POST /api/organizations:', message);
+        return NextResponse.json({ error: message }, { status: 500 });
+    }
+}

@@ -1,14 +1,13 @@
 @import "../SideBar/SideBar.module";
 
 $topBarHeight: 68px;
-$topBarColor: #FFFFFF;
 
 .topBar {
   display: flex;
   align-items: center;
   width: calc(100vw - #{$sideBarWidth});
   height: $topBarHeight;
-  background: $topBarColor;
+  background: var(--surface, #FFFFFF);
   position: fixed;
   top: 0;
   left: $sideBarWidth;
@@ -17,6 +16,7 @@ $topBarColor: #FFFFFF;
   padding: 0 32px 0 28px;
   border-bottom: 1px solid var(--border, #e2e8f0);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 
   .rightPartWrapper {
     display: flex;

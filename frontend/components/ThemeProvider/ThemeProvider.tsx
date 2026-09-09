@@ -24,15 +24,21 @@ const readTheme = (): Theme => {
 
 const ThemeProvider: React.FC<React.PropsWithChildren> = ({children}) => {
     const [theme, setTheme] = useState<Theme>("light");
+    const [mounted, setMounted] = useState<boolean>(false);
 
     useEffect(() => {
-        setTheme(readTheme());
+        const initialTheme = readTheme();
+        setTheme(initialTheme);
+        setMounted(true);
     }, []);
 
     useEffect(() => {
+        if (!mounted) return;
         document.documentElement.dataset.theme = theme;
-        window.localStorage.setItem(storageKey, theme);
-    }, [theme]);
+        try {
+            window.localStorage.setItem(storageKey, theme);
+        } catch {}
+    }, [theme, mounted]);
 
     const value = useMemo(() => ({
         theme,

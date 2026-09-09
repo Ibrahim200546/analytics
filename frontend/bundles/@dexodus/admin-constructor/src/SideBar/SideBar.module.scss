@@ -1,6 +1,5 @@
 
 $sideBarWidth: 260px;
-$sideBarColor: #FFFFFF;
 $sideBarCloseSpeed: 0.25s;
 
 .sideBar {
@@ -8,11 +7,11 @@ $sideBarCloseSpeed: 0.25s;
   flex-direction: column;
   min-width: $sideBarWidth;
   width: $sideBarWidth;
-  background: $sideBarColor;
+  background: var(--surface, #FFFFFF);
   border-right: 1px solid var(--border, #e2e8f0);
   box-shadow: 1px 0 8px rgba(0, 0, 0, 0.03);
   height: 100vh;
-  transition: margin-left $sideBarCloseSpeed ease;
+  transition: margin-left $sideBarCloseSpeed ease, background-color 0.2s ease, border-color 0.2s ease;
   z-index: 20;
 
   .projectName {
@@ -45,15 +44,19 @@ $sideBarCloseSpeed: 0.25s;
     margin-left: 14px;
     margin-right: 14px;
     margin-bottom: 18px;
+    width: calc(100% - 28px);
+    background: transparent;
     padding: 10px 14px;
     border-radius: 8px;
     border: 1px solid var(--border, #e2e8f0);
-    color: #64748b;
+    color: var(--muted, #64748b);
     font-size: 14px;
     font-weight: 500;
     text-decoration: none;
     transition: all 0.2s ease;
     cursor: pointer;
+    text-align: left;
+    outline: none;
 
     svg {
       width: 18px;
@@ -62,9 +65,9 @@ $sideBarCloseSpeed: 0.25s;
     }
 
     &:hover {
-      background: #fef2f2;
-      color: #dc2626;
-      border-color: #fecaca;
+      background: rgba(239, 68, 68, 0.08);
+      color: #ef4444;
+      border-color: rgba(239, 68, 68, 0.3);
       text-decoration: none;
     }
   }
