@@ -25,12 +25,12 @@ class Navigation implements NavigationInterface, RootNavigationInterface
 
     #[FrontendPage('news')]
     #[Title('Новости')]
-    #[IsGranted([UserRoleEnum::ROLE_SUPERVISOR, UserRoleEnum::ROLE_EMPLOYEE])]
+    #[IsGranted([UserRoleEnum::ROLE_ADMIN, UserRoleEnum::ROLE_SUPERVISOR, UserRoleEnum::ROLE_EMPLOYEE])]
     public PageInterface $news;
 
     #[FrontendPage('projects')]
     #[Title('Проекты')]
-    #[IsGranted([UserRoleEnum::ROLE_EMPLOYEE])]
+    #[IsGranted([UserRoleEnum::ROLE_ADMIN, UserRoleEnum::ROLE_SUPERVISOR, UserRoleEnum::ROLE_EMPLOYEE])]
     public PageInterface $projects;
 
     #[CrudNavigation(Organization::class, Organization::class)]

@@ -5,12 +5,12 @@
   display: block;
   margin-top: $topBarHeight;
   transition: $sideBarCloseSpeed;
-  height: calc(100vh - $topBarHeight);
+  height: calc(100vh - #{$topBarHeight});
   width: -webkit-fill-available;
-  background: #F8F8FD;
-  box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);
-  overflow-y: scroll;
-  padding: 16px 0 0 32px;
+  background: var(--background, #f4f7f5);
+  overflow-y: auto;
+  padding: 24px 32px 48px;
+  box-shadow: none;
 
   &.fullWidth {
     transition: $sideBarCloseSpeed;

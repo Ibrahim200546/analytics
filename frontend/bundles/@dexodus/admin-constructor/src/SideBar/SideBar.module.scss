@@ -1,7 +1,7 @@
 
-$sideBarWidth: 250px;
+$sideBarWidth: 260px;
 $sideBarColor: #FFFFFF;
-$sideBarCloseSpeed: 0.3s;
+$sideBarCloseSpeed: 0.25s;
 
 .sideBar {
   display: flex;
@@ -9,41 +9,63 @@ $sideBarCloseSpeed: 0.3s;
   min-width: $sideBarWidth;
   width: $sideBarWidth;
   background: $sideBarColor;
-  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  border-right: 1px solid var(--border, #e2e8f0);
+  box-shadow: 1px 0 8px rgba(0, 0, 0, 0.03);
   height: 100vh;
-  transition: $sideBarCloseSpeed;
+  transition: margin-left $sideBarCloseSpeed ease;
   z-index: 20;
 
   .projectName {
-    font-weight: 500;
-    font-size: 28px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+    padding: 24px 20px 20px;
     text-decoration: none;
-    margin: 20px 0 25px 20px;
-    color: var(--brand-color);
+    color: var(--accent, #087f5b);
+    border-bottom: 1px solid var(--border, #f1f5f9);
+
+    &:hover {
+      text-decoration: none;
+      color: var(--accent-strong, #056146);
+    }
   }
 
   &.closed {
     margin-left: -$sideBarWidth;
-    transition: $sideBarCloseSpeed;
   }
 
   .logout {
     display: flex;
     align-items: center;
-    bottom: 170px;
-    position: absolute;
-    padding-top: 8px;
-    border-top: 1px solid #817F9B;
-    color: #817F9B;
+    gap: 10px;
+    margin-top: auto;
+    margin-left: 14px;
+    margin-right: 14px;
+    margin-bottom: 18px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border, #e2e8f0);
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 500;
     text-decoration: none;
-    margin-left: 35px;
-    width: 180px;
-    height: 50px;
+    transition: all 0.2s ease;
+    cursor: pointer;
 
     svg {
-      width: 20px;
-      height: 20px;
-      margin-right: 11px;
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    &:hover {
+      background: #fef2f2;
+      color: #dc2626;
+      border-color: #fecaca;
+      text-decoration: none;
     }
   }
 }

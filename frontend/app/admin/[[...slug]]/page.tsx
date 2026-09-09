@@ -1,1 +1,1 @@
-export {default} from "@/components/ModernAdmin";
+export {default as default} from "@dexodus/admin-constructor/src/AdminPage"

@@ -26,7 +26,14 @@ export const pages: {[pageName: string]: Page<PageProps | any>} = {
 const AdminPage: NextJS.SFC<AdminPageProps> = async ({params, searchParams}) => {
     const apiFetch = await getApiFetch();
     const data = await apiFetch(`/admin-constructor/navigation`, {cache: 'no-store'} );
-    const json = await data.json();
+    let json: any = {};
+    try {
+        const text = await data.text();
+        const clean = text.replace(/^WARNING:[^\r\n]*\r?\n?/gm, '').trim();
+        json = JSON.parse(clean);
+    } catch {
+        json = {};
+    }
     const resolvedParams = params ? await params : undefined;
     const resolvedSearchParams = searchParams ? await searchParams : {};
     const slug = resolvedParams?.slug ?? [];
@@ -34,8 +41,15 @@ const AdminPage: NextJS.SFC<AdminPageProps> = async ({params, searchParams}) => 
     const pageOptions: PageOptions | undefined = jsel.exec(slug.join('.'));
 
     if (!pageOptions || !(pageOptions.type in pages)) {
-        if (slug.length === 0 && 'rootRedirect' in json && typeof json.rootRedirect === 'string') {
-            return redirect(json.rootRedirect);
+        if (slug.length === 0) {
+            if ('rootRedirect' in json && typeof json.rootRedirect === 'string' && json.rootRedirect) {
+                return redirect(json.rootRedirect);
+            }
+            return redirect('/admin/organizations/list');
+        }
+
+        if (pageOptions && typeof pageOptions === 'object' && 'list' in pageOptions) {
+            return redirect(`/admin/${slug.join('/')}/list`);
         }
 
         return (

@@ -10,17 +10,17 @@ $sizes: (
 );
 
 $backgroundColors: (
-        "Default": #e4e7ea,
-        "Primary": #304ffe,
-        "Success": #00bf4f,
-        "Info": #00aeff,
-        "Warning": #fbbc05,
-        "Danger": #ea4335,
-        "Violet": #7045ff,
+        "Default": #f1f5f9,
+        "Primary": #087f5b,
+        "Success": #0ca678,
+        "Info": #0284c7,
+        "Warning": #d97706,
+        "Danger": #dc2626,
+        "Violet": #7c3aed,
 );
 
 $textColors: (
-        "Default": #000000,
+        "Default": #1e293b,
         "Primary": #ffffff,
         "Success": #ffffff,
         "Info": #ffffff,
@@ -30,24 +30,24 @@ $textColors: (
 );
 
 $hoverBackgroundColors: (
-        "Default": #e4e7ea,
-        "Primary": #1e3ded,
-        "Success": #00ce55,
-        "Info": #00aeff,
-        "Warning": #ffa000,
-        "Danger": #ff3838,
-        "Violet": #8445ff,
+        "Default": #e2e8f0,
+        "Primary": #056146,
+        "Success": #099268,
+        "Info": #0369a1,
+        "Warning": #b45309,
+        "Danger": #b91c1c,
+        "Violet": #6d28d9,
 );
 
 .button, .button_styleDefault {
   position: relative;
   display: inline-flex;
-  font-family: "Poppins", Poppins, Arial, sans-serif;
-  font-weight: 600;
-  border-radius: 10px;
+  font-family: inherit;
+  font-weight: 500;
+  border-radius: 8px;
   border: none;
   outline: none;
-  line-height: 26px;
+  line-height: 24px;
   transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
   align-items: center;
   justify-content: center;

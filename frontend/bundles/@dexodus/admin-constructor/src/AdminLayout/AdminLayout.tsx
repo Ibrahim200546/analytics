@@ -35,14 +35,46 @@ const AdminLayout = async ({children, params}: AdminLayoutProps) => {
     }
 
     const apiFetch = await getApiFetch();
-    const data = await apiFetch(`/admin-constructor/navigation`);
-
-    if (!data.ok) {
-        console.log('error with loading navigation: ', await data.text());
-        throw new Error('Error with loading navigation')
+    let json: any = { _icons: {} };
+    try {
+        const data = await apiFetch(`/admin-constructor/navigation`);
+        if (data.ok) {
+            const text = await data.text();
+            const clean = text.replace(/^WARNING:[^\r\n]*\r?\n?/gm, '').trim();
+            json = JSON.parse(clean);
+        }
+    } catch (e) {
+        console.error('Error loading navigation:', e);
     }
 
-    const json = await data.json();
+    if (!json || Object.keys(json).length === 0 || (!json.organizations && !json.news && !json.projects)) {
+        json = {
+            _icons: {
+                organizations: "users",
+                projects: "folder",
+                news: "newspaper",
+                settings: "settings",
+            },
+            organizations: {
+                list: {
+                    type: "EntityTable",
+                    name: "app.entity.organization"
+                },
+                create: {
+                    type: "EntityForm",
+                    name: "app.entity.organization",
+                    mode: "create"
+                }
+            },
+            projects: {
+                type: "projects"
+            },
+            news: {
+                type: "news"
+            },
+            rootRedirect: "/admin/organizations/list"
+        };
+    }
 
     slug = resolvedParams?.slug ?? slug;
 

@@ -1,4 +1,4 @@
-$borderColor: #dee2e6;
+$borderColor: #e2e8f0;
 
 .fade {
   display: flex;
@@ -7,29 +7,59 @@ $borderColor: #dee2e6;
   position: absolute;
   height: 100%;
   width: 100%;
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(2px);
   cursor: wait;
+  z-index: 5;
 }
 
 .tableContainer {
   position: relative;
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid $borderColor;
 
   .table {
     width: 100%;
+    margin-bottom: 0;
+    border-collapse: collapse;
 
-    border-top: 1px solid $borderColor;
-    border-left: 1px solid $borderColor;
-
-    tr:nth-of-type(even), th {
-      background: rgba(0, 0, 0, .05);
+    thead th, th {
+      background: #f8fafc;
+      color: #475569;
+      font-weight: 600;
+      font-size: 13px;
+      padding: 12px 14px;
+      border-bottom: 2px solid $borderColor;
+      border-right: 1px solid #f1f5f9;
+      text-transform: none;
+      letter-spacing: 0;
     }
 
-    td, th {
+    tbody tr {
+      transition: background-color 0.15s ease;
+
+      &:hover {
+        background-color: #f8fafc;
+      }
+
+      &:nth-of-type(even) {
+        background-color: #fafbfc;
+
+        &:hover {
+          background-color: #f1f5f9;
+        }
+      }
+    }
+
+    td {
       border-bottom: 1px solid $borderColor;
-      border-right: 1px solid $borderColor;
-      padding: 9px;
-      font-size: 12px;
-      line-height: 1.5em;
+      border-right: 1px solid #f1f5f9;
+      padding: 11px 14px;
+      font-size: 13px;
+      color: #1e293b;
+      line-height: 1.5;
+      vertical-align: middle;
 
       &.actions {
         width: 1%;
@@ -37,7 +67,7 @@ $borderColor: #dee2e6;
 
         .action {
           font-size: 12px;
-          margin-right: 4px;
+          margin-right: 6px;
         }
       }
     }
@@ -46,6 +76,7 @@ $borderColor: #dee2e6;
       display: flex;
       justify-content: space-between;
       white-space: nowrap;
+      padding: 12px 16px;
     }
   }
 }
