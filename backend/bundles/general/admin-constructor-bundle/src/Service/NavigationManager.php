@@ -83,11 +83,16 @@ class NavigationManager
             }
 
             if ($titleAttribute instanceof Title) {
-                $titleText = $this->twig->render('@AdminConstructor/string_render.txt.twig', [
-                    'string' => $titleAttribute->value,
-                    'parentKey' => $context,
-                    'parentTitle' => $this->translateService->translate($context, 'ru'),
-                ]);
+                try {
+                    $titleText = $this->twig->render('@AdminConstructor/string_render.txt.twig', [
+                        'string' => $titleAttribute->value,
+                        'parentKey' => $context,
+                        'parentTitle' => $this->translateService->translate($context, 'ru'),
+                    ]);
+                } catch (\Throwable $e) {
+                    error_log("Twig render failed for string '{$titleAttribute->value}': " . $e->getMessage() . " in " . $e->getFile() . ":" . $e->getLine());
+                    $titleText = $titleAttribute->value;
+                }
                 $this->translationCompleter->complete('ru', [$translationKey => str_replace(PHP_EOL, '', $titleText)]);
             }
 

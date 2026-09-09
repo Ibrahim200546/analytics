@@ -46,6 +46,9 @@
     "dexodus/free-currency-api-bundle": {
         "version": "1.0.0"
     },
+    "dexodus/instagram-parser-bundle": {
+        "version": "1.0.0"
+    },
     "dexodus/location-bundle": {
         "version": "1.0.0"
     },

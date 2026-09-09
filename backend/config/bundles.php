@@ -38,4 +38,5 @@ return [
     League\FlysystemBundle\FlysystemBundle::class => ['all' => true],
     Dexodus\FileBundle\FileBundle::class => ['all' => true],
     Dexodus\ChatgptTonerBundle\ChatgptTonerBundle::class => ['all' => true],
+    Dexodus\InstagramParserBundle\InstagramParserBundle::class => ['all' => true],
 ];

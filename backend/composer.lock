@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6740840f5ac88b2cc2911c8c811ebf12",
+    "content-hash": "ca99896e3e9e8cb49e8e97aab6650d45",
     "packages": [
         {
             "name": "amphp/amp",
@@ -3538,6 +3538,34 @@
             "autoload": {
                 "psr-4": {
                     "Dexodus\\FreeCurrencyApiBundle\\": "src/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Daniil Yaroshuk",
+                    "email": "the.dexodus@gmail.com"
+                }
+            ],
+            "description": "description",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "dexodus/instagram-parser-bundle",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "bundles/smi/instagram-parser-bundle",
+                "reference": "d9ee328ef2a5fa183c1dbdc7af89558dfe414608"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Dexodus\\InstagramParserBundle\\": "src/"
                 }
             },
             "license": [

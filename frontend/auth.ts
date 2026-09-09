@@ -1,6 +1,6 @@
 import NextAuth, {type DefaultSession} from "next-auth";
 import User from "@/apiTypes/App/Entity/User";
-import jwtProvider from "@dexodus/next-auth-jwt-provider-bundle/src/resources/auth/jwtProvider";
+import supabaseProvider from "@dexodus/next-auth-jwt-provider-bundle/src/resources/auth/supabaseProvider";
 
 declare module "next-auth" {
     interface Session {
@@ -36,7 +36,7 @@ export const {handlers, signIn, signOut, auth} = NextAuth({
         maxAge: 2678400,
     },
     providers: [
-        jwtProvider,
+        supabaseProvider,
     ],
     callbacks: {
         async jwt(config) {

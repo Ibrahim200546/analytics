@@ -1,0 +1,20 @@
+services:
+    frontend:
+        environment:
+            NEXT_PUBLIC_API_URL: http://localhost:8000
+            NEXT_PUBLIC_API_URL_FROM_SERVER: http://nginx:8000
+
+    php:
+        command: >
+            sh -lc 'chown -R www-data:www-data /srv/app/var/cache /srv/app/var/log && exec php-fpm'
+        volumes: !override
+            - ./.env:/srv/app/.env:ro
+            - ./backend/config/jwt:/srv/app/config/jwt:ro
+            - php-cache:/srv/app/var/cache
+            - php-log:/srv/app/var/log
+        environment:
+            XDEBUG_MODE: off
+
+volumes:
+    php-cache:
+    php-log:

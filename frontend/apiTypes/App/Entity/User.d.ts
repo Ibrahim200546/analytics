@@ -7,7 +7,8 @@ interface User {
    lastName: string;
    patronymic: string;
    iin: string;
-   id: number;
+   // Symfony used a numeric ID; Supabase Auth uses UUID strings.
+   id: number | string;
 }
 
 export default User;

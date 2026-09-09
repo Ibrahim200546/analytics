@@ -1,6 +1,16 @@
 #!/usr/bin/env php
 <?php
 
+if (!class_exists('V8Js')) {
+    class V8Js {
+        public $url;
+        public $changeDataInContext;
+        public function setModuleLoader($callback) {}
+        public function setModuleNormaliser($callback) {}
+        public function executeString($js) {}
+    }
+}
+
 use App\Kernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 

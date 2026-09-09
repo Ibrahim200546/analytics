@@ -23,6 +23,7 @@
         "dexodus/entity-table-bundle": "^1.0",
         "dexodus/file-bundle": "^1.0",
         "dexodus/free-currency-api-bundle": "^1.0",
+        "dexodus/instagram-parser-bundle": "^1.0",
         "dexodus/location-bundle": "^1.0",
         "dexodus/search-engine-bundle": "^1.0",
         "dexodus/single-unique-bundle": "^1.0",
@@ -220,6 +221,10 @@
         {
             "type": "path",
             "url": "bundles/smi/chatgpt-toner-bundle"
+        },
+        {
+            "type": "path",
+            "url": "bundles/smi/instagram-parser-bundle"
         }
     ]
 }

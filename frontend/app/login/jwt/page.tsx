@@ -3,7 +3,7 @@ import LoginForm from "./_components/LoginForm";
 import React from "react";
 import Link from "next/link";
 import {signIn} from "@/auth";
-import {AuthError} from "next-auth";
+import {AuthError, CredentialsSignin} from "next-auth";
 import {isRedirectError} from "next/dist/client/components/redirect-error";
 import {FiArrowLeft, FiLock} from "react-icons/fi";
 
@@ -21,6 +21,10 @@ const Page = () => {
 
             if (error instanceof AuthError) {
                 if (error.type === "CredentialsSignin") {
+                    if (error instanceof CredentialsSignin && error.code === "service_unavailable") {
+                        return "Сервис авторизации временно недоступен. Повторите попытку позже.";
+                    }
+
                     return "Проверьте логин и пароль.";
                 }
 
