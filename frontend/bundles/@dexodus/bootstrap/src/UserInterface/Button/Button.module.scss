@@ -45,7 +45,9 @@ $hoverBackgroundColors: (
   font-family: inherit;
   font-weight: 500;
   border-radius: 8px;
-  border: none;
+  background: var(--surface-soft, #f1f5f9);
+  color: var(--foreground, #1e293b);
+  border: 1px solid var(--border, #e2e8f0);
   outline: none;
   line-height: 24px;
   transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
@@ -118,9 +120,13 @@ $hoverBackgroundColors: (
       }
 
       &_bordered {
-        background: #ffffff;
+        background: transparent;
         color: map-get($backgroundColors, $styleName);
-        border: 2px solid map-get($backgroundColors, $styleName);
+        border: 1px solid map-get($backgroundColors, $styleName);
+
+        &:hover {
+          background: rgba(map-get($backgroundColors, $styleName), 0.1);
+        }
       }
 
       &_rounded {

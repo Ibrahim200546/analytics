@@ -54,10 +54,10 @@ const Card: React.FC<CardProps> = (
             anyWidth && styles.anyWidth,
             className,
         )}>
-            <div className={styles.title} style={{
+            <div className={styles.title} style={color !== Color.None ? {
                 background: BackgroundColor[color],
                 color: TextColor[color],
-            }}>
+            } : undefined}>
                 <div>{title}</div>
                 <div>
                     {typeof titleActions === 'function' ? titleActions(withCollapseButton && (

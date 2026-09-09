@@ -2,6 +2,10 @@ import type { NextConfig } from "next";
 import path from "path";
 
 const nextConfig: NextConfig = {
+    env: {
+        AUTH_URL: process.env.AUTH_URL || "https://ismi-analytics.vercel.app",
+        NEXTAUTH_URL: process.env.NEXTAUTH_URL || "https://ismi-analytics.vercel.app",
+    },
     poweredByHeader: false,
     reactStrictMode: true,
     outputFileTracingRoot: path.join(__dirname),
