@@ -8,7 +8,6 @@ import HydraCollection from "@/types/HydraCollection";
 import PageGasket from "@dexodus/admin-constructor/src/pages/PageGasket";
 import {cookies} from "next/headers";
 import {auth} from "@/auth";
-import HtmlView from "@dexodus/bootstrap/src/UserInterface/HtmlView";
 import Organization from "@/apiTypes/App/Entity/Organization";
 import Project from "@/apiTypes/App/Entity/Project";
 import ProjectArticle from "@/apiTypes/App/Entity/ProjectArticle";
@@ -120,8 +119,9 @@ const Page: NextJS.SFC<PageProps> = async ({}) => {
                 </Card>
             </div>
         );
-    } catch (err: any) {
-        if (err?.digest === 'DYNAMIC_SERVER_USAGE' || err?.digest?.startsWith('NEXT_REDIRECT')) {
+    } catch (err: unknown) {
+        const error = err as { digest?: string } | null;
+        if (error?.digest === 'DYNAMIC_SERVER_USAGE' || error?.digest?.startsWith('NEXT_REDIRECT')) {
             throw err;
         }
         console.error('Error in News Page:', err);
