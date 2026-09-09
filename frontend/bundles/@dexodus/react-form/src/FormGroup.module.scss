@@ -1,11 +1,15 @@
 .formGroup {
   margin-bottom: 22px;
+  width: 100%;
 
   .title {
-    display: inline-flex;
-    align-items: center;
+    display: flex;
+    align-items: flex-end;
     font-weight: 500;
     font-size: 14px;
+    min-height: 38px;
+    line-height: 1.35;
     margin-bottom: 8px;
   }
 }
+

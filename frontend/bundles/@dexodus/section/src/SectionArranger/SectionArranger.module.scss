@@ -1,13 +1,20 @@
 .sectionArranger {
   display: flex;
   flex-direction: column;
+  gap: 16px;
+  width: 100%;
 
   .sectionGroup {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    gap: 24px;
+    width: 100%;
 
     .section {
-      flex-basis: 100vw;
+      flex: 1 1 320px;
+      min-width: 280px;
+      box-sizing: border-box;
     }
   }
 }

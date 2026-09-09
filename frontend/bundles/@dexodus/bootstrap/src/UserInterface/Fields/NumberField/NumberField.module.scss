@@ -1,11 +1,13 @@
 .numberField {
+  box-sizing: border-box;
   line-height: 24px;
-  padding: 9px 14px;
-  height: 45px;
+  padding: 12px 16px;
+  height: 48px;
+  font-size: 15px;
   box-shadow: none;
-  border-radius: 2px;
+  border-radius: 8px;
   display: block;
-  width: -webkit-fill-available;
+  width: 100%;
   background-color: #fff;
   background-clip: padding-box;
   border: 1px solid #ccd1d9;

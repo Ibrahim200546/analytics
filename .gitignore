@@ -9,3 +9,6 @@
 /frontend/public/images/*.tar.xz
 /frontend/public/images/*.zip
 /frontend/public/images/node-v22.12.0-linux-x64/
+
+.vercel
+.env*.local

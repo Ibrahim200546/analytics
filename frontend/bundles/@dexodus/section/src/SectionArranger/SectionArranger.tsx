@@ -22,10 +22,10 @@ const SectionArranger: React.FC<SectionArrangerProps> = (
     const sectionsGroups = groupSections(sections);
 
     const renderSection = (section: Section, key: string): React.ReactNode => {
-        const basis = section?.basis ?? 1;
+        const style: CSSProperties = section?.basis ? { flexBasis: `${section.basis * 100}%` } : {};
 
         return (
-            <div key={key} className={styles.section} style={{flexBasis: `${basis * 100}vw`}}>
+            <div key={key} className={styles.section} style={style}>
                 {section && section.component}
             </div>
         );

@@ -90,31 +90,48 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
     try {
-        const session = await auth();
-        const token = session?.user?.token;
+        const authHeader = request.headers.get('authorization');
+        const token = authHeader?.startsWith('Bearer ')
+            ? authHeader.slice(7)
+            : (await auth())?.user?.token;
         const supabase = createSupabaseServerClient(token);
         const body = await request.json();
 
-        const insertData = {
-            name: body.name || 'Новая организация',
-            bin: String(body.bin || Math.floor(100000000000 + Math.random() * 900000000000)),
+        const rawBin = body.bin ? String(body.bin).replace(/\D/g, '') : '';
+        let bin = rawBin.length === 12 ? rawBin : String(Math.floor(100000000000 + Math.random() * 900000000000));
+
+        let insertData = {
+            name: body.name ? String(body.name).trim() : 'Новая организация',
+            bin,
             city: body.city || null,
             employee_limit: parseInt(body.employeeLimit || body.limitEmployees || '10') || 10,
             project_limit: parseInt(body.projectLimit || body.limitProjects || '5') || 5,
         };
 
-        const { data, error } = await supabase
+        let result = await supabase
             .from('organizations')
             .insert(insertData)
             .select()
             .single();
 
-        if (error) {
-            console.error('Supabase error inserting organization:', error);
-            return NextResponse.json({ error: error.message }, { status: 400 });
+        // If duplicate BIN error, retry once with a guaranteed fresh random 12-digit BIN
+        if (result.error && (result.error.code === '23505' || result.error.message.includes('unique'))) {
+            insertData.bin = String(Math.floor(100000000000 + Math.random() * 900000000000));
+            result = await supabase
+                .from('organizations')
+                .insert(insertData)
+                .select()
+                .single();
         }
 
+        if (result.error) {
+            console.error('Supabase error inserting organization:', result.error);
+            return NextResponse.json({ error: result.error.message }, { status: 400 });
+        }
+
+        const data = result.data;
         const org = {
+            '@context': '/api/contexts/Organization',
             '@id': `/api/organizations/${data.id}`,
             '@type': 'Organization',
             id: data.id,

@@ -71,42 +71,42 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
             {
                 path: 'name',
                 component: 'Input',
-                componentArguments: { placeholder: 'Введите название' },
+                componentArguments: { placeholder: 'Введите официальное название организации' },
                 title: 'Название организации',
                 priority: 1,
                 defaultValue: '',
                 hidden: false,
-                sectionGroupKey: 'default'
+                sectionGroupKey: 'basic_info'
             },
             {
                 path: 'bin',
                 component: 'Input',
-                componentArguments: { placeholder: '12 цифр' },
-                title: 'БИН',
+                componentArguments: { placeholder: '12-значный БИН' },
+                title: 'Бизнес-идентификационный номер (БИН)',
                 priority: 2,
                 defaultValue: '',
                 hidden: false,
-                sectionGroupKey: 'default'
+                sectionGroupKey: 'basic_info'
             },
             {
                 path: 'limitEmployees',
                 component: 'Input',
-                componentArguments: { type: 'number', defaultValue: 10 },
-                title: 'Лимит сотрудников',
+                componentArguments: { type: 'number', defaultValue: 10, placeholder: 'По умолчанию 10' },
+                title: 'Лимит учетных записей сотрудников',
                 priority: 3,
                 defaultValue: 10,
                 hidden: false,
-                sectionGroupKey: 'default'
+                sectionGroupKey: 'limits_info'
             },
             {
                 path: 'limitProjects',
                 component: 'Input',
-                componentArguments: { type: 'number', defaultValue: 5 },
-                title: 'Лимит проектов',
+                componentArguments: { type: 'number', defaultValue: 5, placeholder: 'По умолчанию 5' },
+                title: 'Лимит активных аналитических проектов',
                 priority: 4,
                 defaultValue: 5,
                 hidden: false,
-                sectionGroupKey: 'default'
+                sectionGroupKey: 'limits_info'
             }
         ],
         events: []
