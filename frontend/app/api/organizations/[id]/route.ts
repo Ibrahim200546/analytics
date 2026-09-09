@@ -22,6 +22,47 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
             return NextResponse.json({ error: 'Not found' }, { status: 404 });
         }
 
+        let subscription = null;
+        const { data: subList } = await supabase
+            .from('subscriptions')
+            .select('*')
+            .eq('organization_id', id)
+            .order('ends_at', { ascending: false })
+            .limit(1);
+
+        const sub = subList?.[0];
+        if (sub) {
+            subscription = {
+                id: sub.id,
+                type: sub.type === 'trial' ? 'demo' : 'general',
+                start: sub.starts_at,
+                end: sub.ends_at,
+                active: sub.active ?? true,
+                price: sub.price,
+                priceForProjectImprovements: sub.price_for_project_improvements
+            };
+        }
+
+        let supervisor = null;
+        if (data.supervisor_id) {
+            const { data: sup } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('id', data.supervisor_id)
+                .maybeSingle();
+
+            if (sup) {
+                supervisor = {
+                    id: sup.id,
+                    email: sup.email,
+                    firstName: sup.first_name,
+                    lastName: sup.last_name,
+                    patronymic: sup.patronymic,
+                    iin: sup.iin
+                };
+            }
+        }
+
         const org = {
             '@context': '/api/contexts/Organization',
             '@id': `/api/organizations/${data.id}`,
@@ -36,8 +77,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
             limitProjects: data.project_limit ?? 5,
             createdAt: data.created_at,
             created_at: data.created_at,
-            subscription: null,
-            supervisor: null
+            subscription,
+            supervisor
         };
 
         return NextResponse.json(org, {
