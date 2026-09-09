@@ -43,6 +43,8 @@ const supabaseProvider = Credentials({
                 name: typeof metadata.full_name === "string" ? metadata.full_name : data.user.email ?? email,
                 roles: getRoles(metadata),
                 token: data.session.access_token,
+                refresh_token: data.session.refresh_token,
+                expires_at: data.session.expires_at,
             };
         } catch (error) {
             console.error("Supabase authorization request failed", error);
