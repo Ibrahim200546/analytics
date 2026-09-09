@@ -9,6 +9,16 @@ const BACKEND_DOMAIN_FROM_SERVER = BACKEND_DOMAIN_FROM_SERVER_FROM_PROCESS_ENV ?
 export type ApiFetchFunction = (input: RequestInfo, init?: RequestInit) => Promise<Response>;
 
 export const getApiDomain = (): string => {
+    if (typeof window !== 'undefined') {
+        if (BACKEND_DOMAIN_FROM_CLIENT_FROM_PROCESS_ENV) {
+            return BACKEND_DOMAIN_FROM_CLIENT_FROM_PROCESS_ENV.endsWith('/')
+                ? BACKEND_DOMAIN_FROM_CLIENT_FROM_PROCESS_ENV.slice(0, -1)
+                : BACKEND_DOMAIN_FROM_CLIENT_FROM_PROCESS_ENV;
+        }
+        if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+            return window.location.origin;
+        }
+    }
     const domain = typeof window === 'undefined' ? BACKEND_DOMAIN_FROM_SERVER : BACKEND_DOMAIN_FROM_CLIENT;
 
     return domain.endsWith('/') ? domain.slice(0, -1) : domain;

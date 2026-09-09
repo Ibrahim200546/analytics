@@ -45,13 +45,17 @@ const Navigation: React.FC<NavigationProps> = ({rootItem, context = "", icon}) =
     const paddingLeft = `${(context.split('.').length) * 12}px`;
     const paddingLeftLink = `${(context.split('.').length) * 12 + (!context ? 0 : 12)}px`;
 
+    if (!rootItem || typeof rootItem !== 'object') {
+        return null;
+    }
+
     const subItems = Object.entries(rootItem).map(([path, item]) => {
         if (typeof item === 'string' || (typeof item === 'object' && item === null) || path === '_icons') {
             return undefined;
         }
 
         const pathToItem = context ? `${context}.${path}` : path;
-        const iconKey = rootItem['_icons'][path];
+        const iconKey = rootItem?._icons?.[path];
 
         if ("type" in item) {
             const link = `/admin/${pathToItem.replaceAll('.', '/')}`;
@@ -66,7 +70,10 @@ const Navigation: React.FC<NavigationProps> = ({rootItem, context = "", icon}) =
             );
         }
 
-        return <Navigation key={pathToItem} rootItem={item as NavigationItem & WithIcons} context={pathToItem} icon={<IconStorage name={iconKey} storage={storage}/>}/>;
+        const childIcons = rootItem?._icons ?? {};
+        const childItem = typeof item === 'object' && item !== null ? { ...item, _icons: (item as any)._icons ?? childIcons } : item;
+
+        return <Navigation key={pathToItem} rootItem={childItem as NavigationItem & WithIcons} context={pathToItem} icon={<IconStorage name={iconKey} storage={storage}/>}/>;
     });
 
 
