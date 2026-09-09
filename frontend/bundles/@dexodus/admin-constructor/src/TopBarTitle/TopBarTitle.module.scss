@@ -17,7 +17,7 @@
       position: relative;
       width: 24px;
       height: 24px;
-      color: var(--brand-color);
+      color: var(--foreground, #1b1b1b);
       cursor: pointer;
     }
   }
@@ -25,5 +25,6 @@
   .title {
     font-weight: 600;
     font-size: 24px;
+    color: var(--foreground, #1b1b1b);
   }
 }

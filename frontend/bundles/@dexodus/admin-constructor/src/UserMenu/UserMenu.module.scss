@@ -18,7 +18,7 @@
     .name {
       display: flex;
       flex-direction: column;
-      color: #1b1b1b;
+      color: var(--foreground, #1b1b1b);
 
       .fullname {
         font-weight: 600;
@@ -60,7 +60,7 @@
 
   .chevronUp {
     margin-left: 8px;
-    color: #1b1b1b;
+    color: var(--foreground, #1b1b1b);
   }
 
   .popup {

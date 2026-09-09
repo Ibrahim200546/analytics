@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
         const { data, count, error } = await supabase
             .from('organizations')
             .select('*', { count: 'exact' })
-            .order('created_at', { ascending: false })
+            .order('id', { ascending: true })
             .range(from, to);
 
         if (error) {

@@ -285,7 +285,7 @@ export async function GET(request: NextRequest) {
                 sourceName: art.source_name,
                 publishedAt: art.published_at,
                 createdAt: art.published_at,
-                imageUrl: null,
+                imageUrl: `https://picsum.photos/seed/isminews${art.id}/400/250`,
                 comments: [],
                 canReply: false,
             },
@@ -317,7 +317,7 @@ export async function GET(request: NextRequest) {
                 '@id': `/api/project-articles/${art.id}`,
                 '@type': 'ProjectArticle',
                 id: art.id,
-                article: { id: art.id, title: art.title, content: art.content, announce: art.announce, sourceUrl: art.source_url, sourceName: art.source_name, publishedAt: art.published_at, createdAt: art.published_at, imageUrl: null, comments: [], canReply: false },
+                article: { id: art.id, title: art.title, content: art.content, announce: art.announce, sourceUrl: art.source_url, sourceName: art.source_name, publishedAt: art.published_at, createdAt: art.published_at, imageUrl: `https://picsum.photos/seed/isminews${art.id}/400/250`, comments: [], canReply: false },
                 favorite: false,
             })),
             'hydra:view': { '@id': '/api/news?page=1', '@type': 'hydra:PartialCollectionView', 'hydra:first': '/api/news?page=1', 'hydra:last': `/api/news?page=${Math.ceil(NEWS_DATABASE.length/10)}` }
