@@ -19,6 +19,25 @@ export const getApiDomain = (): string => {
             return window.location.origin;
         }
     }
+
+    if (BACKEND_DOMAIN_FROM_SERVER_FROM_PROCESS_ENV) {
+        return BACKEND_DOMAIN_FROM_SERVER_FROM_PROCESS_ENV.endsWith('/')
+            ? BACKEND_DOMAIN_FROM_SERVER_FROM_PROCESS_ENV.slice(0, -1)
+            : BACKEND_DOMAIN_FROM_SERVER_FROM_PROCESS_ENV;
+    }
+
+    if (process.env.VERCEL_URL) {
+        return `https://${process.env.VERCEL_URL}`;
+    }
+
+    if (process.env.AUTH_URL) {
+        return process.env.AUTH_URL.endsWith('/') ? process.env.AUTH_URL.slice(0, -1) : process.env.AUTH_URL;
+    }
+
+    if (process.env.NODE_ENV === 'production') {
+        return 'https://ismi-analytics.vercel.app';
+    }
+
     const domain = typeof window === 'undefined' ? BACKEND_DOMAIN_FROM_SERVER : BACKEND_DOMAIN_FROM_CLIENT;
 
     return domain.endsWith('/') ? domain.slice(0, -1) : domain;
