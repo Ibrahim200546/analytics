@@ -87,7 +87,20 @@ const structures: Record<string, unknown> = {
                 filters: []
             }
         ],
-        actions: []
+        actions: [
+            {
+                type: 'button',
+                title: 'Изменить',
+                onClick: 'showEditProjectModal(entity.id)',
+                style: 2
+            },
+            {
+                type: 'button',
+                title: 'Удалить',
+                onClick: 'showDeleteProjectModal(entity.id)',
+                style: 1
+            }
+        ]
     },
     'app.entity.user:employee': {
         name: 'app.entity.user:employee',
@@ -109,7 +122,20 @@ const structures: Record<string, unknown> = {
                 filters: []
             }
         ],
-        actions: []
+        actions: [
+            {
+                type: 'button',
+                title: 'Изменить',
+                onClick: 'showEditModal(entity.id)',
+                style: 2
+            },
+            {
+                type: 'button',
+                title: 'Удалить',
+                onClick: 'showDeleteModal(entity.id)',
+                style: 1
+            }
+        ]
     },
     'app.entity.organization-account': {
         name: 'app.entity.organization-account',
@@ -145,21 +171,38 @@ const structures: Record<string, unknown> = {
 export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string[] }> }) {
     const { slug } = await params;
     const name = slug.join('/');
-    const structure = structures[name] || {
-        name,
-        entity: name,
-        path: `/api/${name.split('.').pop()}s`,
-        columns: [
-            {
-                dataKey: 'id',
-                getDataAction: 'entity.id',
-                priority: 1,
-                title: 'ID',
-                filters: [{ type: 'sort', query: 'order[id]=' }]
-            }
-        ],
-        actions: []
-    };
+    const cleanName = name.replace(/\//g, '.');
+
+    let structure = structures[name] || structures[cleanName];
+    if (!structure) {
+        if (cleanName.includes('project')) {
+            structure = structures['app.entity.project'];
+        } else if (cleanName.includes('employee') || cleanName.includes('user')) {
+            structure = structures['app.entity.user:employee'];
+        } else if (cleanName.includes('account')) {
+            structure = structures['app.entity.organization-account'];
+        } else if (cleanName.includes('organization')) {
+            structure = structures['app.entity.organization'];
+        }
+    }
+
+    if (!structure) {
+        structure = {
+            name,
+            entity: name,
+            path: `/api/${name.split('.').pop()}s`,
+            columns: [
+                {
+                    dataKey: 'id',
+                    getDataAction: 'entity.id',
+                    priority: 1,
+                    title: 'ID',
+                    filters: [{ type: 'sort', query: 'order[id]=' }]
+                }
+            ],
+            actions: []
+        };
+    }
 
     return NextResponse.json(structure, {
         headers: {

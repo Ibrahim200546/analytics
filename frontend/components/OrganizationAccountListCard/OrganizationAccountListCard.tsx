@@ -32,6 +32,7 @@ const OrganizationAccountListCard: React.FC<OrganizationAccountListCardProps> = 
     const [showQRCode, setShowQRCode] = useState<() => void>(() => {});
     const [, setRerenderTable] = useState<() => void>(() => {});
     const apiFetch = useApiFetch();
+    const additionalSearchParams = React.useMemo(() => ({organization: organization.id}), [organization.id]);
     const {component: createAccountForm, data: createAccountData, validate: validateCreateAccountData} = useForm<CreateAccountData>((
         <div>
             <Field component={DropdownField} property="type" label="Тип аккаунта" validators={[notBlank('Поле должно быть заполнено')]} componentProps={{
@@ -100,7 +101,7 @@ const OrganizationAccountListCard: React.FC<OrganizationAccountListCardProps> = 
                 entityTableName={`admin.organization.${organization.id}.organization-account`}
                 entityTableStructure={organizationAccountStructure}
                 setRerender={setRerenderTable}
-                additionalSearchParams={{organization: organization.id}}
+                additionalSearchParams={additionalSearchParams}
                 customControls={[
                     <Button
                         key="add-account"

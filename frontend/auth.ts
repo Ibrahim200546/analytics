@@ -56,16 +56,17 @@ export const {handlers, signIn, signOut, auth} = NextAuth({
             return config.session;
         },
         async redirect({ url, baseUrl }) {
+            const canonicalBase = process.env.NODE_ENV === "production" ? "https://ismi-analytics.vercel.app" : baseUrl;
             if (url.startsWith("/")) {
-                return `${baseUrl}${url}`;
+                return `${canonicalBase}${url}`;
             }
             try {
                 const parsed = new URL(url);
-                if (parsed.hostname.includes("ismi-analytics.vercel.app") || parsed.hostname.includes("localhost") || parsed.hostname.includes("vercel.app")) {
+                if (parsed.hostname.includes("ismi-analytics.vercel.app") || parsed.hostname.includes("localhost")) {
                     return url;
                 }
             } catch {}
-            return `${baseUrl}/admin`;
+            return `${canonicalBase}/admin`;
         },
     },
 });

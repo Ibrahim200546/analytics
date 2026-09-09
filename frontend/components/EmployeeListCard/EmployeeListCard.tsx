@@ -25,6 +25,7 @@ const EmployeeListCard: React.FC<EmployeeListCardProps> = ({organization, employ
     const [currentUserId, setCurrentUserId] = useState<number>(-1);
     const [rerenderTable, setRerenderTable] = useState<() => void>(() => {});
     const apiFetch = useApiFetch();
+    const additionalSearchParams = React.useMemo(() => ({organizationId: organization.id}), [organization.id]);
 
     const {form: userForm, show: showUserForm, hide: hideUserForm, loading: loadingUserForm, jselRef: userFormJselRef} = useUserForm(mode, {
         saveUrl: mode === "create" ? `/api/users/create-employee?organizationId=${organization.id}` : `/api/users/edit-employee/${currentUserId}`,
@@ -74,7 +75,7 @@ const EmployeeListCard: React.FC<EmployeeListCardProps> = ({organization, employ
                 entityTableStructure={employeeStructure}
                 entityTableName={`admin.organization.${organization.id}.employees`}
                 entitiesPath={"users/employees"}
-                additionalSearchParams={{organizationId: organization.id}}
+                additionalSearchParams={additionalSearchParams}
                 setRerender={setRerenderTable}
                 customControls={[
                     <Button

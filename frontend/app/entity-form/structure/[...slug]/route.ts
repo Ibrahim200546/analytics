@@ -4,6 +4,59 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const { slug } = await params;
     const name = slug.join('/');
 
+    if (name.includes('telegram-account')) {
+        const telegramStructure = {
+            name,
+            entity: 'TelegramAccount',
+            paths: {
+                create: '/api/telegram_accounts',
+                edit: '/api/telegram_accounts/{id}',
+                get: '/api/telegram_accounts/{id}',
+                collection: '/api/telegram_accounts'
+            },
+            idColumn: 'id',
+            fields: [
+                {
+                    path: 'name',
+                    component: 'Input',
+                    componentArguments: { placeholder: 'Имя аккаунта' },
+                    title: 'Имя аккаунта',
+                    priority: 1,
+                    defaultValue: '',
+                    hidden: false,
+                    sectionGroupKey: 'default'
+                },
+                {
+                    path: 'apiId',
+                    component: 'Input',
+                    componentArguments: { type: 'number', placeholder: 'API ID' },
+                    title: 'API ID',
+                    priority: 2,
+                    defaultValue: 0,
+                    hidden: false,
+                    sectionGroupKey: 'default'
+                },
+                {
+                    path: 'apiHash',
+                    component: 'Input',
+                    componentArguments: { placeholder: 'API Hash' },
+                    title: 'API Hash',
+                    priority: 3,
+                    defaultValue: '',
+                    hidden: false,
+                    sectionGroupKey: 'default'
+                }
+            ],
+            events: []
+        };
+        return NextResponse.json(telegramStructure, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            }
+        });
+    }
+
     const structure = {
         name,
         entity: name.split('/')[0] || name,

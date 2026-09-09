@@ -37,14 +37,16 @@ const TableCard: React.FC<TableCardProps> = ({cardTitle, entityTableStructure, e
     const sessionToken = session?.user?.token;
     const apiFetch = useApiFetch();
     const [loadedStructure, setLoadedStructure] = useState(entityTableStructure);
+    const searchParamsKey = JSON.stringify(additionalSearchParams ?? {});
+    const memoizedSearchParams = useMemo(() => additionalSearchParams, [searchParamsKey]);
     const adapter = useMemo(() => new EntityTableAdapter(
         getApiDomain(),
         "entity-table/structure/" + entityTableName,
         loadedStructure,
         apiFetch,
         entitiesPath && "/api/" + entitiesPath,
-        additionalSearchParams,
-    ), [apiFetch, additionalSearchParams, entityTableName, entitiesPath, loadedStructure]);
+        memoizedSearchParams,
+    ), [apiFetch, searchParamsKey, entityTableName, entitiesPath, loadedStructure]);
     const [showSettings, setShowSettings] = useState<() => void>(() => {});
     const tableName = userName + "_" + (entitiesPath ? "/api/" + entitiesPath : "entity-table/structure/" + entityTableName);
     const [renderTable, setRenderTable] = useState<boolean>(true);
@@ -130,7 +132,7 @@ const TableCard: React.FC<TableCardProps> = ({cardTitle, entityTableStructure, e
             <div className={styles.cardContent}>
                 {renderTable && sessionStatus === "authenticated" && sessionToken ? (
                     <Table
-                        key={sessionToken}
+                        key={`${sessionToken}_${entityTableName}`}
                         adapter={adapter}
                         name={tableName}
                         setShowSettings={showSettings => setShowSettings(() => showSettings)}

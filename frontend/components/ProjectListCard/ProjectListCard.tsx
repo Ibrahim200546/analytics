@@ -38,7 +38,8 @@ const ProjectListCard: React.FC<ProjectListCardProps> = ({organization, projectS
     const [loading, setLoading] = useState<boolean>(false);
 
     const apiFetch = useApiFetch();
-    const createDefaultProject = (): ProjectFormData => ({name: '', tags: []})
+    const createDefaultProject = (): ProjectFormData => ({name: '', tags: []});
+    const additionalSearchParams = React.useMemo(() => ({organization: organization.id}), [organization.id]);
 
     const [mode, setMode] = useState<"create" | "edit">("create");
     const {component: projectForm, data, jselRef, validate} = useForm<ProjectFormData>((
@@ -136,7 +137,7 @@ const ProjectListCard: React.FC<ProjectListCardProps> = ({organization, projectS
                 entityTableName={`admin.projects.${organization.id}`}
                 cardTitle="Проекты"
                 entitiesPath="projects.jsonld"
-                additionalSearchParams={{organization: organization.id}}
+                additionalSearchParams={additionalSearchParams}
                 customControls={[
                     <Button key="add-project" isLoading={loading} onClick={() => {
                         showProjectModal();

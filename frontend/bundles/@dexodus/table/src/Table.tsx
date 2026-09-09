@@ -44,10 +44,15 @@ const Table =  ({adapter, className, setRefresh, name, setShowSettings, setJselR
 
     const refreshData = () => {
         (async () => {
-            setLoading(true);
-            setData(await adapter.getData());
-            saveOptions();
-            setLoading(false);
+            try {
+                setLoading(true);
+                setData(await adapter.getData());
+                saveOptions();
+            } catch (err) {
+                console.error("Error refreshing table data:", err);
+            } finally {
+                setLoading(false);
+            }
         })()
     };
 
@@ -75,7 +80,7 @@ const Table =  ({adapter, className, setRefresh, name, setShowSettings, setJselR
 
     useEffect(() => {
         initTable();
-    }, []);
+    }, [adapter]);
 
     useEffect(() => {
         if (setJselRef) {
@@ -93,23 +98,32 @@ const Table =  ({adapter, className, setRefresh, name, setShowSettings, setJselR
         }
 
         (async () => {
-            if (!adapter.isInit()) {
-                await adapter.init();
+            try {
+                if (!adapter.isInit()) {
+                    await adapter.init();
+                }
+
+                const tableOptions = window.sessionStorage.getItem(`${name}_options`) ?? window.localStorage.getItem(`${name}_options`);
+
+                if (tableOptions) {
+                    try {
+                        adapter.importOptions(JSON.parse(tableOptions));
+                    } catch (e) {
+                        console.warn("Failed to parse tableOptions", e);
+                    }
+                }
+
+                setData(await adapter.getData());
+                setColumns(adapter.getColumns());
+                setActions(adapter.getActions());
+                addFunction('routerPush', ((path: string) => {
+                    router.push(path);
+                }) as any)
+            } catch (err) {
+                console.error("Error initializing table:", err);
+            } finally {
+                setLoading(false);
             }
-
-            const tableOptions = window.sessionStorage.getItem(`${name}_options`) ?? window.localStorage.getItem(`${name}_options`);
-
-            if (tableOptions) {
-                adapter.importOptions(JSON.parse(tableOptions))
-            }
-
-            setData(await adapter.getData());
-            setColumns(adapter.getColumns());
-            setActions(adapter.getActions());
-            addFunction('routerPush', ((path: string) => {
-                router.push(path);
-            }) as any)
-            setLoading(false);
         })()
     }
 

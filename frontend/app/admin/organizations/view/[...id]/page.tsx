@@ -5,6 +5,8 @@ import OrganizationPage from "@/components/OrganizationPage";
 import PageGasket from "@dexodus/admin-constructor/src/pages/PageGasket";
 import Card from "@dexodus/bootstrap/src/UserInterface/Card";
 
+export const dynamic = 'force-dynamic';
+
 interface PageProps {
     params: Promise<{
         id: string[];
@@ -17,24 +19,29 @@ const Page: NextJS.SFC<PageProps> = async ({params}) => {
     const resolvedParams = await Promise.resolve(params);
     const organizationId = parseInt(resolvedParams.id[0]);
     const apiFetch = await getApiFetch();
-    const responses = await Promise.all([
-        apiFetch(`/api/organizations/${organizationId}.jsonld`),
-        apiFetch(`/entity-table/structure/app.entity.project`),
-        apiFetch(`/entity-table/structure/app.entity.user:employee`),
-        apiFetch(`/entity-table/structure/app.entity.organization-account`),
-        apiFetch(`/entity-form/structure/dexodus.telegram-parser-bundle.entity.telegram-account`),
-    ]);
+    const urls = [
+        `/api/organizations/${organizationId}.jsonld`,
+        `/entity-table/structure/app.entity.project`,
+        `/entity-table/structure/app.entity.user:employee`,
+        `/entity-table/structure/app.entity.organization-account`,
+        `/entity-form/structure/dexodus.telegram-parser-bundle.entity.telegram-account`,
+    ];
+    const responses = await Promise.all(urls.map(u => apiFetch(u)));
 
-    for (const response of responses) {
+    for (let i = 0; i < responses.length; i++) {
+        const response = responses[i];
         if (!response.ok) {
-            return (
-                <Card title="Ошибка загрузки" fullWidth={true}>
-                    <div style={{padding: "1rem"}}>
-                        <h3>Не удалось загрузить данные организации #{organizationId}</h3>
-                        <p>Проверьте доступ или вернитесь к <Link href="/admin/organizations/list" className="text-primary underline">списку организаций</Link>.</p>
-                    </div>
-                </Card>
-            );
+            console.error(`[OrganizationView] Failed to fetch ${urls[i]}: ${response.status}`);
+            if (i === 0) {
+                return (
+                    <Card title="Ошибка загрузки" fullWidth={true}>
+                        <div style={{padding: "1rem"}}>
+                            <h3>Не удалось загрузить данные организации #{organizationId}</h3>
+                            <p>Проверьте доступ или вернитесь к <Link href="/admin/organizations/list" className="text-primary underline">списку организаций</Link>.</p>
+                        </div>
+                    </Card>
+                );
+            }
         }
     }
 
