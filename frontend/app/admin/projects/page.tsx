@@ -12,12 +12,13 @@ type PageProps = Record<string, never>;
 const Page: NextJS.SFC<PageProps> = async ({}) => {
     const session = await auth();
     const user = session?.user;
+    const roles = Array.isArray(user?.roles) ? user.roles : [];
 
     if (!user) {
-        return <></>
+        return <></>;
     }
 
-    if (!user.roles.includes('ROLE_EMPLOYEE') && !user.roles.includes('ROLE_SUPERVISOR') && !user.roles.includes('ROLE_ADMIN')) {
+    if (!roles.includes('ROLE_EMPLOYEE') && !roles.includes('ROLE_SUPERVISOR') && !roles.includes('ROLE_ADMIN')) {
         return (
             <Card title="Нет доступа">
                 Для просмотра проектов необходима соответствующая роль.
