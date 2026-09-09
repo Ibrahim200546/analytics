@@ -117,7 +117,6 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
         const { searchParams } = new URL(request.url);
         const page = parseInt(searchParams.get('page') || '1') || 1;
-        const onlyFavorite = searchParams.get('favorite') === 'true' || searchParams.get('favorite') === '1';
         const sort = searchParams.get('sort') || 'desc';
         const limit = 10;
         const from = (page - 1) * limit;
@@ -170,8 +169,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         }
 
         // Fallback: static 100-article mock dataset
-        let articles = [...MOCK_100_ARTICLES];
-        if (sort === 'asc') articles.reverse();
+        const articles = sort === 'asc' ? [...MOCK_100_ARTICLES].reverse() : [...MOCK_100_ARTICLES];
         const total = articles.length;
         const lastPage = Math.max(1, Math.ceil(total / limit));
         const pageItems = articles.slice(from, from + limit);

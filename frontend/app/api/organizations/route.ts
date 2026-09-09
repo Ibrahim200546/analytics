@@ -98,9 +98,9 @@ export async function POST(request: NextRequest) {
         const body = await request.json();
 
         const rawBin = body.bin ? String(body.bin).replace(/\D/g, '') : '';
-        let bin = rawBin.length === 12 ? rawBin : String(Math.floor(100000000000 + Math.random() * 900000000000));
+        const bin = rawBin.length === 12 ? rawBin : String(Math.floor(100000000000 + Math.random() * 900000000000));
 
-        let insertData = {
+        const insertData: { name: string; bin: string; city: string | null; employee_limit: number; project_limit: number } = {
             name: body.name ? String(body.name).trim() : 'Новая организация',
             bin,
             city: body.city || null,
