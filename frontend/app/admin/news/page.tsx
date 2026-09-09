@@ -1,5 +1,4 @@
 import React from "react";
-import Link from "next/link";
 import styles from "./page.module.scss";
 import Card from "@dexodus/bootstrap/src/UserInterface/Card";
 import ArticleList from "@/components/ArticleList";
@@ -23,12 +22,14 @@ const Page: NextJS.SFC<PageProps> = async ({}) => {
         const session = await auth();
         const user = session?.user;
         const roles = Array.isArray(user?.roles) ? user.roles : [];
-        let organizationId = undefined;
+        let organizationId: string | undefined = undefined;
+        let organizationName: string | undefined = undefined;
 
         if (!user) {
             return <></>;
         }
 
+        // Resolve organizationId per role
         if (roles.includes('ROLE_ADMIN')) {
             organizationId = cookiesStore.get(`admin-${user?.id}-organization-id`)?.value;
             if (!organizationId) {
@@ -39,6 +40,7 @@ const Page: NextJS.SFC<PageProps> = async ({}) => {
                         const firstOrg = orgsData['hydra:member']?.[0];
                         if (firstOrg) {
                             organizationId = `${firstOrg.id}`;
+                            organizationName = firstOrg.name;
                         }
                     }
                 } catch (e) {
@@ -49,13 +51,13 @@ const Page: NextJS.SFC<PageProps> = async ({}) => {
             organizationId = cookiesStore.get(`supervisor-${user?.id}-organization-id`)?.value;
         } else if (roles.includes('ROLE_EMPLOYEE')) {
             organizationId = cookiesStore.get(`employee-${user?.id}-organization-id`)?.value;
-
             if (!organizationId) {
                 try {
                     const myOrganizationResponse = await apiFetch('/api/organizations/my');
                     if (myOrganizationResponse.ok) {
                         const myOrganization: Organization = await myOrganizationResponse.json();
                         organizationId = `${myOrganization.id}`;
+                        organizationName = myOrganization.name;
                     }
                 } catch (e) {
                     console.error('Error fetching my organization', e);
@@ -63,18 +65,22 @@ const Page: NextJS.SFC<PageProps> = async ({}) => {
             }
         }
 
-        if (!organizationId) {
-            return (
-                <Card title="Материалы" fullWidth={true}>
-                    <div style={{padding: "1rem"}}>
-                        <h3>Организация не выбрана</h3>
-                        <p>Для просмотра материалов перейдите в раздел <Link href="/admin/organizations/list" className="text-primary underline">Организации</Link>.</p>
-                    </div>
-                </Card>
-            );
+        // Fetch organization name if we have ID but no name
+        if (organizationId && !organizationName) {
+            try {
+                const orgRes = await apiFetch(`/api/organizations/${organizationId}`);
+                if (orgRes.ok) {
+                    const orgData: Organization = await orgRes.json();
+                    organizationName = orgData.name;
+                }
+            } catch { /* ignore */ }
         }
 
-        const projectId = cookiesStore.get(`news-${user?.id}-${organizationId}-project-id`)?.value;
+        // Fetch articles from /api/news (works with or without organizationId)
+        // If org selected, filter by org name for relevant news
+        const newsUrl = organizationName
+            ? `/api/news?page=1&organization=${encodeURIComponent(organizationName)}`
+            : '/api/news?page=1';
 
         let projectArticlesHydraCollection: HydraCollection<ProjectArticle> = {
             '@context': '',
@@ -92,13 +98,27 @@ const Page: NextJS.SFC<PageProps> = async ({}) => {
         };
         let project: Project | undefined;
 
-        if (projectId) {
+        // Try to fetch from news API first
+        try {
+            const newsRes = await apiFetch(newsUrl);
+            if (newsRes.ok) {
+                projectArticlesHydraCollection = await newsRes.json();
+            }
+        } catch (e) {
+            console.error('Error fetching news:', e);
+        }
+
+        // Also try project-specific articles if a project is selected
+        const projectId = organizationId
+            ? cookiesStore.get(`news-${user?.id}-${organizationId}-project-id`)?.value
+            : undefined;
+
+        if (projectId && projectArticlesHydraCollection['hydra:totalItems'] === 0) {
             try {
                 const [articlesRes, projectRes] = await Promise.all([
                     apiFetch("/api/project-articles/" + projectId),
                     apiFetch("/api/projects/" + projectId),
                 ]);
-
                 if (articlesRes.ok) {
                     projectArticlesHydraCollection = await articlesRes.json();
                 }
@@ -114,7 +134,11 @@ const Page: NextJS.SFC<PageProps> = async ({}) => {
             <div className={styles.page}>
                 <Card title='Новости' fullWidth={true}>
                     <PageGasket title="Новости">
-                        <ArticleList project={project} organizationId={organizationId} projectArticlesHydraCollection={projectArticlesHydraCollection}/>
+                        <ArticleList
+                            project={project}
+                            organizationId={organizationId}
+                            projectArticlesHydraCollection={projectArticlesHydraCollection}
+                        />
                     </PageGasket>
                 </Card>
             </div>

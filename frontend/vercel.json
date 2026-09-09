@@ -3,5 +3,11 @@
   "buildCommand": "yarn build",
   "installCommand": "yarn install --frozen-lockfile",
   "devCommand": "yarn dev",
-  "cleanUrls": true
+  "cleanUrls": true,
+  "crons": [
+    {
+      "path": "/api/news",
+      "schedule": "0 6 * * 1"
+    }
+  ]
 }
