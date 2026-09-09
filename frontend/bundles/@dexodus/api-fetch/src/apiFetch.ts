@@ -38,7 +38,7 @@ const ensureApiDomainInUrl = (url: string): string => {
     }
 };
 
-const apiFetch = (input: RequestInfo, init?: RequestInit, authorization?: string): Promise<Response> => {
+const apiFetch = async (input: RequestInfo, init?: RequestInit, authorization?: string): Promise<Response> => {
     if (typeof input === "string") {
         input = ensureApiDomainInUrl(input);
     }
@@ -54,7 +54,17 @@ const apiFetch = (input: RequestInfo, init?: RequestInit, authorization?: string
         };
     }
 
-    return fetch(input, init);
+    try {
+        return await fetch(input, init);
+    } catch (e: any) {
+        const targetUrl = typeof input === "string" ? input : (input as Request)?.url || "unknown";
+        console.warn(`[apiFetch] Network error for ${targetUrl}:`, e?.message || e);
+        return new Response(JSON.stringify({ error: "Backend unavailable", message: e?.message || String(e) }), {
+            status: 503,
+            statusText: "Service Unavailable",
+            headers: { "Content-Type": "application/json" },
+        });
+    }
 };
 
 export default apiFetch;

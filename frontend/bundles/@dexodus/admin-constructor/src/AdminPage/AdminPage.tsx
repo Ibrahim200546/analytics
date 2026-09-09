@@ -23,31 +23,67 @@ export const pages: {[pageName: string]: Page<PageProps | any>} = {
     EntityTable: EntityTablePage,
 }
 
+const defaultNavigation = {
+    _icons: {
+        organizations: "users",
+        projects: "folder",
+        news: "newspaper",
+        settings: "settings",
+    },
+    organizations: {
+        list: {
+            type: "EntityTable",
+            name: "app.entity.organization"
+        },
+        create: {
+            type: "EntityForm",
+            name: "app.entity.organization",
+            mode: "create"
+        }
+    },
+    projects: {
+        type: "projects"
+    },
+    news: {
+        type: "news"
+    },
+    rootRedirect: "/admin/organizations/list"
+};
+
 const AdminPage: NextJS.SFC<AdminPageProps> = async ({params, searchParams}) => {
-    const apiFetch = await getApiFetch();
-    const data = await apiFetch(`/admin-constructor/navigation`, {cache: 'no-store'} );
     let json: any = {};
     try {
-        const text = await data.text();
-        const clean = text.replace(/^WARNING:[^\r\n]*\r?\n?/gm, '').trim();
-        json = JSON.parse(clean);
-    } catch {
+        const apiFetch = await getApiFetch();
+        const data = await apiFetch(`/admin-constructor/navigation`, {cache: 'no-store'} );
+        if (data.ok) {
+            const text = await data.text();
+            const clean = text.replace(/^WARNING:[^\r\n]*\r?\n?/gm, '').trim();
+            json = JSON.parse(clean);
+        }
+    } catch (e) {
+        console.error('Error loading navigation in AdminPage:', e);
         json = {};
     }
+
+    if (!json || Object.keys(json).length === 0 || (!json.organizations && !json.news && !json.projects)) {
+        json = defaultNavigation;
+    }
+
     const resolvedParams = params ? await params : undefined;
     const resolvedSearchParams = searchParams ? await searchParams : {};
     const slug = resolvedParams?.slug ?? [];
+
+    if (slug.length === 0) {
+        if ('rootRedirect' in json && typeof json.rootRedirect === 'string' && json.rootRedirect) {
+            return redirect(json.rootRedirect);
+        }
+        return redirect('/admin/organizations/list');
+    }
+
     const jsel = new Jsel(new JselContext(json));
     const pageOptions: PageOptions | undefined = jsel.exec(slug.join('.'));
 
     if (!pageOptions || !(pageOptions.type in pages)) {
-        if (slug.length === 0) {
-            if ('rootRedirect' in json && typeof json.rootRedirect === 'string' && json.rootRedirect) {
-                return redirect(json.rootRedirect);
-            }
-            return redirect('/admin/organizations/list');
-        }
-
         if (pageOptions && typeof pageOptions === 'object' && 'list' in pageOptions) {
             return redirect(`/admin/${slug.join('/')}/list`);
         }

@@ -28,7 +28,12 @@ const AdminLayout = async ({children, params}: AdminLayoutProps) => {
     let slug = headerUrl.startsWith('/admin/') ? headerUrl.slice(7).split('/') : [];
     const resolvedParams = params ? await params : undefined;
 
-    const session = await auth();
+    let session = null;
+    try {
+        session = await auth();
+    } catch (e) {
+        console.error("Auth error in AdminLayout:", e);
+    }
 
     if (session === null) {
         return redirect('/login');

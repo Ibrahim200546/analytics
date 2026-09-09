@@ -18,17 +18,45 @@ interface EntityFormPageProps extends PageProps {
 }
 
 const EntityFormPage: Page<EntityFormPageProps> = async ({options, searchParams}) => {
-    const session = await auth();
-    const apiFetch = await getApiFetch();
-    const fetchResult = await apiFetch(`/entity-form/structure/${options.name}/${(searchParams.id !== undefined && searchParams.idColumn !== undefined) ? 'edit' : options.mode}`);
-    const structure = await fetchResult.json();
+    let session = null;
+    try {
+        session = await auth();
+    } catch (e) {
+        console.error('Auth error in EntityFormPage:', e);
+    }
+
+    let structure: any = { fields: [], paths: {} };
+    try {
+        const apiFetch = await getApiFetch();
+        const mode = (searchParams.id !== undefined && searchParams.idColumn !== undefined) ? 'edit' : options.mode;
+        const fetchResult = await apiFetch(`/entity-form/structure/${options.name}/${mode}`);
+        if (fetchResult.ok) {
+            const text = await fetchResult.text();
+            const clean = text.replace(/^WARNING:[^\r\n]*\r?\n?/gm, '').trim();
+            structure = JSON.parse(clean);
+        }
+    } catch (e) {
+        console.error('Failed to get form structure:', e);
+    }
+
     let defaultEntity: any = undefined;
     const {t} = await useTranslation();
 
-    if (searchParams.id !== undefined && searchParams.idColumn !== undefined) {
-        const getEntityResult = await apiFetch(`${structure.paths.get.replace(`{${searchParams.idColumn}}`, searchParams.id)}`);
-        defaultEntity = await getEntityResult.json();
-        defaultEntity[searchParams.idColumn as string] = parseInt(defaultEntity['@id'].split('/').pop());
+    if (searchParams.id !== undefined && searchParams.idColumn !== undefined && structure.paths?.get) {
+        try {
+            const apiFetch = await getApiFetch();
+            const getEntityResult = await apiFetch(`${structure.paths.get.replace(`{${searchParams.idColumn}}`, searchParams.id)}`);
+            if (getEntityResult.ok) {
+                const text = await getEntityResult.text();
+                const clean = text.replace(/^WARNING:[^\r\n]*\r?\n?/gm, '').trim();
+                defaultEntity = JSON.parse(clean);
+                if (defaultEntity && defaultEntity['@id']) {
+                    defaultEntity[searchParams.idColumn as string] = parseInt(defaultEntity['@id'].split('/').pop());
+                }
+            }
+        } catch (e) {
+            console.error('Failed to get default entity:', e);
+        }
     }
 
     return (
