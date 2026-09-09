@@ -51,17 +51,20 @@ const EntityFormField: React.FC<EntityFormFieldProps> = ({fields, fieldComponent
 
                     let FieldComponent = fieldComponents[field.component];
                     if (!FieldComponent) {
-                        if (field.component?.toLowerCase().includes('number')) {
+                        const compLower = (field.component || "").toLowerCase();
+                        if (compLower.includes("number")) {
                             FieldComponent = fieldComponents.NumberField || fieldComponents.Number || fieldComponents.TextField || fieldComponents.Input;
-                        } else if (field.component?.toLowerCase().includes('select') || field.component?.toLowerCase().includes('dropdown')) {
+                        } else if (compLower.includes("select") || compLower.includes("dropdown")) {
                             FieldComponent = fieldComponents.DropdownField || fieldComponents.Select || fieldComponents.TextField || fieldComponents.Input;
+                        } else if (compLower.includes("date") || compLower.includes("time")) {
+                            FieldComponent = fieldComponents.DateTimePickerField || fieldComponents.DateField || fieldComponents.TextField || fieldComponents.Input;
                         } else {
-                            FieldComponent = fieldComponents.Input || fieldComponents.TextField || fieldComponents.StringField || fieldComponents.InputField;
+                            FieldComponent = fieldComponents.Input || fieldComponents.TextField || fieldComponents.StringField;
                         }
                     }
 
                     if (!FieldComponent) {
-                        FieldComponent = fieldComponents.TextField || fieldComponents.StringField || (Object.values(fieldComponents)[0] as any);
+                        FieldComponent = fieldComponents.TextField || fieldComponents.StringField;
                     }
 
                     return {
