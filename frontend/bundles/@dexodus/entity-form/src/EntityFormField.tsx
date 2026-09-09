@@ -49,11 +49,20 @@ const EntityFormField: React.FC<EntityFormFieldProps> = ({fields, fieldComponent
                 } else {
                     const GeneralField = generalFieldComponents.Field as typeof Field;
 
-                    if (!(field.component in fieldComponents)) {
-                        throw new Error(`Entity form required field component "${field.component}", but it not set`)
+                    let FieldComponent = fieldComponents[field.component];
+                    if (!FieldComponent) {
+                        if (field.component?.toLowerCase().includes('number')) {
+                            FieldComponent = fieldComponents.NumberField || fieldComponents.Number || fieldComponents.TextField || fieldComponents.Input;
+                        } else if (field.component?.toLowerCase().includes('select') || field.component?.toLowerCase().includes('dropdown')) {
+                            FieldComponent = fieldComponents.DropdownField || fieldComponents.Select || fieldComponents.TextField || fieldComponents.Input;
+                        } else {
+                            FieldComponent = fieldComponents.Input || fieldComponents.TextField || fieldComponents.StringField || fieldComponents.InputField;
+                        }
                     }
 
-                    const FieldComponent = fieldComponents[field.component];
+                    if (!FieldComponent) {
+                        FieldComponent = fieldComponents.TextField || fieldComponents.StringField || (Object.values(fieldComponents)[0] as any);
+                    }
 
                     return {
                         groupKey: field.sectionGroupKey,

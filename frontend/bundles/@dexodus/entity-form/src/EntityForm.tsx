@@ -51,6 +51,14 @@ export const entityFormDefaultFields: EntityFormFieldComponents = {
     DateField,
     DateTimePickerField,
     TextField: StringField,
+    Input: StringField,
+    InputField: StringField,
+    StringField: StringField,
+    Textarea: StringField,
+    TextareaField: StringField,
+    Number: NumberField,
+    Select: DropdownField,
+    Dropdown: DropdownField,
     MultipleDropdownField,
     AsyncMultipleDropdownField,
     AsyncDropdownField,
@@ -95,8 +103,8 @@ const EntityForm: React.FC<EntityFormProps> = (
 ) => {
     const [loading, setLoading] = useState<boolean>(false);
     const router = useRouter();
-    const mode = (defaultEntity[structure.idColumn] ?? undefined) === undefined ? "create" : "edit";
-    const savePath = structure.paths[mode]?.replace(`{${structure.idColumn}}`, defaultEntity[structure.idColumn] ?? "");
+    const mode = (!defaultEntity || !structure?.idColumn || defaultEntity[structure.idColumn] === undefined) ? "create" : "edit";
+    const savePath = structure?.paths?.[mode]?.replace(`{${structure.idColumn}}`, defaultEntity?.[structure.idColumn] ?? "") || "";
     const apiFetch = useApiFetch();
 
     const {component, jselRef: formJselRef, data: entity, validate} = useForm(jselRef => {
