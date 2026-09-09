@@ -162,6 +162,15 @@ const Table =  ({adapter, className, setRefresh, name, setShowSettings, setJselR
     }
 
     const onClickAction = async (action: Action, data: Data): Promise<void> => {
+        if (!action.onClick) {
+            if ((action as any).path) {
+                let targetPath = String((action as any).path);
+                targetPath = targetPath.replace(/\{entity\.([a-zA-Z0-9_]+)\}/g, (_, prop) => String(data[prop] ?? ''));
+                router.push(targetPath);
+            }
+            return;
+        }
+
         jselRef.current.assign('entity', data);
         const result = jselRef.current.exec(action.onClick);
 
@@ -209,9 +218,12 @@ const Table =  ({adapter, className, setRefresh, name, setShowSettings, setJselR
                         {actions.length > 0 && (
                             <td className={styles.actions}>
                                 {actions.filter(action => {
-                                    jselRef.current.assign('entity', datum)
+                                    if (!action.isVisible) {
+                                        return true;
+                                    }
+                                    jselRef.current.assign('entity', datum);
 
-                                    return jselRef.current.exec(action.isVisible)
+                                    return Boolean(jselRef.current.exec(action.isVisible));
                                 }).map(action => (
                                     <Button size={ButtonSizes.ExtraSmall} key={action.title} onClick={() => onClickAction(action, datum)} style={action.style} className={styles.action}>
                                         {action.title}

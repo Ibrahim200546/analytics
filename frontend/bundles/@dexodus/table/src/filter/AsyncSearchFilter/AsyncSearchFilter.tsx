@@ -47,7 +47,7 @@ const AsyncSearchFilter: FilterComponentInterface = ({column, filter, applyFilte
 
         return {
             key: item.id,
-            value: jsel.exec(column.getDataAction),
+            value: column.getDataAction ? jsel.exec(column.getDataAction) : (item.name ?? item.title ?? item.id),
         };
     };
 

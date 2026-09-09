@@ -52,7 +52,8 @@ const structures: Record<string, unknown> = {
             {
                 type: 'link',
                 title: 'Подробнее',
-                path: '/admin/organizations/view/{entity.id}'
+                path: '/admin/organizations/view/{entity.id}',
+                isVisible: 'true'
             }
         ]
     },

@@ -19,6 +19,9 @@ class Jsel {
         this.eventDispatcher = new EventDispatcher_1.default();
     }
     exec(code) {
+        if (!code || typeof code !== 'string') {
+            return undefined;
+        }
         try {
             const tokens = this.lexer.analyse(code);
             const rootNode = this.parser.parse(tokens);

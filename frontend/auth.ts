@@ -10,6 +10,13 @@ declare module "next-auth" {
     }
 }
 
+if (!process.env.AUTH_URL && !process.env.NEXTAUTH_URL) {
+    if (process.env.NODE_ENV === "production") {
+        process.env.AUTH_URL = "https://ismi-analytics.vercel.app";
+        process.env.NEXTAUTH_URL = "https://ismi-analytics.vercel.app";
+    }
+}
+
 const authSecret = process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || "ismi-secret-jwt-fallback-key-2026-production-safe-32char";
 
 export const {handlers, signIn, signOut, auth} = NextAuth({
@@ -47,6 +54,18 @@ export const {handlers, signIn, signOut, auth} = NextAuth({
                 ...config.token,
             } as typeof config.session.user;
             return config.session;
+        },
+        async redirect({ url, baseUrl }) {
+            if (url.startsWith("/")) {
+                return `${baseUrl}${url}`;
+            }
+            try {
+                const parsed = new URL(url);
+                if (parsed.hostname.includes("ismi-analytics.vercel.app") || parsed.hostname.includes("localhost") || parsed.hostname.includes("vercel.app")) {
+                    return url;
+                }
+            } catch {}
+            return `${baseUrl}/admin`;
         },
     },
 });

@@ -12,7 +12,10 @@ const Page = () => {
         'use server'
 
         try {
-            await signIn('credentials', data);
+            await signIn('credentials', {
+                ...data,
+                redirectTo: '/admin',
+            });
             return null;
         } catch (error) {
             if (isRedirectError(error)) {

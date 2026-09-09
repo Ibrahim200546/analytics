@@ -310,7 +310,7 @@ export class EntityTableAdapter implements AdapterInterface {
             const dataMember: { [name: string]: any } = member;
 
             for (const column of this.structure.columns) {
-                dataMember[column.dataKey] = jsel.exec(column.getDataAction);
+                dataMember[column.dataKey] = column.getDataAction ? (jsel.exec(column.getDataAction) ?? member[column.dataKey]) : member[column.dataKey];
             }
 
             return dataMember;
