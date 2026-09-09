@@ -68,15 +68,18 @@ const ArticleList: React.FC<ArticleListProps> = ({project, projectArticlesHydraC
         setCurrentProjectArticle(projectArticle);
     }
 
-    const renderHydraCollection = (hydraCollection: HydraCollection<ProjectArticle>): React.ReactNode[] => {
-        return hydraCollection['hydra:member'].map(projectArticle => projectArticle.article ? (
+    const renderHydraCollection = (hydraCollection?: HydraCollection<ProjectArticle>): React.ReactNode[] => {
+        if (!hydraCollection || !Array.isArray(hydraCollection['hydra:member'])) {
+            return [];
+        }
+        return hydraCollection['hydra:member'].map(projectArticle => projectArticle?.article ? (
             <ArticleAnnounce
                 key={projectArticle.id}
                 projectArticle={projectArticle}
                 article={projectArticle.article}
                 viewMore={showMore}
             />
-        ) : '');
+        ) : '').filter(Boolean);
     }
 
     useEffect(() => {
@@ -146,7 +149,7 @@ const ArticleList: React.FC<ArticleListProps> = ({project, projectArticlesHydraC
 
                     return {
                         components,
-                        isFinish: components.length === 0 || hydraCollection["hydra:view"]["@id"] === hydraCollection["hydra:view"]["hydra:last"],
+                        isFinish: !hydraCollection || components.length === 0 || hydraCollection?.["hydra:view"]?.["@id"] === hydraCollection?.["hydra:view"]?.["hydra:last"],
                     };
                 }}
                 firstPageComponents={loading ? [] : renderHydraCollection(firstProjectArticlesHydraCollection)}

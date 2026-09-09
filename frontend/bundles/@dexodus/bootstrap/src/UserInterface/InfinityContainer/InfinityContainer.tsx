@@ -22,10 +22,11 @@ const InfinityContainer: React.FC<InfinityContainerProps> = ({ loadPage, classNa
     const [loading, setLoading] = useState<boolean>(false);
 
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const scrollParentRef = useRef<HTMLElement | Window>(window);
+    const scrollParentRef = useRef<HTMLElement | Window | null>(null);
 
     // Функция для поиска родительского элемента с прокруткой
-    const findScrollParent = (element: HTMLElement): HTMLElement | Window => {
+    const findScrollParent = (element: HTMLElement): HTMLElement | Window | null => {
+        if (typeof window === 'undefined') return null;
         let parent: HTMLElement | null = element;
         while (parent && parent !== document.body) {
             const { overflowY } = getComputedStyle(parent);
@@ -68,9 +69,9 @@ const InfinityContainer: React.FC<InfinityContainerProps> = ({ loadPage, classNa
         // Получаем размеры контейнера и прокрутки
         const containerRect = containerRef.current.getBoundingClientRect();
         const parentBottom =
-            scrollParent instanceof Window
+            (typeof window !== "undefined" && scrollParent instanceof Window)
                 ? window.innerHeight
-                : scrollParent.getBoundingClientRect().bottom;
+                : (scrollParent as HTMLElement)?.getBoundingClientRect?.()?.bottom ?? 0;
 
         if (containerRect.bottom <= parentBottom + 50 && !loading) {
             applyLoadPage();
@@ -89,10 +90,12 @@ const InfinityContainer: React.FC<InfinityContainerProps> = ({ loadPage, classNa
         }
 
         const scrollParent = scrollParentRef.current;
-        scrollParent.addEventListener("scroll", handleScroll);
-        return () => {
-            scrollParent.removeEventListener("scroll", handleScroll);
-        };
+        if (scrollParent) {
+            scrollParent.addEventListener("scroll", handleScroll);
+            return () => {
+                scrollParent.removeEventListener("scroll", handleScroll);
+            };
+        }
     }, [handleScroll, applyLoadPage]);
 
     return (
