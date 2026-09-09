@@ -2,10 +2,12 @@ import { NextResponse } from 'next/server';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { auth } from '@/auth';
 
-export async function GET() {
+export async function GET(request: Request) {
     try {
-        const session = await auth();
-        const token = session?.user?.token;
+        const authHeader = request.headers.get('authorization');
+        const token = authHeader?.startsWith('Bearer ')
+            ? authHeader.slice(7)
+            : (await auth())?.user?.token;
         const supabase = createSupabaseServerClient(token);
 
         const { data, error } = await supabase
