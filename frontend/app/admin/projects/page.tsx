@@ -7,6 +7,8 @@ import {auth} from "@/auth";
 import Organization from "@/apiTypes/App/Entity/Organization";
 import {EntityTableStructure} from "@dexodus/table/src/adapter/EntityTableAdapter";
 
+export const dynamic = 'force-dynamic';
+
 type PageProps = Record<string, never>;
 
 const Page: NextJS.SFC<PageProps> = async ({}) => {

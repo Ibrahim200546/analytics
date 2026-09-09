@@ -81,7 +81,7 @@ const structures: Record<string, unknown> = {
             },
             {
                 dataKey: 'tags',
-                getDataAction: 'Array.isArray(entity.tags) ? entity.tags.join(", ") : ""',
+                getDataAction: 'entity.tags',
                 priority: 3,
                 title: 'Теги',
                 filters: []

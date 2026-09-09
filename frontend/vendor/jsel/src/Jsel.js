@@ -28,7 +28,8 @@ class Jsel {
             return rootNode.run(this.context.scope, this.context.scope, this.eventDispatcher);
         }
         catch (error) {
-            throw new Error(`${error}. Execution code: ${code}`);
+            console.warn(`[Jsel.exec] Execution warning for "${code}":`, error?.message || error);
+            return undefined;
         }
     }
     assign(propertyPath, value) {

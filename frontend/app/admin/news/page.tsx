@@ -13,6 +13,8 @@ import Organization from "@/apiTypes/App/Entity/Organization";
 import Project from "@/apiTypes/App/Entity/Project";
 import ProjectArticle from "@/apiTypes/App/Entity/ProjectArticle";
 
+export const dynamic = 'force-dynamic';
+
 type PageProps = Record<string, never>;
 
 const Page: NextJS.SFC<PageProps> = async ({}) => {
@@ -118,7 +120,10 @@ const Page: NextJS.SFC<PageProps> = async ({}) => {
                 </Card>
             </div>
         );
-    } catch (err: unknown) {
+    } catch (err: any) {
+        if (err?.digest === 'DYNAMIC_SERVER_USAGE' || err?.digest?.startsWith('NEXT_REDIRECT')) {
+            throw err;
+        }
         console.error('Error in News Page:', err);
         return (
             <Card title="Новости" fullWidth={true}>

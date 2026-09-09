@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
             '@type': 'Project',
             id: row.id,
             name: row.name,
-            tags: Array.isArray(row.tags) ? row.tags : [],
+            tags: Array.isArray(row.tags) ? row.tags.join(', ') : (row.tags ?? ''),
             disabled: row.disabled ?? false,
             createdAt: row.created_at,
             created_at: row.created_at,
